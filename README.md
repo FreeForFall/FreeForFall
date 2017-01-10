@@ -6,11 +6,11 @@ git checkout branch_name
 ```
 Once you have made the changes expected, commit and message the github dictator. 
 ```
-git commit --all -m "Commit message")
+git commit --all -m "Commit message"
 ```
 If you have created files in the process, add them, and then commit.
 ```
-git add path/to/file)
+git add path/to/file
 git commit --all -m "Commit message"
 ```
 Merging into will be handled by the github dictator. (For now, at least) 
