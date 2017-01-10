@@ -1,3 +1,4 @@
+# Repository guidelines
 This is the repository for our awesome game.
 There are 5 branches : master, Alex, Corentin, Nicolas, Stan.
 Do NOT edit anything that is not in YOUR branch. 
@@ -14,3 +15,6 @@ git add path/to/file
 git commit --all -m "Commit message"
 ```
 Merging into will be handled by the github dictator. (For now, at least) 
+
+# Project info
+The current unity version in use is : 5.5.0f3
