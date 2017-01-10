@@ -1,8 +1,14 @@
 # Repository guidelines
 This is the repository for our awesome game.
 There are 5 branches : master, Alex, Corentin, Nicolas, Stan.
+
 Do NOT edit anything that is not in YOUR branch. 
+
+If ANY error pops up, please send a message to the github dictator, we don't want the whole repo to crash.
+
+To start editing your branch, use
 ````
+git rebase master
 git checkout branch_name
 ```
 Once you have made the changes expected, commit and message the github dictator. 
