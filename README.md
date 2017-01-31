@@ -20,7 +20,7 @@ If you have created files in the process, add them, and then commit.
 git add path/to/file
 git commit --all -m "Commit message"
 ```
-Merging into will be handled by the github dictator. (For now, at least) 
+Merging into will be handled by the github dictator. (For now, at least) OR open a pull request.
 
 # Project info
 The current unity version in use is : 5.5.0f3
