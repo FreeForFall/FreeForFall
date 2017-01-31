@@ -25,6 +25,5 @@ public class CameraController : MonoBehaviour {
 		} else {
 			transform.position = this.player.transform.position;
 		}
-
 	}
 }
