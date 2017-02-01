@@ -33,14 +33,21 @@ public class CameraController : MonoBehaviour {
 		doOrientation();
 	}
 
+	private Vector3 getPositionBehind(GameObject o, int behind, int above){
+		return o.transform.position -  (this.player.transform.forward * behind) + (this.player.transform.up * above);
+	}
+
 	// Update is called once per frame
 	void LateUpdate () {
 		this.player.transform.eulerAngles = new Vector3(0f, horizontalOrientation, 0f);
 		if(Input.GetKeyDown(KeyCode.E)){
-			if(fps)
-				transform.position = this.player.transform.position - this.distance;
-			this.fps = !this.fps;
+			if(fps){
+				// this updates the position to be behind the player
+				transform.position = getPositionBehind(this.player, 15, 3);
+				transform.LookAt(this.player.transform);
+			}
 			this.rotationAroundPlayer = 0f;
+			this.fps = !this.fps;
 		}
 		if(!this.fps){
 			this.rotationAroundPlayer += Input.GetAxis("Mouse ScrollWheel") * 1000;
