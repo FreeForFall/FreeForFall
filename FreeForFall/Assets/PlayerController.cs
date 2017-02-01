@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-	private float speed;
-	private float sprintSpeedMultiplicator;
+	public float speed;
+	public float maxSprintSpeed;
+    private float sprintMultiplier;
 	private bool airbone;
 	private Rigidbody rigidBody;
 
-
 	// Use this for initialization
 	void Start () {
-		this.speed = 5.0f;
-		this.sprintSpeedMultiplicator = 1;
+	    this.sprintMultiplier = 1f;
 		this.airbone = false;
 		this.rigidBody = this.GetComponent<Rigidbody>();
 	}
@@ -28,14 +27,14 @@ public class PlayerController : MonoBehaviour {
 			this.rigidBody.AddForce(new Vector3(0f, 200f, 0f));
 		}
 		if(Input.GetKey(KeyCode.LeftShift)){
-			this.sprintSpeedMultiplicator = 1.5f;
+			this.sprintMultiplier = this.maxSprintSpeed;
 		} else {
-			this.sprintSpeedMultiplicator = 1f;
+			this.sprintMultiplier = 1f;
 		}
 		float h = Input.GetAxis("Horizontal");
 		float v = Input.GetAxis("Vertical");
-		transform.Translate(Vector3.right * h * Time.deltaTime * this.speed * this.sprintSpeedMultiplicator);
-		transform.Translate(Vector3.forward * v * Time.deltaTime * this.speed * this.sprintSpeedMultiplicator);
+		transform.Translate(Vector3.right * h * Time.deltaTime * this.speed * this.sprintMultiplier);
+		transform.Translate(Vector3.forward * v * Time.deltaTime * this.speed * this.sprintMultiplier);
 	}
 
 
