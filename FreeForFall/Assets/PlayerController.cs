@@ -21,9 +21,8 @@ public class PlayerController : MonoBehaviour {
 	void OnCollisionEnter(Collision c){
 		this.airbone = !(c.gameObject.name == "Ground");
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	private void doMovement(){
 		if(Input.GetKeyDown(KeyCode.Space) && !this.airbone){
 			this.airbone = true;
 			this.rigidBody.AddForce(new Vector3(0f, 200f, 0f));
@@ -37,5 +36,14 @@ public class PlayerController : MonoBehaviour {
 		float v = Input.GetAxis("Vertical");
 		transform.Translate(Vector3.right * h * Time.deltaTime * this.speed * this.sprintSpeedMultiplicator);
 		transform.Translate(Vector3.forward * v * Time.deltaTime * this.speed * this.sprintSpeedMultiplicator);
+	}
+
+
+
+	
+	
+	// Update is called once per frame
+	void Update () {
+		doMovement();
 	}
 }
