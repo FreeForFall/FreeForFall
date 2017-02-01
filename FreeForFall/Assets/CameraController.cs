@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour {
 	private void doOrientation(){
 		horizontalOrientation += Input.GetAxis("Mouse X");
 		verticalOrientation -= Input.GetAxis("Mouse Y");
-		this.eulerAngle.x = verticalOrientation;
+		this.eulerAngle.x = -verticalOrientation;
 		this.eulerAngle.y = horizontalOrientation;
 	}
 
