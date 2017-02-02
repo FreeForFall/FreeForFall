@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour {
 	private void doOrientation(){
 		horizontalOrientation += Input.GetAxis("Mouse X");
 		verticalOrientation -= Input.GetAxis("Mouse Y");
-		this.eulerAngle.x = -verticalOrientation;
+		this.eulerAngle.x = verticalOrientation;
 		this.eulerAngle.y = horizontalOrientation;
 	}
 
@@ -40,7 +40,8 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () {
 		this.player.transform.eulerAngles = new Vector3(0f, horizontalOrientation, 0f);
-		if(Input.GetKeyDown(KeyCode.E)){
+		if(Input.GetKeyDown(KeyCode.E ) || Input.GetKeyDown(KeyCode.Joystick1Button9))
+        {
 			if(fps){
 				// this updates the position to be behind the player
 				transform.position = getPositionBehind(this.player, 15, 3);
