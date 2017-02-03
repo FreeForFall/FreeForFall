@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
 			this.airbone = true;
 			this.rigidBody.AddForce(new Vector3(0f, 200f, 0f));
 		}
-		if(Input.GetKey(KeyCode.LeftShift)){
+		if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.Joystick1Button8)){
 			this.sprintMultiplier = this.maxSprintSpeed;
 		} else {
 			this.sprintMultiplier = 1f;
