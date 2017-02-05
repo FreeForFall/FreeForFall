@@ -4,7 +4,26 @@ timeCreated: 1486054723
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: Cube
+    100002: Cube_001
+    100004: Cylinder
+    100006: //RootNode
+    400000: Cube
+    400002: Cube_001
+    400004: Cylinder
+    400006: //RootNode
+    2300000: Cube
+    2300002: Cube_001
+    2300004: Cylinder
+    3300000: Cube
+    3300002: Cube_001
+    3300004: Cylinder
+    4300000: Cylinder
+    4300002: Cube
+    4300004: Cube_001
+    7400000: Default Take
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
