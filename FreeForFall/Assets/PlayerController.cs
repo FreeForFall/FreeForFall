@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision c){
-		this.airbone = !(c.gameObject.name == "Ground");
+		this.airbone = false;
 	}
 
 	private void doMovement(){
