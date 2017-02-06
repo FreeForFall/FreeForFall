@@ -103,6 +103,8 @@ public class FracturedChunk : MonoBehaviour
         }
     }
 
+
+
     void OnCollisionEnter(Collision collision)
     {
         if(FracturedObjectSource == null || collision == null)
@@ -160,7 +162,7 @@ public class FracturedChunk : MonoBehaviour
                 }
             }
 
-            if(bOtherIsFreeChunkFromSameObject == false && collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachMinVelocity && fMass > FracturedObjectSource.EventDetachMinMass && GetComponent<Rigidbody>() != null && IsDestructibleChunk())
+            if(bOtherIsFreeChunkFromSameObject == false && collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachMinVelocity && collision.rigidbody && GetComponent<Rigidbody>() != null && IsDestructibleChunk())
             {
                 CollisionInfo collisionInfo = new CollisionInfo(this, collision, true);
                 FracturedObjectSource.NotifyDetachChunkCollision(collisionInfo);
@@ -175,12 +177,7 @@ public class FracturedChunk : MonoBehaviour
                     DetachFromObject();
                    
 
-                    if (collision.rigidbody)
-                    {
-
-                        DetachFromObject();
-
-                    }
+                   
 
                     foreach (FracturedChunk chunk in listBreaks)
                     {
@@ -206,16 +203,16 @@ public class FracturedChunk : MonoBehaviour
         {
             // Free chunk
 
-            if(collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachedMinVelocity && fMass > FracturedObjectSource.EventDetachedMinMass)
+            if(collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachedMinVelocity && collision.rigidbody)
             {
                 FracturedObjectSource.NotifyFreeChunkCollision(new CollisionInfo(this, collision, true));
             }
         }
     }
-
+    
 
     void OnCollisionStay(Collision collision)
-    {
+    { 
         if (FracturedObjectSource == null || collision == null)
         {
             return;
@@ -271,7 +268,7 @@ public class FracturedChunk : MonoBehaviour
                 }
             }
 
-            if (bOtherIsFreeChunkFromSameObject == false && collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachMinVelocity && fMass > FracturedObjectSource.EventDetachMinMass && GetComponent<Rigidbody>() != null && IsDestructibleChunk())
+            if (bOtherIsFreeChunkFromSameObject == false && collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachMinVelocity && collision.rigidbody && GetComponent<Rigidbody>() != null && IsDestructibleChunk())
             {
                 CollisionInfo collisionInfo = new CollisionInfo(this, collision, true);
                 FracturedObjectSource.NotifyDetachChunkCollision(collisionInfo);
@@ -284,13 +281,6 @@ public class FracturedChunk : MonoBehaviour
                     listBreaks = ComputeRandomConnectionBreaks();
                     listBreaks.Add(this);
                     DetachFromObject();
-
-                    if (collision.rigidbody)
-                    {
-
-                        DetachFromObject();
-
-                    }
 
                     foreach (FracturedChunk chunk in listBreaks)
                     {
@@ -316,14 +306,14 @@ public class FracturedChunk : MonoBehaviour
         {
             // Free chunk
 
-            if (collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachedMinVelocity && fMass > FracturedObjectSource.EventDetachedMinMass)
+            if (collision.relativeVelocity.magnitude > FracturedObjectSource.EventDetachedMinVelocity && collision.rigidbody)
             {
                 FracturedObjectSource.NotifyFreeChunkCollision(new CollisionInfo(this, collision, true));
             }
         }
     }
-
-
+    
+    
 #if UNITY_EDITOR
 
     void OnRenderObject()
