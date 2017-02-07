@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
 	private void doMovement(){
 		if((Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Space)) && !this.airbone){
 			this.airbone = true;
-			this.rigidBody.AddForce(new Vector3(0f, 200f, 0f));
+			this.rigidBody.AddForce(new Vector3(0f, 50000f, 0f));
 		}
 		if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.Joystick1Button8)){
 			this.sprintMultiplier = this.maxSprintSpeed;
@@ -37,10 +37,6 @@ public class PlayerController : MonoBehaviour {
 		transform.Translate(Vector3.forward * v * Time.deltaTime * this.speed * this.sprintMultiplier);
 	}
 
-
-
-	
-	
 	// Update is called once per frame
 	void Update () {
 		doMovement();
