@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 4ad1e92ed0f2da24a9c8d0059a61affd
+timeCreated: 1486502883
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: CF Denim Jeans
+  fontNames:
+  - CF Denim Jeans
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
