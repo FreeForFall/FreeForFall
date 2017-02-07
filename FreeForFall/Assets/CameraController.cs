@@ -4,27 +4,35 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-	private bool fps;
+	public bool fps;
 	private GameObject player;
 	private Vector3 distance;
 	private float horizontalOrientation;
 	private float verticalOrientation;
 	private Vector3 eulerAngle;
 	private float rotationAroundPlayer;
+	public float sensibility;
 
 	void Start () {
-		this.fps = true;
 		this.player = GameObject.Find("Player");
 		this.distance = new Vector3(0, -3, 15);
 		this.horizontalOrientation = 0f;
 		this.verticalOrientation = 0f;
 		this.eulerAngle = new Vector3(0f, 0f, 0f);
 		this.rotationAroundPlayer = 0f;
+		if(sensibility == 0)
+			sensibility = 1;
+
+		// To start in fps, remove those two lines
+		if(!fps){ 
+			transform.position = getPositionBehind(this.player, 15, 3);
+			transform.LookAt(this.player.transform);
+		}
 	}
 
 	private void doOrientation(){
-		horizontalOrientation += Input.GetAxis("Mouse X");
-		verticalOrientation -= Input.GetAxis("Mouse Y");
+		horizontalOrientation += Input.GetAxis("Mouse X") * sensibility;
+		verticalOrientation -= Input.GetAxis("Mouse Y") * sensibility;
 		this.eulerAngle.x = verticalOrientation;
 		this.eulerAngle.y = horizontalOrientation;
 	}
