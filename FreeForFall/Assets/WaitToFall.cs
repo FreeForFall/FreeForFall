@@ -4,22 +4,26 @@ using UnityEngine;
 
 public class WaitToFall : MonoBehaviour {
 
-	public float Delay = 0.4f;
+	private float _dropDelay;
+	private float _destroyDelay;
 
-
-	void Drop(){
-		Rigidbody rb = GetComponent<Rigidbody>();
-		rb.isKinematic = false;
-		Invoke("Remove", 3f);
+	void Start() {
+		_dropDelay = transform.parent.gameObject.GetComponent<GroundManager>().DropDelay;
+		_destroyDelay = transform.parent.gameObject.GetComponent<GroundManager>().DestroyDelay;
 	}
 
-	void Remove(){
+	void Drop() {
+		Rigidbody rb = GetComponent<Rigidbody>();
+		rb.isKinematic = false;
+		Invoke("Remove", _destroyDelay);
+	}
+
+	void Remove() {
 		Destroy(gameObject);
 	}
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "Player")
-			Invoke("Drop", 0.4f);
+			Invoke("Drop", _dropDelay);
     }
 }

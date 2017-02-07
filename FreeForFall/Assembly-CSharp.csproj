@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\CameraController.cs" />
+     <Compile Include="Assets\GroundManager.cs" />
      <Compile Include="Assets\PlayerController.cs" />
      <Compile Include="Assets\Ultimate Game Tools\Fracturing\CDT\P2T.cs" />
      <Compile Include="Assets\Ultimate Game Tools\Fracturing\CDT\Triangulation\Delaunay\DelaunayTriangle.cs" />
