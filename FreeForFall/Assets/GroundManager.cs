@@ -14,6 +14,16 @@ public class GroundManager : MonoBehaviour {
 			DestroyDelay = 3f;
 		foreach(Transform t in transform){
 			t.gameObject.AddComponent<WaitToFall>();
+			t.gameObject.AddComponent<Rigidbody>();
+			var r = t.GetComponent<Rigidbody>();
+			r.useGravity = true;
+			r.isKinematic = true;
+			var m1 = t.gameObject.AddComponent<MeshCollider>();
+			var m2 = t.gameObject.AddComponent<MeshCollider>();
+			m1.convex = true;
+			m2.convex = true;
+			m2.inflateMesh = true;
+			m2.isTrigger = true;
 		}
 	}
 }
