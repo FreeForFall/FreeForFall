@@ -8,8 +8,8 @@ public class WaitToFall : MonoBehaviour {
 	private float _destroyDelay;
 
 	void Start() {
-		_dropDelay = transform.parent.gameObject.GetComponent<GroundManager>().DropDelay;
-		_destroyDelay = transform.parent.gameObject.GetComponent<GroundManager>().DestroyDelay;
+		_dropDelay = 0.2f;
+		_destroyDelay = 200000000;
 	}
 
 	void Drop() {
