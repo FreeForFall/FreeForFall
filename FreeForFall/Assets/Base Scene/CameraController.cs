@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour {
 	public float sensibility;
 
 	void Start () {
-		this.player = GameObject.Find("Player");
+		this.player = transform.parent.gameObject;
 		this.distance = new Vector3(0, -3, 15);
 		this.horizontalOrientation = 0f;
 		this.verticalOrientation = 0f;
