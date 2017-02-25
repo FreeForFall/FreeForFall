@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 		this.rigidBody = this.GetComponent<Rigidbody>();
 	}
 
-	void OnCollisionEnter(Collision c){
+	void OnTriggerEnter(Collider other){
 		this.airbone = false;
 	}
 

@@ -12,18 +12,19 @@ public class WaitToFall : MonoBehaviour {
 		_destroyDelay = 200000000;
 	}
 
-	void Drop() {
+	void Drop()
+    {
 		Rigidbody rb = GetComponent<Rigidbody>();
 		rb.isKinematic = false;
 		Invoke("Remove", _destroyDelay);
 	}
 
+    void Call()
+    {
+        Invoke("Drop", _dropDelay);
+    }
+
 	void Remove() {
 		Destroy(gameObject);
 	}
-
-    private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Player")
-			Invoke("Drop", _dropDelay);
-    }
 }
