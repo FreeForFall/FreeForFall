@@ -6,19 +6,25 @@ public class UI : MonoBehaviour
 {
     public Text timerLabel;
 
-    private float time;
+	private float fraction = 0f;
+	private float seconds = 0f;
+	private float minutes = 0f;
     private bool timerOn = true;
 
     void Update()
     {
         if (timerOn == true) { 
-            time += Time.deltaTime;
-
-            var minutes = time / 60; 
-            var seconds = time % 60;
-            var fraction = (time * 100) % 100;
-
-            timerLabel.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
+			fraction += Time.deltaTime;
+			if(fraction >= 1){
+				fraction %= 1;
+				seconds++;
+				if(seconds > 60){
+					seconds %= 60;
+					minutes++;
+				}
+			}
+			var disp = (fraction * 100) % 100;
+			timerLabel.text = string.Format("{0}:{1}:{2:0##}", minutes, seconds, disp);
         }
     }
 }
