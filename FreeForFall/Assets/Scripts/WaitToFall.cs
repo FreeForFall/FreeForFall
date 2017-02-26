@@ -6,17 +6,22 @@ public class WaitToFall : MonoBehaviour {
 
 	private float _dropDelay;
 	private float _destroyDelay;
+    private float _dropforce;
+    private GameObject cell;
 
 	void Start() {
 		_dropDelay = 0.2f;
-		_destroyDelay = 200000000;
-	}
+		_destroyDelay = 4;
+        _dropforce = 300f;
+
+    }
 
 	void Drop()
     {
 		Rigidbody rb = GetComponent<Rigidbody>();
 		rb.isKinematic = false;
-		Invoke("Remove", _destroyDelay);
+        rb.AddForce(new Vector3(0f, -_dropforce, 0f));
+        Invoke("Remove", _destroyDelay);
 	}
 
     void Call()
@@ -24,7 +29,8 @@ public class WaitToFall : MonoBehaviour {
         Invoke("Drop", _dropDelay);
     }
 
-	void Remove() {
-		Destroy(gameObject);
+	void Remove()
+    {
+        Destroy(gameObject);
 	}
 }
