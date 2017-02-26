@@ -9,7 +9,7 @@ public class WaitToFall : MonoBehaviour {
 
 	void Start() {
 		_dropDelay = 0.2f;
-		_destroyDelay = 200000000;
+		_destroyDelay = 200000000f;
 	}
 
 	void Drop() {
