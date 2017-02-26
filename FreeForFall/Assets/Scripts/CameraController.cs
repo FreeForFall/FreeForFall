@@ -63,7 +63,7 @@ public class CameraController : MonoBehaviour {
 			this.transform.RotateAround(this.player.transform.position, Vector3.up, rotationAroundPlayer * Time.deltaTime);
 			transform.LookAt(this.player.transform);
 		} else {
-			transform.position = this.player.transform.position;
+			transform.position = this.player.transform.position + Vector3.up;
 			transform.eulerAngles = this.eulerAngle;
 		}
 	}
