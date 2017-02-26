@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Controls : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    public GameObject pauseMenuHolder;
+    public GameObject hud;
+    // Use this for initialization
+    void Start () {
 
     }
 
@@ -19,5 +21,28 @@ void Update () {
             SceneManager.LoadScene("BaseScence");
         }
 
+        if ((Input.GetKeyDown(KeyCode.Joystick1Button8) || Input.GetKeyDown(KeyCode.Escape)))
+        {
+            Pause();
+        }
+
+    }
+
+    public void Pause()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+            hud.SetActive(false);
+            pauseMenuHolder.SetActive(true);
+
+        }
+        else if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            hud.SetActive(false);
+            pauseMenuHolder.SetActive(false);
+
+        }
     }
 }

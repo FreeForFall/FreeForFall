@@ -11,7 +11,7 @@ public class UI : MonoBehaviour
 
     void Update()
     {
-        if (timerOn == true) { 
+       
             time += Time.deltaTime;
 
             var minutes = time / 60; 
@@ -21,4 +21,5 @@ public class UI : MonoBehaviour
             timerLabel.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
         }
     }
-}
+
+
