@@ -6,7 +6,9 @@ public class UI : MonoBehaviour
 {
     public Text timerLabel;
 
-    private float time;
+	private float fraction = 0f;
+	private float seconds = 0f;
+	private float minutes = 0f;
     private bool timerOn = true;
 
     void Update()
