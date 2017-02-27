@@ -11,14 +11,15 @@ public class Menu : MonoBehaviour
     public GameObject optionsMenuHolder;
     public GameObject pauseMenuHolder;
     public GameObject hud;
-    public GameObject timer;
+    public Text timerLabel;
+    public Text timerLabel2;
     public Toggle[] resolutionToggles;
     public Toggle fullscreenToggle;
     public int[] screenWidths;
     int activeScreenResIndex;
     public bool fps;
   
-
+    
     void Start()
     {
         Time.timeScale = 1;
@@ -31,8 +32,14 @@ public class Menu : MonoBehaviour
         }
 
         fullscreenToggle.isOn = isFullscreen;
+        
     }
 
+    void pause()
+    {
+        while (true)
+        timerLabel.text = timerLabel2.text;
+    }
     public void Play()
     {
         SceneManager.LoadScene("BaseScence");
@@ -148,18 +155,19 @@ public class Menu : MonoBehaviour
 
     public void Pause()
     {
-        Renderer r = hud.GetComponent<Renderer>();
+        
         if (Time.timeScale == 1)
         {
             Time.timeScale = 0;
-            r.enabled = false;
+            
             pauseMenuHolder.SetActive(true);
 
         }
         else if (Time.timeScale == 0)
         {
             Time.timeScale = 1;
-            r.enabled = true;
+            hud.SetActive(true);
+            
             pauseMenuHolder.SetActive(false);
 
         }

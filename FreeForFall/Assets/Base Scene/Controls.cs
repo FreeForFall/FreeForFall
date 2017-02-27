@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Controls : MonoBehaviour {
 
+
+  
     public GameObject pauseMenuHolder;
     public GameObject hud;
+   
     // Use this for initialization
     void Start () {
 
@@ -25,7 +29,8 @@ void Update () {
         {
             Pause();
         }
-
+           
+        
     }
 
     public void Pause()
@@ -34,13 +39,15 @@ void Update () {
         {
             Time.timeScale = 0;
             hud.SetActive(false);
+           
             pauseMenuHolder.SetActive(true);
 
         }
         else if (Time.timeScale == 0)
         {
             Time.timeScale = 1;
-            hud.SetActive(false);
+            hud.SetActive(true);
+           
             pauseMenuHolder.SetActive(false);
 
         }

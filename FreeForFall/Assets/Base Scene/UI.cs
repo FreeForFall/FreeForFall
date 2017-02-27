@@ -11,7 +11,6 @@ public class UI : MonoBehaviour
 
     void Update()
     {
-       
             time += Time.deltaTime;
 
             var minutes = time / 60; 
