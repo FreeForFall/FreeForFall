@@ -9,15 +9,20 @@ public class Menu : MonoBehaviour
 
     public GameObject mainMenuHolder;
     public GameObject optionsMenuHolder;
+    public GameObject pauseMenuHolder;
+    public GameObject hud;
+    public Text timerLabel;
+    public Text timerLabel2;
     public Toggle[] resolutionToggles;
     public Toggle fullscreenToggle;
     public int[] screenWidths;
     int activeScreenResIndex;
     public bool fps;
   
-
+    
     void Start()
     {
+        Time.timeScale = 1;
         activeScreenResIndex = PlayerPrefs.GetInt("screen res index");
         bool isFullscreen = (PlayerPrefs.GetInt("fullscreen") == 1) ? true : false;
 
@@ -27,8 +32,14 @@ public class Menu : MonoBehaviour
         }
 
         fullscreenToggle.isOn = isFullscreen;
+        
     }
 
+    void pause()
+    {
+        while (true)
+        timerLabel.text = timerLabel2.text;
+    }
     public void Play()
     {
         SceneManager.LoadScene("BaseScence");
@@ -49,6 +60,18 @@ public class Menu : MonoBehaviour
     {
         optionsMenuHolder.SetActive(false);
         mainMenuHolder.SetActive(true);
+    }
+
+    public void PauseMenu()
+    {
+        optionsMenuHolder.SetActive(false);
+        pauseMenuHolder.SetActive(true);
+    }
+
+    public void OptionsPause()
+    {
+        pauseMenuHolder.SetActive(false);
+        optionsMenuHolder.SetActive(true);
     }
 
     public void SetResolution(int i)
@@ -123,4 +146,32 @@ public class Menu : MonoBehaviour
         PlayerPrefs.SetInt("fullscreen", ((isFullscreen) ? 1 : 0));
         PlayerPrefs.Save();
     }
+
+    public void QuitPause()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+
+    public void Pause()
+    {
+        
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+            
+            pauseMenuHolder.SetActive(true);
+
+        }
+        else if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            hud.SetActive(true);
+            
+            pauseMenuHolder.SetActive(false);
+
+        }
+    }
+
+
 }

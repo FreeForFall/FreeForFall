@@ -13,18 +13,14 @@ public class UI : MonoBehaviour
 
     void Update()
     {
-        if (timerOn == true) { 
-			fraction += Time.deltaTime;
-			if(fraction >= 1){
-				fraction %= 1;
-				seconds++;
-				if(seconds > 60){
-					seconds %= 60;
-					minutes++;
-				}
-			}
-			var disp = (fraction * 100) % 100;
-			timerLabel.text = string.Format("{0}:{1}:{2:0##}", minutes, seconds, disp);
+            time += Time.deltaTime;
+
+            var minutes = time / 60; 
+            var seconds = time % 60;
+            var fraction = (time * 100) % 100;
+
+            timerLabel.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
         }
     }
-}
+
+
