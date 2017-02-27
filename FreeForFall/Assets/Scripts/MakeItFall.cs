@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MakeItFall : MonoBehaviour {
 
@@ -10,8 +8,5 @@ public class MakeItFall : MonoBehaviour {
         {
             other.gameObject.BroadcastMessage("Call");
         }
-        else
-            return;
-
     }
 }

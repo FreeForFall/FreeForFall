@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DestroyCell : MonoBehaviour {
 
@@ -10,8 +8,5 @@ public class DestroyCell : MonoBehaviour {
         {
             Destroy(other.gameObject);
         }
-        else
-            return;
-
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
@@ -22,7 +20,6 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void doMovement(){
-		
 		if((Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Space)) && !this.airbone){
 			this.airbone = true;
 			this.rigidBody.AddForce(new Vector3(0f, 50000f, 0f));

@@ -6,12 +6,18 @@ public class NetworkScript : MonoBehaviour {
 
 	void Start () {
         Debug.Log("ok");
-		connectToServer();
+		connectToServer(GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode);
 	}
 
-    private void connectToServer()
+    private void connectToServer(bool online)
     {
-        PhotonNetwork.ConnectUsingSettings("v0.1");
+        if(!online){
+            PhotonNetwork.offlineMode = true;
+            PhotonNetwork.CreateRoom("some name");
+        }
+        else{
+            PhotonNetwork.ConnectUsingSettings("v0.1");
+        }
     }
 
     void OnGUI()

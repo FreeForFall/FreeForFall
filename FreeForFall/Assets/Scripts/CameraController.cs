@@ -20,8 +20,11 @@ public class CameraController : MonoBehaviour {
 		this.verticalOrientation = 0f;
 		this.eulerAngle = new Vector3(0f, 0f, 0f);
 		this.rotationAroundPlayer = 0f;
+		sensibility = GameObject.Find("SettingsManager").GetComponent<Settings>().Sensitivity;
 		if(sensibility == 0)
 			sensibility = 1;
+
+		fps = GameObject.Find("SettingsManager").GetComponent<Settings>().FpsMode;
 
 		// To start in fps, remove those two lines
 		if(!fps){ 

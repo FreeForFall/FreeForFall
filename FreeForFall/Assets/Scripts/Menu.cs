@@ -109,19 +109,14 @@ public class Menu : MonoBehaviour
       
     }
 
-    public void SetSensitvity(int value)
+    public void SetSensitvity(Slider slider)
     {
-
+        GameObject.Find("SettingsManager").GetComponent<Settings>().Sensitivity = slider.value;
     }
 
     public void SetCamera(bool fps)
     {
-        if (fps)
-        {
-            
-
-            
-        }
+        GameObject.Find("SettingsManager").GetComponent<Settings>().FpsMode = true;
     }
 
 

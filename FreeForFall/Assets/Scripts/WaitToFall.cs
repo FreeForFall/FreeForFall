@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WaitToFall : MonoBehaviour {
 
@@ -13,7 +11,6 @@ public class WaitToFall : MonoBehaviour {
 		_dropDelay = 0.2f;
 		_destroyDelay = 20000000000000;
         _dropforce = 300f;
-
     }
 
 	void Drop()
