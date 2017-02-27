@@ -40,7 +40,10 @@ public class NetworkScript : MonoBehaviour {
     void OnJoinedRoom()
     {
         Debug.Log("Joined a room dede Status : " + PhotonNetwork.connectionStateDetailed.ToString());
-        var player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        Vector3 spawnPosition = new Vector3(0, 33, 0);
+        spawnPosition.x = Random.Range(-9f, 9f);
+        spawnPosition.z = Random.Range(-9f, 9f);
+        var player = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity, 0);
 		player.GetComponent<PlayerController>().enabled = true;
 		player.GetComponent<Controls>().enabled = true;
 		player.transform.Find("PlayerView").GetComponent<Camera>().enabled = true;
