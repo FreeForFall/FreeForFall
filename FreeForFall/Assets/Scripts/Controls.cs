@@ -25,14 +25,20 @@ void Update () {
             SceneManager.LoadScene("BaseScence");
         }
 
+        /*
         if ((Input.GetKeyDown(KeyCode.Joystick1Button8) || Input.GetKeyDown(KeyCode.Escape)))
         {
             Pause();
         }
-           
+          */
+
+        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button7)){
+            Application.Quit();
+        } 
         
     }
 
+/* 
     public void Pause()
     {
         if (Time.timeScale == 1)
@@ -52,4 +58,5 @@ void Update () {
 
         }
     }
+    */
 }

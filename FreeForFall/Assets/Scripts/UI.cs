@@ -5,10 +5,7 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
     public Text timerLabel;
-
-	private float fraction = 0f;
-	private float seconds = 0f;
-	private float minutes = 0f;
+    private float time = 0f;
     private bool timerOn = true;
 
     void Update()
