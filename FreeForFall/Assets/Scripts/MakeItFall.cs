@@ -6,7 +6,7 @@ public class MakeItFall : MonoBehaviour {
     {
         if (other.tag == "Ground")
         {
-            other.gameObject.BroadcastMessage("Call");
+            other.gameObject.BroadcastMessage("CallDrop");
         }
     }
 }
