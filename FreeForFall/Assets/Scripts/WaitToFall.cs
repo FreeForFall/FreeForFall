@@ -7,16 +7,41 @@ public class WaitToFall : MonoBehaviour {
     private float _dropforce;
     private Vector3 _initialPosition;
     private Quaternion _initialRotation;
-    private bool _isFallen = false;
+    public bool _isFallen = false;
     private GameObject cell;
+    public float speed = 5;
+    public float rotateSpeed = 360;
 
-	void Start() {
+    void Start() {
 		_dropDelay = 0.2f;
 		_destroyDelay = 20000000000000;
         _dropforce = 300f;
-        Rigidbody rb = GetComponent<Rigidbody>();
         _initialPosition = transform.position;
         _initialRotation = transform.rotation;
+    }
+
+    void Update()
+    {
+        if (_isFallen)
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            float step = speed * Time.deltaTime;
+            float rotate = rotateSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, _initialPosition, step);
+            rb.rotation = Quaternion.RotateTowards(transform.rotation, _initialRotation, rotate);
+            if (transform.position == _initialPosition)
+            {
+                _isFallen = false;
+            }
+        }
+
+    }
+
+    void IsFallen()
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        _isFallen = true;
     }
 
     void Drop()
@@ -33,17 +58,5 @@ public class WaitToFall : MonoBehaviour {
     void CallDrop()
     {
         Invoke("Drop", _dropDelay);
-    }
-
-    void Replace()
-    {
-        Rigidbody rb = GetComponent<Rigidbody>();
-        transform.position = Vector3.Lerp(transform.position, _initialPosition, 100f );
-        transform.rotation = Quaternion.Lerp(transform.rotation, _initialRotation, 100f);
-        if (rb.transform.position == _initialPosition)
-        {
-            rb.isKinematic = true;
-            _isFallen = false;
-        }
     }
 }

@@ -6,7 +6,7 @@ public class DestroyCell : MonoBehaviour {
     {
         if (other.tag == "Ground")
         {
-            other.gameObject.BroadcastMessage("Replace");
+            other.gameObject.BroadcastMessage("IsFallen");
         }
     }
 }
