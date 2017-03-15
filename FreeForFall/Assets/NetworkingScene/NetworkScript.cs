@@ -40,6 +40,7 @@ public class NetworkScript : MonoBehaviour {
     void OnJoinedRoom()
     {
         Debug.Log("Joined a room dede Status : " + PhotonNetwork.connectionStateDetailed.ToString());
+		Instantiate (Resources.Load("Map"));
         Vector3 spawnPosition = new Vector3(0, 33, 0);
         spawnPosition.x = Random.Range(-9f, 9f);
         spawnPosition.z = Random.Range(-9f, 9f);
