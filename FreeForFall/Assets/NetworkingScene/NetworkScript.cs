@@ -121,7 +121,7 @@ namespace AssemblyCSharp
 		{
 			Debug.Log ("Creating a room with text : " + _nameInput.text);
 			var options = new RoomOptions ();
-			options.MaxPlayers = 2;
+			options.MaxPlayers = 10;
 			PhotonNetwork.JoinOrCreateRoom (_nameInput.text, options, null);
 		}
 
@@ -168,9 +168,8 @@ namespace AssemblyCSharp
 				return;
 			Debug.Log ("The room is now full");
 			/*
-		 * I'm not sure of the way the game is handling disconnections...
-		 * 
-		 **/
+			 * I'm not sure of the way the game is handling disconnections...
+			 */
 			if (!PhotonNetwork.isMasterClient)
 				_startGameButton.interactable = false;
 		}
@@ -182,26 +181,8 @@ namespace AssemblyCSharp
 			//_startGameButton.interactable = false;
 			Destroy (_waitForGameStartCanvas);
 			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
-			// This is just for testing
-			//loadMap ("Map");
+			loadMap ("Map");
 		}
-
-		/*
-	void OnJoinedRoom ()
-	{
-		Debug.Log ("Joined a room Status : " + PhotonNetwork.connectionStateDetailed.ToString ());
-		Instantiate (Resources.Load ("Map"));
-		Vector3 spawnPosition = new Vector3 (0, 33, 0);
-		spawnPosition.x = Random.Range (-9f, 9f);
-		spawnPosition.z = Random.Range (-9f, 9f);
-		var player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
-		player.GetComponent<PlayerController> ().enabled = true;
-		player.GetComponent<Controls> ().enabled = true;
-		player.transform.Find ("PlayerView").GetComponent<Camera> ().enabled = true;
-		player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
-	}
-	*/
-
 	}
 
 }
