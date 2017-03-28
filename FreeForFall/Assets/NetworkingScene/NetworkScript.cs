@@ -22,6 +22,11 @@ namespace AssemblyCSharp
 		private Text _playerCountText;
 		private Button _startGameButton;
 
+		public int getPlayerCount ()
+		{
+			return PhotonNetwork.room.PlayerCount;
+		}
+
 		void Start ()
 		{
 			PhotonNetwork.autoJoinLobby = true;
