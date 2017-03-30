@@ -75,7 +75,7 @@ public class Menu : MonoBehaviour
 		optionsMenuHolder.SetActive (true);
 	}
 
-	public void SetResolution (int i)
+	public void SetResolution ()
 	{
 		if (resolutionToggles [3].isOn)
 		{
@@ -136,7 +136,7 @@ public class Menu : MonoBehaviour
 		}
 		else
 		{
-			SetResolution (activeScreenResIndex);
+			SetResolution ();
 		}
 
 		PlayerPrefs.SetInt ("fullscreen", ((isFullscreen) ? 1 : 0));
