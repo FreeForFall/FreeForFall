@@ -57,6 +57,7 @@ namespace AssemblyCSharp
 					break;
 				case 0x3:
 				// remove walls
+					Invoke ("switchCamera", 3);
 					Invoke ("destroyBox", 5);
 					break;
 				default:
