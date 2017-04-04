@@ -23,6 +23,8 @@ namespace AssemblyCSharp
 		private Text _playerCountText;
 		private Button _startGameButton;
 
+		private GameObject _player;
+
 		private int _loadedCount;
 
 		public int getPlayerCount ()
@@ -71,8 +73,15 @@ namespace AssemblyCSharp
 			{
 				Debug.Log ("REMOVING WALLS");
 				NetworkEventHandlers.SendEvent (new RemoveWallsEvent ());
+				Invoke ("switchCamera", 3);
 				Invoke ("destroyBox", 5);
 			}
+		}
+
+		private void switchCamera ()
+		{
+			GameObject.Find ("Camera").SetActive (false);
+			_player.transform.Find ("PlayerView").GetComponent<Camera> ().enabled = true;
 		}
 
 		private void destroyBox ()
@@ -107,12 +116,10 @@ namespace AssemblyCSharp
 			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
-			var player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
-			player.GetComponent<PlayerController> ().enabled = true;
-			player.GetComponent<Controls> ().enabled = true;
-			player.transform.Find ("PlayerView").GetComponent<Camera> ().enabled = true;
-			player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
-			GameObject.Find ("Camera").SetActive (false);
+			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
+			_player.GetComponent<PlayerController> ().enabled = true;
+			_player.GetComponent<Controls> ().enabled = true;
+			_player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
 			{
