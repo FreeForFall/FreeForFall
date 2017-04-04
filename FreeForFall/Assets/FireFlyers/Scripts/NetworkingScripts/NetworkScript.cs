@@ -47,19 +47,19 @@ namespace AssemblyCSharp
 		{
 			switch (eventCode)
 			{
-			case 0x0:
-				handleMapLoadNetworkEvent (((byte[])content) [0]);
-				break;
-			case 0x1:
-				removeWalls ();
-				break;
-			case 0x3:
+				case 0x0:
+					handleMapLoadNetworkEvent (((byte[])content) [0]);
+					break;
+				case 0x1:
+					removeWalls ();
+					break;
+				case 0x3:
 				// remove walls
-				Invoke ("destroyBox", 10);
-				break;
-			default:
-				Debug.LogWarning ("Received unknown event with code " + eventCode);
-				return;
+					Invoke ("destroyBox", 5);
+					break;
+				default:
+					Debug.LogWarning ("Received unknown event with code " + eventCode);
+					return;
 			}
 		}
 
@@ -71,13 +71,14 @@ namespace AssemblyCSharp
 			{
 				Debug.Log ("REMOVING WALLS");
 				NetworkEventHandlers.SendEvent (new RemoveWallsEvent ());
-				Invoke ("destroyBox", 10);
+				Invoke ("destroyBox", 5);
 			}
 		}
 
 		private void destroyBox ()
 		{
-			Destroy (_map.transform.Find ("box").gameObject);
+			Debug.Log ("Destroying the box");
+			Destroy (_map.transform.Find ("BoxPrefab").gameObject);
 		}
 
 		private int handlePlayerLoaded ()
@@ -89,20 +90,20 @@ namespace AssemblyCSharp
 		{
 			switch (map)
 			{
-			case 0x0:
-				loadMap ("Map");
-				return;
-			default:
-				Debug.LogWarning ("Tried to load a map that didn't exist with id : " + map);
-				return;
+				case 0x0:
+					loadMap ("Map");
+					return;
+				default:
+					Debug.LogWarning ("Tried to load a map that didn't exist with id : " + map);
+					return;
 			}
 		}
 
 		private void loadMap (string name)
 		{
 			Debug.Log ("Loading map " + name);
-			_map = (GameObject)Instantiate (Resources.Load (name));
-			Vector3 spawnPosition = new Vector3 (0, 33, 0);
+			_map = (GameObject)Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
+			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			var player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
