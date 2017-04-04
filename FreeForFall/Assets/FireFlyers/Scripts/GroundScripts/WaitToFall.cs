@@ -20,6 +20,7 @@ public class WaitToFall : MonoBehaviour {
         _initialRotation = transform.rotation;
     }
 
+	/*
     void Update()
     {
         if (_isFallen)
@@ -36,6 +37,7 @@ public class WaitToFall : MonoBehaviour {
         }
 
     }
+    */
 
     void IsFallen()
     {
