@@ -103,6 +103,7 @@ namespace AssemblyCSharp
 		{
 			Debug.Log ("Loading map " + name);
 			_map = (GameObject)Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
+			Destroy (_waitForGameStartCanvas);
 			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
@@ -113,6 +114,10 @@ namespace AssemblyCSharp
 			player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
 			GameObject.Find ("Camera").SetActive (false);
 			removeWalls ();
+			if (!PhotonNetwork.isMasterClient)
+			{
+				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
+			}
 		}
 
 		private void init ()
@@ -147,7 +152,10 @@ namespace AssemblyCSharp
 
 		void OnGUI ()
 		{
-			GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
+			if (PhotonNetwork.isMasterClient)
+				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString () + " Count in room : " + PhotonNetwork.room.PlayerCount + " Count Loaded : " + _loadedCount);
+			else
+				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
 		}
 
 		private void findMatchmakingObjects ()
@@ -220,7 +228,6 @@ namespace AssemblyCSharp
 			if (!PhotonNetwork.isMasterClient)
 				return;
 			//_startGameButton.interactable = false;
-			Destroy (_waitForGameStartCanvas);
 			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
 			loadMap ("Map");
 		}
