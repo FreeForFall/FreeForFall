@@ -15,12 +15,17 @@ namespace AssemblyCSharp
 	*/
 		private GameObject _matchMakingCanvas;
 		private GameObject _waitForGameStartCanvas;
+		private GameObject _map;
 		private Button _roomCreationButton;
 		private Button _refreshButton;
 		private InputField _nameInput;
 		private Text _roomList;
 		private Text _playerCountText;
 		private Button _startGameButton;
+
+		private GameObject _player;
+
+		private int _loadedCount;
 
 		public int getPlayerCount ()
 		{
@@ -29,6 +34,7 @@ namespace AssemblyCSharp
 
 		void Start ()
 		{
+			_loadedCount = 0;
 			PhotonNetwork.autoJoinLobby = true;
 			PhotonNetwork.OnEventCall += handleNetworkEvents;
 			_matchMakingCanvas = (GameObject)Resources.Load ("MatchmakingCanvas");
@@ -43,40 +49,83 @@ namespace AssemblyCSharp
 		{
 			switch (eventCode)
 			{
-			case 0x0:
-				handleMapLoadNetworkEvent (((byte[])content) [0]);
-				break;
-			default:
-				Debug.LogWarning ("Received unknown event with code " + eventCode);
-				return;
+				case 0x0:
+					handleMapLoadNetworkEvent (((byte[])content) [0]);
+					break;
+				case 0x1:
+					removeWalls ();
+					break;
+				case 0x3:
+				// remove walls
+					Invoke ("switchCamera", 3);
+					Invoke ("destroyBox", 5);
+					break;
+				default:
+					Debug.LogWarning ("Received unknown event with code " + eventCode);
+					return;
 			}
+		}
+
+		private void removeWalls ()
+		{
+			if (!PhotonNetwork.isMasterClient)
+				return;
+			if (handlePlayerLoaded () >= PhotonNetwork.room.PlayerCount)
+			{
+				Debug.Log ("REMOVING WALLS");
+				NetworkEventHandlers.SendEvent (new RemoveWallsEvent ());
+				Invoke ("switchCamera", 3);
+				Invoke ("destroyBox", 5);
+			}
+		}
+
+		private void switchCamera ()
+		{
+			GameObject.Find ("Camera").SetActive (false);
+			_player.transform.Find ("PlayerView").GetComponent<Camera> ().enabled = true;
+		}
+
+		private void destroyBox ()
+		{
+			Debug.Log ("Destroying the box");
+			Destroy (_map.transform.Find ("BoxPrefab").gameObject);
+		}
+
+		private int handlePlayerLoaded ()
+		{
+			return ++_loadedCount;
 		}
 
 		private void handleMapLoadNetworkEvent (byte map)
 		{
 			switch (map)
 			{
-			case 0x0:
-				loadMap ("Map");
-				return;
-			default:
-				Debug.LogWarning ("Tried to load a map that didn't exist with id : " + map);
-				return;
+				case 0x0:
+					loadMap ("Map");
+					return;
+				default:
+					Debug.LogWarning ("Tried to load a map that didn't exist with id : " + map);
+					return;
 			}
 		}
 
 		private void loadMap (string name)
 		{
 			Debug.Log ("Loading map " + name);
-			Instantiate (Resources.Load (name));
-			Vector3 spawnPosition = new Vector3 (0, 33, 0);
+			_map = (GameObject)Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
+			Destroy (_waitForGameStartCanvas);
+			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
-			var player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
-			player.GetComponent<PlayerController> ().enabled = true;
-			player.GetComponent<Controls> ().enabled = true;
-			player.transform.Find ("PlayerView").GetComponent<Camera> ().enabled = true;
-			player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
+			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
+			_player.GetComponent<PlayerController> ().enabled = true;
+			_player.GetComponent<Controls> ().enabled = true;
+			_player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
+			removeWalls ();
+			if (!PhotonNetwork.isMasterClient)
+			{
+				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
+			}
 		}
 
 		private void init ()
@@ -111,7 +160,10 @@ namespace AssemblyCSharp
 
 		void OnGUI ()
 		{
-			GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
+			if (PhotonNetwork.isMasterClient)
+				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString () + " Count in room : " + PhotonNetwork.room.PlayerCount + " Count Loaded : " + _loadedCount);
+			else
+				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
 		}
 
 		private void findMatchmakingObjects ()
@@ -184,7 +236,6 @@ namespace AssemblyCSharp
 			if (!PhotonNetwork.isMasterClient)
 				return;
 			//_startGameButton.interactable = false;
-			Destroy (_waitForGameStartCanvas);
 			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
 			loadMap ("Map");
 		}
