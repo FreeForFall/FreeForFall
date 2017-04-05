@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 namespace AssemblyCSharp
 {
@@ -9,10 +11,18 @@ namespace AssemblyCSharp
 	{
 		/*
 
-	TODO : Rewrite this, at the moment I need have 2 find*Objects functions which is not pretty.
-	Instantiating the two menus from the beginning and only rendering one of them could be cool.
+		TODO : Rewrite this, at the moment I need have 2 find*Objects functions which is not pretty.
+		Instantiating the two menus from the beginning and only rendering one of them could be cool.
 
-	*/
+		*/
+
+		/*
+
+
+		The event handling should be reworked too. Normal clients should ignore most events.
+		Maybe reserve < 20 eventCodes for master client events.
+
+		*/
 		private GameObject _matchMakingCanvas;
 		private GameObject _waitForGameStartCanvas;
 		private GameObject _map;
@@ -26,6 +36,7 @@ namespace AssemblyCSharp
 		private GameObject _player;
 
 		private int _loadedCount;
+		private int _lostCount;
 
 		public int getPlayerCount ()
 		{
@@ -35,6 +46,7 @@ namespace AssemblyCSharp
 		void Start ()
 		{
 			_loadedCount = 0;
+			_lostCount = 0;
 			PhotonNetwork.autoJoinLobby = true;
 			PhotonNetwork.OnEventCall += handleNetworkEvents;
 			_matchMakingCanvas = (GameObject)Resources.Load ("MatchmakingCanvas");
@@ -60,10 +72,45 @@ namespace AssemblyCSharp
 					Invoke ("switchCamera", 3);
 					Invoke ("destroyBox", 5);
 					break;
+				case 0x19:
+					// Player lost
+					handlePlayerLost ();
+					break;
+				case 0x99:
+					// End of the game
+					endGame ();
+					break;
 				default:
 					Debug.LogWarning ("Received unknown event with code " + eventCode);
 					return;
 			}
+		}
+
+		private void endGame ()
+		{
+			PhotonNetwork.Disconnect ();
+			SceneManager.LoadScene ("Menu");
+		}
+
+		private int playerLost ()
+		{
+			return ++_lostCount;
+		}
+
+		// public because has to be called from PlayerCollector.cs
+		public void handlePlayerLost ()
+		{
+			Debug.Log ("A player lost");
+			if (!PhotonNetwork.isMasterClient)
+				return;
+			if (playerLost () < PhotonNetwork.room.PlayerCount)
+			{
+				Debug.Log ("a player lost, but he wasn't the last one");
+				return;
+			}
+			Debug.Log ("A player lost and was the last man standing.");
+			NetworkEventHandlers.SendEvent (new EndGameEvent ());
+			endGame ();
 		}
 
 		private void removeWalls ()
@@ -178,7 +225,7 @@ namespace AssemblyCSharp
 		{
 			Debug.Log ("Creating a room with text : " + _nameInput.text);
 			var options = new RoomOptions ();
-			options.MaxPlayers = 10;
+			options.MaxPlayers = 255;
 			PhotonNetwork.JoinOrCreateRoom (_nameInput.text, options, null);
 		}
 
@@ -221,9 +268,6 @@ namespace AssemblyCSharp
 		void OnPhotonPlayerConnected (PhotonPlayer other)
 		{
 			Debug.Log ("Another player joined the room...");
-			if (PhotonNetwork.room.MaxPlayers < PhotonNetwork.room.PlayerCount)
-				return;
-			Debug.Log ("The room is now full");
 			/*
 			 * I'm not sure of the way the game is handling disconnections...
 			 */
