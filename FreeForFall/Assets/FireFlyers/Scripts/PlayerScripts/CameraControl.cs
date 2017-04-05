@@ -6,7 +6,6 @@ public class CameraControl : MonoBehaviour {
 
 
     public Transform target;
-    public float orbitDistance = 3.0f;
     public float orbitDegreesPerSec = 180.0f;
     public float sensivity = 1f;
     public Vector3 relativeDistance;
@@ -16,7 +15,7 @@ public class CameraControl : MonoBehaviour {
 
     void Start()
     {
-        initial_distance = new Vector3(0,1,-8);
+        initial_distance = new Vector3(0,2,-10);
         if (target != null)
         {
             transform.position = target.position + initial_distance;
@@ -37,7 +36,7 @@ public class CameraControl : MonoBehaviour {
             transform.RotateAround(target.position, Vector3.up, orbitDegreesPerSec* h * Time.deltaTime);
             if (once)
             {
-                transform.position *= orbitDistance;
+
                 once = false;
             }
             relativeDistance = transform.position - target.position;
