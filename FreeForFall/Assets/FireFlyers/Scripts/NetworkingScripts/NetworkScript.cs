@@ -34,6 +34,7 @@ namespace AssemblyCSharp
 		private Button _startGameButton;
 
 		private GameObject _player;
+		private GameObject _camera;
 
 		private int _loadedCount;
 		private int _lostCount;
@@ -129,7 +130,7 @@ namespace AssemblyCSharp
 		private void switchCamera ()
 		{
 			GameObject.Find ("Camera").SetActive (false);
-			_player.transform.Find ("PlayerView").GetComponent<Camera> ().enabled = true;
+			_camera.GetComponent<Camera> ().enabled = true;
 		}
 
 		private void destroyBox ()
@@ -165,9 +166,12 @@ namespace AssemblyCSharp
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
+			_camera = (GameObject)Instantiate (Resources.Load ("CameraPlayer"));
+			_camera.GetComponent<CameraControl> ().target = _player.transform;
+			_camera.GetComponent<CameraControl> ().enabled = true;
 			_player.GetComponent<PlayerController> ().enabled = true;
 			_player.GetComponent<Controls> ().enabled = true;
-			_player.transform.Find ("PlayerView").GetComponent<CameraController> ().enabled = true;
+			_player.GetComponent<PlayerController> ().playerCamera = _camera.transform;
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
 			{
