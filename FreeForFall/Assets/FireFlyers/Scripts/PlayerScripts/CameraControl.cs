@@ -43,7 +43,7 @@ public class CameraControl : MonoBehaviour {
         }
         if (v != 0)
         {
-            if (transform.position.y < target.position.y + 5 && v > 0)
+            if (transform.position.y < target.position.y + 9 && v > 0)
             {
                 Vector3 mouvement_up = new Vector3(0, v * sensivity , 0);
                 relativeDistance = Vector3.Lerp(relativeDistance, relativeDistance + mouvement_up,Time.deltaTime* sensivity * 10f);
