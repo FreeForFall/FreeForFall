@@ -67,13 +67,13 @@ public class PlayerController : MonoBehaviour
         float v = Input.GetAxis("Vertical");
         if (h > 0 || h < 0 || v > 0 || v < 0)
         {
-            float rotate = rotateSpeed * Time.deltaTime;
+            float rotate = rotateSpeed;
             Vector3 direction = new Vector3(h, 0, v);
             rotation = Quaternion.LookRotation(direction, Vector3.up);
             Quaternion cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
-            rb.rotation = Quaternion.RotateTowards(transform.rotation, cam * rotation, rotate);
+            rb.rotation = Quaternion.RotateTowards(transform.rotation, cam * rotation, rotate * 0.125f);
             Vector3 Moveto = new Vector3(0, transform.position.y, 1);
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward * this.speed* this.sprintMultiplier * Time.deltaTime, 1f);
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward,speed * maxSprintSpeed * 0.125f);
         }
     }
 

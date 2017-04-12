@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-
+    public Transform player;
     public Transform target;
-    public float orbitDegreesPerSec = 180.0f;
-    public float sensivity = 1f;
+    public float orbitDegreesPerSec = 0.5f;
+    public float sensivity = 4f;
     public Vector3 relativeDistance;
     public Vector3 initial_distance;
     public bool once = true;
@@ -15,11 +15,12 @@ public class CameraControl : MonoBehaviour {
 
     void Start()
     {
-        initial_distance = new Vector3(0,2,-10);
+        Cursor.visible = false;
+        initial_distance = new Vector3(2,2,-15);
         if (target != null)
         {
-            transform.position = target.position + initial_distance;
-            relativeDistance = transform.position - target.position;
+            transform.position = player.position + initial_distance;
+            relativeDistance = transform.position - player.position;
         }
     }
 
@@ -27,13 +28,11 @@ public class CameraControl : MonoBehaviour {
     {
         float h = Input.GetAxis("Mouse X");
         float v = Input.GetAxis("Mouse Y");
-        Vector3 lookto = new Vector3(target.position.x, target.position.y + 2, target.position.z);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookto - transform.position), Time.deltaTime * 10f);
         if (target != null)
         {
             
             transform.position = (target.position + relativeDistance);
-            transform.RotateAround(target.position, Vector3.up, orbitDegreesPerSec* h * Time.deltaTime);
+            transform.RotateAround(target.position, Vector3.up, orbitDegreesPerSec* h * 0.125f);
             if (once)
             {
 
@@ -45,27 +44,22 @@ public class CameraControl : MonoBehaviour {
         {
             if (transform.position.y < target.position.y + 9 && v > 0)
             {
-                Vector3 mouvement_up = new Vector3(0, v * sensivity , 0);
-                relativeDistance = Vector3.Lerp(relativeDistance, relativeDistance + mouvement_up,Time.deltaTime* sensivity * 10f);
+                Vector3 mouvement_up = new Vector3(0, v + sensivity , 0);
+                relativeDistance = Vector3.Slerp(relativeDistance, relativeDistance + mouvement_up,2* 0.125f);
             }
             if(transform.position.y > target.position.y - 0.5 && v <0)
             {
-                Vector3 mouvement_up = new Vector3(0, v * sensivity , 0);
-                relativeDistance = Vector3.Lerp(relativeDistance, relativeDistance + mouvement_up,Time.deltaTime * sensivity * 10f);
+                Vector3 mouvement_up = new Vector3(0, v - sensivity , 0);
+                relativeDistance = Vector3.Slerp(relativeDistance, relativeDistance + mouvement_up,2 * 0.125f);
 
             }
         }
 
     }
 
-    void LateUpdate()
+    void Update()
     {
         Orbit();
-    }
-
-    private Vector3 getPositionBehind(Transform o, float behind, float above)
-    {
-        return o.transform.position - (target.transform.forward * behind) + (target.transform.up * above);
     }
 }
 

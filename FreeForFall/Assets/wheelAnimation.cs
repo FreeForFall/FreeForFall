@@ -9,11 +9,7 @@ public class wheelAnimation : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        if (left)
-            sensivity = 100;
-        else
-            sensivity = -100;
-
+        sensivity = -200;
 	}
 	
 	// Update is called once per frame
@@ -24,9 +20,7 @@ public class wheelAnimation : MonoBehaviour {
         float v = Input.GetAxis("Vertical");
         if (h != 0 || v != 0)
         {
-            Quaternion rotate = new Quaternion(0, 0, 1 * sensivity, 1 * sensivity);
-            Quaternion cam = new Quaternion(transform.position.x, transform.position.y,transform.position.z , transform.rotation.w);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, cam * rotate, 15);
+            transform.Rotate(Vector3.left * Time.deltaTime * sensivity, Space.Self);
         }
     }
 }
