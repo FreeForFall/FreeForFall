@@ -13,9 +13,10 @@ public class PlayerController : MonoBehaviour
     private Quaternion camera_rotation;
     public float rotateSpeed = 1f;
     private Rigidbody rb;
-    public Transform playerCamera;
+    public Transform playerCamera;  
     private Quaternion startrotation;
     private Vector3 initial_Camera;
+
 
     // Use this for initialization
     void Start()
@@ -80,6 +81,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         doMovement();
     }
 }

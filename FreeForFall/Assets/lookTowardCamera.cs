@@ -7,12 +7,14 @@ public class lookTowardCamera : MonoBehaviour {
     public Transform playerCamera;
     public Transform bottom;
     Vector3 offset;
+
 	// Use this for initialization
 	void Start ()
     {
         offset = transform.position - bottom.position;
 	}
-	
+
+    // Update is called once per frame
 	// Update is called once per frame
 	void LateUpdate ()
     {
