@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
             Quaternion cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
             rb.rotation = Quaternion.RotateTowards(transform.rotation, cam * rotation, rotate * 0.125f);
             Vector3 Moveto = new Vector3(0, transform.position.y, 1);
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward,speed * maxSprintSpeed * 0.125f);
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward,speed * sprintMultiplier * 0.125f);
         }
     }
 

@@ -4,34 +4,31 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-    public Transform player;
-    public Transform target;
+    public Transform player; //the full object (in this case robot 1)
+    public Transform target; //the target is a children of the body, it is the point where is looking the camera in TPS view
     public float orbitDegreesPerSec = 0.5f;
-    public float sensivity = 4f;
-    public Vector3 relativeDistance;
-    public Vector3 initial_distance;
+    public float sensivity = 4f; //sensivity is only used for the upward and downward speed int TPS. (but i need to ad a variablefor all other movement)
+    public Vector3 relativeDistance; // distance at witch the camera will orbit arround the object
+    public Vector3 initial_distance; // initializing the distance of the camera from the object
     public bool once = true;
-    public float MaxCameraAngleUp = 12;
-    public float MaxCameraAngleDown = 2;
-    public Camera Principale;
-    public Camera Secondaire;
-    public Transform FPSAnchor;
-    public Transform FPSlookto;
-    private bool istps = true;
-    private Vector3 eulerAngle;
-    private float verticalOrientation;
-    private float horizontalOrientation;
-    private Quaternion rotation;
+    public float MaxCameraAngleUp = 12; //max integer hieght of the camera in TPS
+    public float MaxCameraAngleDown = 2; // min integer hight of the camera in TPS
+    public Camera Principale; // the principale camera the will be the onlyone used by the player 
+    public Camera Secondaire; // a secondary camera that will stay in orbit (can be used for the big screen and such)
+    public Transform FPSAnchor; // the place where the camera goes whene in FPS mode
+    private bool istps = true; // the bool to know if the player is in TPS or FPS
+    private Vector3 eulerAngle; // suposed to calculate the angle on the x axis for the FPS view (but ... mehhhh not really working that great...)
+    private float verticalOrientation; 
 
 
     void Start()
     {
         verticalOrientation = 0f;
-        horizontalOrientation = 0f;
         eulerAngle = new Vector3(0f, 0f, 0f);
         Secondaire.enabled = false;
         Principale.enabled = true;
         Cursor.visible = false;
+        //initialisation of the Camera (remember the camera is an empty object that host 2 real camera, the primary and secondary cameras. 
         initial_distance = new Vector3(2,2,-15);
         if (target != null)
         {
@@ -40,17 +37,23 @@ public class CameraControl : MonoBehaviour {
         }
     }
 
-    void OrbitTPS()
+    //the main methode
+
+    void Orbit()
     {
+        //check for any input
+
         float h = Input.GetAxis("Mouse X");
         float v = Input.GetAxis("Mouse Y");
+        //position the camera depending of the camera mode
         if (istps)
         {
-            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 60 * 0.125f);
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 20 * 0.125f);
             Principale.transform.rotation = transform.rotation;
         }
         else
-            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 60 * 0.125f);
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 20 * 0.125f);
+        //no matter what mode you are in the rotation for the Horizontal axis is the same
         if (target != null)
         {
             
@@ -63,6 +66,7 @@ public class CameraControl : MonoBehaviour {
             }
             relativeDistance = transform.position - target.position;
         }
+        //here is the rotation for the TPS camera (it just raise or decrease the height of the camera.
         if (v != 0 && istps)
         {
             if (transform.position.y < target.position.y + MaxCameraAngleUp && v > 0)
@@ -77,57 +81,34 @@ public class CameraControl : MonoBehaviour {
 
             }
         }
+        //here is the rotation for the fps view (need to be fixed, right now if you look up or down the camera directly look forward (so if you look east and then look up you'll rotate toward north ...)
         if (v !=0 && !istps)
         {
-            horizontalOrientation = h * 5;
-            verticalOrientation = v * 5;
-            this.eulerAngle.x -= verticalOrientation;
-            this.eulerAngle.y += horizontalOrientation;
+            verticalOrientation += v * 5;
+            eulerAngle = new Vector3(verticalOrientation, 0, 0);
             Principale.transform.eulerAngles = this.eulerAngle;
         }
     }
 
-    void FPSview()
-    {
-        Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 40 * 0.125f);
-        horizontalOrientation = Input.GetAxis("Mouse X") * 5;
-        verticalOrientation = Input.GetAxis("Mouse Y") * 5;
-        this.eulerAngle.x -= verticalOrientation;
-        this.eulerAngle.y += horizontalOrientation;
-        Principale.transform.eulerAngles = this.eulerAngle;
-    }
 
     void Update()
     {
+        //change between FPS and TPS view
         if ((Input.GetKeyDown(KeyCode.Joystick1Button9) || Input.GetKeyDown(KeyCode.E)))
         {
             istps = !istps;
         }
-        OrbitTPS();
-        /*
-        if (istps)
-        {
-            OrbitTPS();
-        }
-        else
-        {
-            FPSview();   
-        }
-        */
+        Orbit();
     }
 
     void LateUpdate()
     {
+        // say the the camera to look at the target if in TPS mode, otherwise it should look forward.
         if (istps)
         {
-            lookto();
+            Vector3 lookto = new Vector3(target.position.x, target.position.y + 2, target.position.z);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookto - transform.position), 40 * 0.125f);
         }
-    }
-
-    void lookto()
-    {
-        Vector3 lookto = new Vector3(target.position.x, target.position.y + 2, target.position.z);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookto - transform.position), 40 * 0.125f);
     }
 }
 
