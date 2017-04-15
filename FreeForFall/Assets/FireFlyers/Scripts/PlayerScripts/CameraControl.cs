@@ -10,6 +10,7 @@ public class CameraControl : MonoBehaviour {
     public float sensivity = 4f; //sensivity is only used for the upward and downward speed int TPS. (but i need to ad a variablefor all other movement)
     public Vector3 relativeDistance; // distance at witch the camera will orbit arround the object
     public Vector3 initial_distance; // initializing the distance of the camera from the object
+    public Vector3 fpsvertical;
     public bool once = true;
     public float MaxCameraAngleUp = 12; //max integer hieght of the camera in TPS
     public float MaxCameraAngleDown = 2; // min integer hight of the camera in TPS
@@ -17,14 +18,17 @@ public class CameraControl : MonoBehaviour {
     public Camera Secondaire; // a secondary camera that will stay in orbit (can be used for the big screen and such)
     public Transform FPSAnchor; // the place where the camera goes whene in FPS mode
     private bool istps = true; // the bool to know if the player is in TPS or FPS
-    private Vector3 eulerAngle; // suposed to calculate the angle on the x axis for the FPS view (but ... mehhhh not really working that great...)
-    private float verticalOrientation; 
+    private Vector3 current;// suposed to calculate the angle on the x axis for the FPS view (but ... mehhhh not really working that great...)
+    private Vector3 FPSyaxisInput;
+    private float verticalOrientation;
+    private float horizontalOrientation;
+    private Quaternion rotationFPS;
 
 
     void Start()
     {
         verticalOrientation = 0f;
-        eulerAngle = new Vector3(0f, 0f, 0f);
+        horizontalOrientation = 0f;
         Secondaire.enabled = false;
         Principale.enabled = true;
         Cursor.visible = false;
@@ -66,7 +70,7 @@ public class CameraControl : MonoBehaviour {
             }
             relativeDistance = transform.position - target.position;
         }
-        //here is the rotation for the TPS camera (it just raise or decrease the height of the camera.
+        //here is the rotation for the TPS camera (it just raise or decrease the height of the camera).
         if (v != 0 && istps)
         {
             if (transform.position.y < target.position.y + MaxCameraAngleUp && v > 0)
@@ -82,11 +86,19 @@ public class CameraControl : MonoBehaviour {
             }
         }
         //here is the rotation for the fps view (need to be fixed, right now if you look up or down the camera directly look forward (so if you look east and then look up you'll rotate toward north ...)
-        if (v !=0 && !istps)
+        if (v != 0 && !istps)
         {
-            verticalOrientation += v * 5;
-            eulerAngle = new Vector3(verticalOrientation, 0, 0);
-            Principale.transform.eulerAngles = this.eulerAngle;
+            
+            if (verticalOrientation < 40 && v > 0)
+            {
+                Principale.transform.Rotate(-v * 2, 0, 0);
+                verticalOrientation += v;
+            }
+            if(verticalOrientation > -40 && v < 0)
+            {
+                Principale.transform.Rotate(-v * 2, 0, 0);
+                verticalOrientation += v;
+            }
         }
     }
 
