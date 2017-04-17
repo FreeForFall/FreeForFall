@@ -61,13 +61,8 @@ public class CameraControl : MonoBehaviour {
         if (target != null)
         {
             
-            transform.position = (target.position + relativeDistance);
+            transform.position = Vector3.Lerp(transform.position,target.position + relativeDistance,10 * 0.125f);
             transform.RotateAround(target.position, Vector3.up, orbitDegreesPerSec* h * 0.125f);
-            if (once)
-            {
-
-                once = false;
-            }
             relativeDistance = transform.position - target.position;
         }
         //here is the rotation for the TPS camera (it just raise or decrease the height of the camera).
@@ -75,13 +70,13 @@ public class CameraControl : MonoBehaviour {
         {
             if (transform.position.y < target.position.y + MaxCameraAngleUp && v > 0)
             {
-                Vector3 mouvement_up = new Vector3(0, v + sensivity , 0);
-                relativeDistance = Vector3.Slerp(relativeDistance, relativeDistance + mouvement_up, 2 * 0.125f);
+                Vector3 mouvement_up = new Vector3(0, v , 0);
+                relativeDistance = relativeDistance + mouvement_up;
             }
             if(transform.position.y > target.position.y - MaxCameraAngleDown && v <0)
             {
-                Vector3 mouvement_up = new Vector3(0, v - sensivity , 0);
-                relativeDistance = Vector3.Slerp(relativeDistance, relativeDistance + mouvement_up, 2 * 0.125f);
+                Vector3 mouvement_up = new Vector3(0, v , 0);
+                relativeDistance = relativeDistance + mouvement_up;
 
             }
         }
@@ -103,7 +98,7 @@ public class CameraControl : MonoBehaviour {
     }
 
 
-    void Update()
+    void LateUpdate()
     {
         //change between FPS and TPS view
         if ((Input.GetKeyDown(KeyCode.Joystick1Button9) || Input.GetKeyDown(KeyCode.E)))
@@ -111,11 +106,6 @@ public class CameraControl : MonoBehaviour {
             istps = !istps;
         }
         Orbit();
-    }
-
-    void LateUpdate()
-    {
-        // say the the camera to look at the target if in TPS mode, otherwise it should look forward.
         if (istps)
         {
             Vector3 lookto = new Vector3(target.position.x, target.position.y + 2, target.position.z);
