@@ -170,6 +170,7 @@ namespace AssemblyCSharp
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponentInChildren<lookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
+			_player.transform.Find ("TPScamera/firstCamera").gameObject.GetComponent<Camera> ().enabled = true;
 			// Don't forget to remove the camera of the other players
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
