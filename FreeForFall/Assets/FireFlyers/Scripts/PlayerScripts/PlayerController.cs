@@ -13,9 +13,10 @@ public class PlayerController : MonoBehaviour
     private Quaternion camera_rotation;
     public float rotateSpeed = 1f;
     private Rigidbody rb;
-    public Transform playerCamera;
+    public Transform playerCamera;  
     private Quaternion startrotation;
     private Vector3 initial_Camera;
+
 
     // Use this for initialization
     void Start()
@@ -67,19 +68,20 @@ public class PlayerController : MonoBehaviour
         float v = Input.GetAxis("Vertical");
         if (h > 0 || h < 0 || v > 0 || v < 0)
         {
-            float rotate = rotateSpeed * Time.deltaTime;
+            float rotate = rotateSpeed;
             Vector3 direction = new Vector3(h, 0, v);
             rotation = Quaternion.LookRotation(direction, Vector3.up);
             Quaternion cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
-            rb.rotation = Quaternion.RotateTowards(transform.rotation, cam * rotation, rotate);
+            rb.rotation = Quaternion.RotateTowards(transform.rotation, cam * rotation, rotate * 0.125f);
             Vector3 Moveto = new Vector3(0, transform.position.y, 1);
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward * this.speed* this.sprintMultiplier * Time.deltaTime, 1f);
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward,speed * sprintMultiplier * Time.deltaTime);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+
         doMovement();
     }
 }

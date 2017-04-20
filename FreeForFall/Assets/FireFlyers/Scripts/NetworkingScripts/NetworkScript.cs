@@ -166,12 +166,12 @@ namespace AssemblyCSharp
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
-			_camera = (GameObject)Instantiate (Resources.Load ("CameraPlayer"));
-			_camera.GetComponent<CameraControl> ().target = _player.transform;
-			_camera.GetComponent<CameraControl> ().enabled = true;
-			_player.GetComponent<PlayerController> ().enabled = true;
-			_player.GetComponent<Controls> ().enabled = true;
-			_player.GetComponent<PlayerController> ().playerCamera = _camera.transform;
+			_player.GetComponent<crosshair> ().enabled = true;
+			_player.GetComponentInChildren<PlayerController> ().enabled = true;
+			//_player.GetComponentInChildren<lookTowardCamera> ().enabled = true;
+			_player.GetComponentInChildren<CameraControl> ().enabled = true;
+			_player.transform.Find ("TPScamera/firstCamera").gameObject.GetComponent<Camera> ().enabled = true;
+			// Don't forget to remove the camera of the other players
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
 			{
