@@ -52,11 +52,11 @@ public class CameraControl : MonoBehaviour {
         //position the camera depending of the camera mode
         if (istps)
         {
-            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 20 * 0.125f);
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 20 * Time.deltaTime);
             Principale.transform.rotation = transform.rotation;
         }
         else
-            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 20 * 0.125f);
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 20 * Time.deltaTime);
         //no matter what mode you are in the rotation for the Horizontal axis is the same
         if (target != null)
         {

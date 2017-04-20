@@ -42,6 +42,10 @@ public class WaitToFall : MonoBehaviour {
     void IsFallen()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
+        Renderer Ren = GetComponent<Renderer>();
+        MeshCollider Mcol = GetComponent<MeshCollider>();
+        Mcol.enabled = false;
+        Ren.enabled = false;
         rb.isKinematic = true;
         _isFallen = true;
     }
