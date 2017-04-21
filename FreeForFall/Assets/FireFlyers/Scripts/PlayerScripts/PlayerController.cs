@@ -2,7 +2,8 @@
 
 public class PlayerController : MonoBehaviour
 {
-
+	public float JumpCooldown;
+	private float _timeSincePreviousJump;
 	public float speed;
 	public float maxSprintSpeed;
 	private float sprintMultiplier;
@@ -17,16 +18,14 @@ public class PlayerController : MonoBehaviour
 	private Quaternion startrotation;
 	private Vector3 initial_Camera;
 
-
 	// Use this for initialization
 	void Start ()
 	{
+		_timeSincePreviousJump = 0f;
 		this.sprintMultiplier = 1f;
 		this.airbone = false;
 		this.rigidBody = this.GetComponent<Rigidbody> ();
 		rb = GetComponent<Rigidbody> ();
-
-
 	}
 
 	void OnCollisionEnter (Collision other)
@@ -45,16 +44,26 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	private void jump ()
+	{
+		this.rigidBody.AddForce (new Vector3 (0f, jumpforce, 0f));
+		Invoke ("jumpDown", 0.3f);
+	}
+
+	private void jumpDown ()
+	{
+		this.rigidBody.AddForce (new Vector3 (0f, -jumpforce, 0f));
+	}
 
 	private void doMovement ()
 	{
-		if ((Input.GetKeyDown (KeyCode.Joystick1Button0) || Input.GetKeyDown (KeyCode.Space)) && !this.airbone)
+		if ((Input.GetKeyDown (KeyCode.Joystick1Button0)
+		    || Input.GetKeyDown (KeyCode.Space))
+		    && !this.airbone
+		    && JumpCooldown < _timeSincePreviousJump)
 		{
-			this.rigidBody.AddForce (new Vector3 (0f, jumpforce, 0f));
-		}
-		if ((Input.GetKeyDown (KeyCode.Joystick1Button3) || Input.GetKeyDown (KeyCode.F)))
-		{
-			BroadcastMessage ("IsFallen", 100f);
+			_timeSincePreviousJump = 0f;
+			jump ();
 		}
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
 		{
@@ -74,13 +83,15 @@ public class PlayerController : MonoBehaviour
 			Quaternion cam = new Quaternion (0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
 			rb.rotation = Quaternion.RotateTowards (transform.rotation, cam * rotation, rotate * 0.125f);
 			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
-			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, speed * sprintMultiplier * Time.deltaTime);
+			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
+				speed * sprintMultiplier * Time.deltaTime);
 		}
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
+		_timeSincePreviousJump += Time.deltaTime;
 		doMovement ();
 	}
 }
