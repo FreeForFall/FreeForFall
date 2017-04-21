@@ -3,7 +3,7 @@
 public class PlayerController : MonoBehaviour
 {
 	public float JumpCooldown;
-	private float _timeSincePreviousJump;
+	public float TimeSincePreviousJump;
 	public float speed;
 	public float maxSprintSpeed;
 	private float sprintMultiplier;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		_timeSincePreviousJump = 0f;
+		TimeSincePreviousJump = 0f;
 		this.sprintMultiplier = 1f;
 		this.airbone = false;
 		this.rigidBody = this.GetComponent<Rigidbody> ();
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
 	private void jumpDown ()
 	{
-		this.rigidBody.AddForce (new Vector3 (0f, -jumpforce, 0f));
+		this.rigidBody.AddForce (new Vector3 (0f, -jumpforce * 1.5f, 0f));
 	}
 
 	private void doMovement ()
@@ -60,9 +60,9 @@ public class PlayerController : MonoBehaviour
 		if ((Input.GetKeyDown (KeyCode.Joystick1Button0)
 		    || Input.GetKeyDown (KeyCode.Space))
 		    && !this.airbone
-		    && JumpCooldown < _timeSincePreviousJump)
+		    && JumpCooldown < TimeSincePreviousJump)
 		{
-			_timeSincePreviousJump = 0f;
+			TimeSincePreviousJump = 0f;
 			jump ();
 		}
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		_timeSincePreviousJump += Time.deltaTime;
+		TimeSincePreviousJump += Time.deltaTime;
 		doMovement ();
 	}
 }
