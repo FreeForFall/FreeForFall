@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour {
 	private float rotationAroundPlayer;
 	public float sensibility;
 
+
 	void Start () {
 		this.player = transform.parent.gameObject;
 		this.distance = new Vector3(0, -3, 15);

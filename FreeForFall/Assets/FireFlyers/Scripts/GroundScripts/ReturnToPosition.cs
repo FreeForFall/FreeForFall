@@ -13,11 +13,25 @@ public class ReturnToPosition : MonoBehaviour {
     {
         _initialPosition = transform.position;
         _initialRotation = transform.rotation;
+        GetComponent<ReturnToPosition>().enabled = false;
     }
-	
-	// Update is called once per frame
+
+    void Update()
+    {
+        Renderer Ren = GetComponent<Renderer>();
+        MeshCollider Mcol = GetComponent<MeshCollider>();
+        Rigidbody rb = GetComponent<Rigidbody>();
+        float step = 5 * Time.deltaTime;
+        float rotate = 360 * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, _initialPosition, step);
+        rb.rotation = Quaternion.RotateTowards(transform.rotation, _initialRotation, rotate);
+        if (transform.position == _initialPosition)
+        {
+            GetComponent<ReturnToPosition>().enabled = false;
+        }
+    }
 
 
- 
+
 
 }
