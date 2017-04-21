@@ -2,7 +2,6 @@
 
 public class NetworkPlayerController : MonoBehaviour
 {
-
 	private Vector3 _targetPosition;
 	// Need to find a way to smooth the rotation
 	private Quaternion _targetRotation;
@@ -13,10 +12,14 @@ public class NetworkPlayerController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		_targetPosition = transform.position;
-		_targetRotation = Quaternion.Euler (0, 0, 0);
+		Debug.LogError (gameObject);
+		
 		_photonView = GetComponent<PhotonView> ();
-		_bottom = transform.Find ("Bottom").transform;
+		Debug.LogError ("photon view");
+		Debug.Log (_photonView.isMine);
+		_bottom = gameObject.transform.Find ("bottom");
+		_targetPosition = _bottom.position;
+		_targetRotation = Quaternion.Euler (0, 0, 0);
 	}
 	
 	// Update is called once per frame
