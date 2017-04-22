@@ -114,7 +114,12 @@ public class CameraControl : MonoBehaviour
 	void LateUpdate ()
 	{
 		//change between FPS and TPS view
+		#if UNITY_STANDALONE_WIN
 		if ((Input.GetKeyDown (KeyCode.Joystick1Button9) || Input.GetKeyDown (KeyCode.E)))
+		#endif
+		#if UNITY_STANDALONE_LINUX
+		if ((Input.GetKeyDown (KeyCode.JoystickButton10) || Input.GetKeyDown (KeyCode.E)))
+		#endif
 		{
 			istps = !istps;
 		}
@@ -124,8 +129,6 @@ public class CameraControl : MonoBehaviour
 			Vector3 lookto = new Vector3 (target.position.x, target.position.y + 2, target.position.z);
 			transform.rotation = Quaternion.RotateTowards (transform.rotation, Quaternion.LookRotation (lookto - transform.position), 40 * 0.125f);
 		}
-		Debug.Log (player.gameObject.GetComponent<PhotonView> ());
-		Debug.Log (player.gameObject.GetComponent<PhotonView> ().isMine);
 	}
 }
 

@@ -65,7 +65,12 @@ public class PlayerController : MonoBehaviour
 			TimeSincePreviousJump = 0f;
 			jump ();
 		}
+		#if UNITY_STANDALONE_WIN
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
+		#endif
+		#if UNITY_STANDALONE_LINUX
+		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.JoystickButton9))
+		#endif
 		{
 			this.sprintMultiplier = this.maxSprintSpeed;
 		}
