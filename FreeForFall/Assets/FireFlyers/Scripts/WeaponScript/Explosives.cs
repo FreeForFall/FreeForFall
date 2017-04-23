@@ -5,7 +5,7 @@ using UnityEngine;
 public class Explosives : MonoBehaviour {
     public float radius;
     public float power;
-    public float explosionPhysics;
+    private float explosionPhysics = 15f;
 
 	// Use this for initialization
 	void Start () {
