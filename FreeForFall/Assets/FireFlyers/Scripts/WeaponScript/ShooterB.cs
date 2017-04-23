@@ -16,7 +16,7 @@ public class ShooterB : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0)||Input.GetKey(KeyCode.Joystick1Button5))
         {
             GameObject temp_projectile;
             temp_projectile = Instantiate(projectile, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
@@ -26,7 +26,7 @@ public class ShooterB : MonoBehaviour {
             Destroy(temp_projectile, 10.0f);
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1)|| Input.GetKey(KeyCode.Joystick1Button4))
         {
             GameObject temp_projectile;
             temp_projectile = Instantiate(grip, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
