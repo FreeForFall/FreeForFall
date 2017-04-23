@@ -75,7 +75,7 @@ public class CameraControl : MonoBehaviour
 		{
             
 			transform.position = Vector3.Lerp (transform.position, target.position + relativeDistance, 10 * 0.125f);
-			transform.RotateAround (target.position, Vector3.up, orbitDegreesPerSec * h * 0.125f);
+			transform.RotateAround (target.position, Vector3.up, orbitDegreesPerSec * h * Time.deltaTime);
 			relativeDistance = transform.position - target.position;
 		}
 		//here is the rotation for the TPS camera (it just raise or decrease the height of the camera).
@@ -98,13 +98,13 @@ public class CameraControl : MonoBehaviour
 		//here is the rotation for the fps view (need to be fixed, right now if you look up or down the camera directly look forward (so if you look east and then look up you'll rotate toward north ...)
 		if (v != 0 && !istps)
 		{
-            
-			if (verticalOrientation < 40 && v > 0)
+            print(Principale.transform.rotation.x);
+			if (Principale.transform.rotation.x > -0.7 && v > 0)
 			{
 				Principale.transform.Rotate (-v * 2, 0, 0);
 				verticalOrientation += v;
 			}
-			if (verticalOrientation > -40 && v < 0)
+			if (Principale.transform.rotation.x < 0.6 && v < 0)
 			{
 				Principale.transform.Rotate (-v * 2, 0, 0);
 				verticalOrientation += v;
