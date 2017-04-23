@@ -15,7 +15,7 @@ public class WaitToFall : MonoBehaviour
 	{
 		_dropDelay = 0.2f;
 		_destroyDelay = 20000000000000;
-		_dropforce = 600f;
+		_dropforce = 300f;
 	}
 
 
