@@ -38,6 +38,7 @@ public class CameraControl : MonoBehaviour
 	private Quaternion rotationFPS;
 
 
+
 	void Start ()
 	{
 		verticalOrientation = 0f;
@@ -62,14 +63,13 @@ public class CameraControl : MonoBehaviour
 
 		float h = Input.GetAxis ("Mouse X");
 		float v = Input.GetAxis ("Mouse Y");
-		//position the camera depending of the camera mode
-		if (istps)
-		{
-			Principale.transform.position = Vector3.MoveTowards (Principale.transform.position, transform.position, 20 * Time.deltaTime);
-			Principale.transform.rotation = transform.rotation;
-		}
-		else
-			Principale.transform.position = Vector3.MoveTowards (Principale.transform.position, FPSAnchor.position, 20 * Time.deltaTime);
+        //position the camera depending of the camera mode
+        if (istps)
+        {
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 200 * Time.deltaTime);
+        }
+        else
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 200 * Time.deltaTime);
 		//no matter what mode you are in the rotation for the Horizontal axis is the same
 		if (target != null)
 		{
@@ -81,17 +81,19 @@ public class CameraControl : MonoBehaviour
 		//here is the rotation for the TPS camera (it just raise or decrease the height of the camera).
 		if (v != 0 && istps)
 		{
-			if (transform.position.y < target.position.y + MaxCameraAngleUp && v > 0)
+			if (transform.position.y < target.position.y + MaxCameraAngleUp && v < 0)
 			{
 				Vector3 mouvement_up = new Vector3 (0, v, 0);
-				relativeDistance = relativeDistance + mouvement_up;
+				relativeDistance = relativeDistance - mouvement_up;
+                FPSAnchor.position = FPSAnchor.position + mouvement_up;
 			}
-			if (transform.position.y > target.position.y - MaxCameraAngleDown && v < 0)
+			if (transform.position.y > target.position.y - MaxCameraAngleDown && v > 0)
 			{
 				Vector3 mouvement_up = new Vector3 (0, v, 0);
-				relativeDistance = relativeDistance + mouvement_up;
+				relativeDistance = relativeDistance - mouvement_up;
+                FPSAnchor.position = FPSAnchor.position + mouvement_up;
 
-			}
+            }
 		}
 		//here is the rotation for the fps view (need to be fixed, right now if you look up or down the camera directly look forward (so if you look east and then look up you'll rotate toward north ...)
 		if (v != 0 && !istps)
@@ -122,12 +124,17 @@ public class CameraControl : MonoBehaviour
 		#endif
 		{
 			istps = !istps;
+            if (istps)
+                Principale.fieldOfView = 65f;
+            else
+                Principale.fieldOfView = 80f;
 		}
 		Orbit ();
 		if (istps)
 		{
 			Vector3 lookto = new Vector3 (target.position.x, target.position.y + 2, target.position.z);
-			transform.rotation = Quaternion.RotateTowards (transform.rotation, Quaternion.LookRotation (lookto - transform.position), 40 * 0.125f);
+			Principale.transform.rotation = Quaternion.RotateTowards (Principale.transform.rotation, 
+                Quaternion.LookRotation (lookto - Principale.transform.position), 200 * Time.deltaTime);
 		}
 	}
 }
