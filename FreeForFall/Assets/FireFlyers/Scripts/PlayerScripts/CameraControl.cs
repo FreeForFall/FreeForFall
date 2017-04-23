@@ -66,10 +66,10 @@ public class CameraControl : MonoBehaviour
         //position the camera depending of the camera mode
         if (istps)
         {
-            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 100 * Time.deltaTime);
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, transform.position, 50 * Time.deltaTime);
         }
         else
-            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 100 * Time.deltaTime);
+            Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 50 * Time.deltaTime);
 		//no matter what mode you are in the rotation for the Horizontal axis is the same
 		if (target != null)
 		{
@@ -130,7 +130,7 @@ public class CameraControl : MonoBehaviour
                 Principale.fieldOfView = 80f;
 		}
 		Orbit ();
-		if (istps)
+		if (istps && Principale.transform.position == transform.position)
 		{
 			Vector3 lookto = new Vector3 (target.position.x, target.position.y + 2, target.position.z);
 			Principale.transform.rotation = Quaternion.RotateTowards (Principale.transform.rotation, 
