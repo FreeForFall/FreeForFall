@@ -110,6 +110,7 @@ namespace AssemblyCSharp
 
 		private int playerLost ()
 		{
+			Debug.LogWarning ("Wtf");
 			return ++_lostCount;
 		}
 

@@ -32,8 +32,6 @@ public class PlayerCollector : MonoBehaviour
 		}
 		if (PhotonNetwork.isMasterClient)
 			_networking.handlePlayerLost ();
-		else
-			NetworkEventHandlers.SendEvent (new PlayerLostEvent ());
-		
+		Destroy (p);
 	}
 }
