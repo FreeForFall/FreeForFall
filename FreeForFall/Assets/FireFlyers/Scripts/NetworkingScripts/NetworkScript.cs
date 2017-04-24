@@ -165,11 +165,13 @@ namespace AssemblyCSharp
 		{
 			if (FlyingCamera.gameObject.GetActive ())
 			{
+				FlyingCamera.gameObject.GetComponent<Camera> ().enabled = false;
 				FlyingCamera.gameObject.SetActive (false);
 				_camera.SetActive (true);
 			}
 			else
 			{
+				FlyingCamera.gameObject.GetComponent<Camera> ().enabled = true;
 				FlyingCamera.gameObject.SetActive (true);
 				_camera.SetActive (false); 
 			}
@@ -215,6 +217,7 @@ namespace AssemblyCSharp
 			_player.GetComponent<ShooterB> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
+
 			// SET THE NICKNAME CANVAS
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
