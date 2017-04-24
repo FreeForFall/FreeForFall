@@ -36,6 +36,8 @@ namespace AssemblyCSharp
 		private GameObject _player;
 		private GameObject _camera;
 
+		public Camera FlyingCamera;
+
 		private int _loadedCount;
 		private int _lostCount;
 
@@ -122,15 +124,24 @@ namespace AssemblyCSharp
 			{
 				Debug.Log ("REMOVING WALLS");
 				NetworkEventHandlers.SendEvent (new RemoveWallsEvent ());
-				Invoke ("switchCamera", 3);
+				//Invoke ("switchCamera", 3);
 				Invoke ("destroyBox", 5);
 			}
 		}
 
 		private void switchCamera ()
 		{
-			GameObject.Find ("Camera").SetActive (false);
-			_camera.GetComponent<Camera> ().enabled = true;
+			if (FlyingCamera.gameObject.GetActive ())
+			{
+				FlyingCamera.gameObject.SetActive (false);
+				_camera.SetActive (true);
+			}
+			else
+			{
+				FlyingCamera.gameObject.SetActive (true);
+				_camera.SetActive (false); 
+			}
+
 		}
 
 		private void destroyBox ()
@@ -168,10 +179,12 @@ namespace AssemblyCSharp
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
-            _player.GetComponent<ShooterB>().enabled = true;
+			_player.GetComponent<ShooterB> ().enabled = true;
 			//_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
-			_player.transform.Find ("TPScamera/firstCamera").gameObject.GetComponent<Camera> ().enabled = true;
+			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
+			FlyingCamera.gameObject.SetActive (false);
+			//_camera.SetActive (false);
 			// Don't forget to remove the camera of the other players
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
