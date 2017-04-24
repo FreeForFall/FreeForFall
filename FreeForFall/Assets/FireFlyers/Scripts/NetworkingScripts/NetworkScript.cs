@@ -127,7 +127,7 @@ namespace AssemblyCSharp
 			}
 			Debug.Log ("A player lost and was the last man standing.");
 			NetworkEventHandlers.SendEvent (new EndGameEvent ());
-			endGame ();
+			//endGame ();
 		}
 
 		private void removeWalls ()
