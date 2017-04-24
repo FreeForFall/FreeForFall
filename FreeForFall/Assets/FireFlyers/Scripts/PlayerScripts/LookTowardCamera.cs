@@ -19,9 +19,9 @@ public class LookTowardCamera : MonoBehaviour
 	// Update is called once per frame
 	void LateUpdate ()
 	{
-		float rotate = 0.125f;
 		transform.position = bottom.position + new Vector3 (-0.02f, 1.45f, 0);
 		Quaternion cam = new Quaternion (0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
-		transform.rotation = Quaternion.Slerp (transform.rotation, cam, rotate);
+        transform.rotation = cam;
+        
 	}
 }
