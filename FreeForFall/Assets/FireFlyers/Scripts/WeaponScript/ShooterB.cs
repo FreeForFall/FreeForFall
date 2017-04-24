@@ -8,32 +8,47 @@ public class ShooterB : MonoBehaviour {
     public GameObject grip;
     public GameObject Camera;
     public GameObject PlayerBody;
+    public float CDExplosion = 0f;
+    public float CDGrip = 0f;
+    private float TimeSinceLastExplosion;
+    private float TimeSinceLastGrip;
     public float projectile_force;
 	// Use this for initialization
 	void Start () {
-		
+        TimeSinceLastExplosion = 10f;
+        TimeSinceLastGrip = 10f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0)||Input.GetKey(KeyCode.Joystick1Button5))
+        TimeSinceLastExplosion += Time.deltaTime;
+        TimeSinceLastGrip += Time.deltaTime;
+        if (CDExplosion - TimeSinceLastExplosion <= 0)
         {
-            GameObject temp_projectile;
-            temp_projectile = Instantiate(projectile, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
-            Rigidbody projectile_body;
-            projectile_body = temp_projectile.GetComponent<Rigidbody>();
-            projectile_body.AddForce( Camera.transform.forward * projectile_force);
-            Destroy(temp_projectile, 10.0f);
+            if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Joystick1Button5))
+            {
+                TimeSinceLastExplosion = 0;
+                GameObject temp_projectile;
+                temp_projectile = Instantiate(projectile, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
+                Rigidbody projectile_body;
+                projectile_body = temp_projectile.GetComponent<Rigidbody>();
+                projectile_body.AddForce(Camera.transform.forward * projectile_force);
+                Destroy(temp_projectile, 10.0f);
+            }
         }
 
-        if (Input.GetMouseButtonDown(1)|| Input.GetKey(KeyCode.Joystick1Button4))
+        if (CDGrip - TimeSinceLastGrip <= 0)
         {
-            GameObject temp_projectile;
-            temp_projectile = Instantiate(grip, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
-            Rigidbody projectile_body;
-            projectile_body = temp_projectile.GetComponent<Rigidbody>();
-            projectile_body.AddForce(Camera.transform.forward * projectile_force);
-            Destroy(temp_projectile, 10.0f);
+            if (Input.GetMouseButtonDown(1) || Input.GetKey(KeyCode.Joystick1Button4))
+            {
+                TimeSinceLastGrip = 0;
+                GameObject temp_projectile;
+                temp_projectile = Instantiate(grip, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
+                Rigidbody projectile_body;
+                projectile_body = temp_projectile.GetComponent<Rigidbody>();
+                projectile_body.AddForce(Camera.transform.forward * projectile_force);
+                Destroy(temp_projectile, 10.0f);
+            }
         }
 	}
 }
