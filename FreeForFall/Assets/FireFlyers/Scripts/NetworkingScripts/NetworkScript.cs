@@ -60,31 +60,61 @@ namespace AssemblyCSharp
 		// Need to introduce safe casting of the objects sent over the network, this is really dangerous.
 		private void handleNetworkEvents (byte eventCode, object content, int senderId)
 		{
+			/*
+
+			0x0 : LoadMapEvent
+			0x1 : MapLoadedEvent
+			0x3 : RemoveWallsEvent
+			
+			0x19 : PlayerLostEvent
+
+			0x30 : VisionImpairedEvent
+			0x31 : SpeedBoostEvent // Not implemented, needed for particles
+			0x32 : CooldownRefreshEvent // Not implemented, needed for particles
+
+			0x99 : EndGameEvent
+
+			*/
 			switch (eventCode)
 			{
 				case 0x0:
 					handleMapLoadNetworkEvent (((byte[])content) [0]);
-					break;
+					return;
 				case 0x1:
 					removeWalls ();
-					break;
+					return;
 				case 0x3:
 				// remove walls
 					Invoke ("switchCamera", 3);
 					Invoke ("destroyBox", 5);
-					break;
+					return;
+
+
+
 				case 0x19:
 					// Player lost
 					handlePlayerLost ();
-					break;
+					return;
+
+
+				case 0x30:
+					handleVisionImpaired ();
+					return;
+				
+				
 				case 0x99:
 					// End of the game
 					endGame ();
-					break;
+					return;
 				default:
 					Debug.LogWarning ("Received unknown event with code " + eventCode);
 					return;
 			}
+		}
+
+		private void handleVisionImpaired ()
+		{
+			Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
 		}
 
 		private void endGame ()
@@ -168,7 +198,7 @@ namespace AssemblyCSharp
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
-            _player.GetComponent<ShooterB>().enabled = true;
+			_player.GetComponent<ShooterB> ().enabled = true;
 			//_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
 			_player.transform.Find ("TPScamera/firstCamera").gameObject.GetComponent<Camera> ().enabled = true;
