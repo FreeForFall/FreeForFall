@@ -5,6 +5,8 @@ using UnityEngine;
 public class Explosives : MonoBehaviour {
     public float radius;
     public float power;
+    public GameObject impactParticle;
+    public Vector3 impactNormal;
     private float explosionPhysics = 15f;
 
 	// Use this for initialization
@@ -20,6 +22,7 @@ public class Explosives : MonoBehaviour {
     // Called when the object collides
     void OnCollisionEnter(Collision collision)
     {
+        impactParticle = Instantiate(impactParticle, transform.position, Quaternion.FromToRotation(Vector3.up, impactNormal)) as GameObject;
         Vector3 explosion_epicenter = transform.position;
         Collider[] colliders = Physics.OverlapSphere(explosion_epicenter, radius);
         for (int i = 0; i<colliders.Length; i++)
