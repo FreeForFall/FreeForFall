@@ -126,14 +126,23 @@ namespace AssemblyCSharp
 			Debug.Log ("A player lost");
 			if (!PhotonNetwork.isMasterClient)
 				return;
-			if (playerLost () < PhotonNetwork.room.PlayerCount)
+			int a = playerLost ();
+			if (GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
 			{
-				Debug.Log ("a player lost, but he wasn't the last one");
-				return;
+				if (a < PhotonNetwork.room.PlayerCount)
+				{
+					Debug.Log ("a player lost, but he wasn't the last one");
+					return;
+				}
+				Debug.Log ("A player lost and was the last man standing.");
+				NetworkEventHandlers.SendEvent (new EndGameEvent ());
+				Invoke ("endGame", 6);
 			}
-			Debug.Log ("A player lost and was the last man standing.");
-			NetworkEventHandlers.SendEvent (new EndGameEvent ());
-			Invoke ("endGame", 6);
+			else
+			{
+				Invoke ("endGame", 6);
+			}
+
 		}
 
 		private void removeWalls ()
@@ -231,6 +240,8 @@ namespace AssemblyCSharp
 			{
 				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
 			}
+			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
+				spawnAI (25);
 			removeWalls ();
 		}
 
@@ -343,6 +354,18 @@ namespace AssemblyCSharp
 			//_startGameButton.interactable = false;
 			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
 			loadMap ("Map");
+		}
+
+		private void spawnAI (int x)
+		{
+			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
+			spawnPosition.x = Random.Range (-9f, 9f);
+			spawnPosition.z = Random.Range (-9f, 9f);
+			for (int i = 0; i < x; i++)
+			{
+				Instantiate (Resources.Load ("IA"), spawnPosition, Quaternion.identity);
+				_loadedCount++;
+			}
 		}
 	}
 
