@@ -29,6 +29,7 @@ namespace AssemblyCSharp
 		private Button _roomCreationButton;
 		private Button _refreshButton;
 		private InputField _nameInput;
+		private InputField _nicknameInput;
 		private Text _roomList;
 		private Text _playerCountText;
 		private Button _startGameButton;
@@ -216,7 +217,7 @@ namespace AssemblyCSharp
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 			FlyingCamera.gameObject.SetActive (false);
 			//_camera.SetActive (false);
-			// Don't forget to remove the camera of the other players
+			// SET THE NICKNAME CANVAS
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
 			{
@@ -268,11 +269,12 @@ namespace AssemblyCSharp
 			_refreshButton = GameObject.Find ("RefreshButton").GetComponent<Button> ();
 			_nameInput = GameObject.Find ("RoomNameInput").GetComponent<InputField> ();
 			_roomList = GameObject.Find ("RoomListView").GetComponent<Text> ();
+			_nicknameInput = GameObject.Find ("NicknameInput").GetComponent<InputField> ();
 		}
 
 		private void roomCreationClick ()
 		{
-			Debug.Log ("Creating a room with text : " + _nameInput.text);
+			Debug.Log ("Creating a room with text : " + _nameInput.text + " by nickname : " + _nicknameInput.text);
 			var options = new RoomOptions ();
 			options.MaxPlayers = 255;
 			PhotonNetwork.JoinOrCreateRoom (_nameInput.text, options, null);
