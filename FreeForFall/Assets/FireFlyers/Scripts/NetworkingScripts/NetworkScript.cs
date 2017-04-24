@@ -137,7 +137,7 @@ namespace AssemblyCSharp
 		{
 			Debug.Log ("Destroying the box");
 			Destroy (_map.transform.Find ("BoxPrefab").gameObject);
-		}
+        }
 
 		private int handlePlayerLoaded ()
 		{
@@ -178,7 +178,9 @@ namespace AssemblyCSharp
 			{
 				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
 			}
-		}
+            if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
+                spawnAI(2);
+        }
 
 		private void init ()
 		{
@@ -288,6 +290,17 @@ namespace AssemblyCSharp
 			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
 			loadMap ("Map");
 		}
+
+        private void spawnAI (int x)
+        {
+            Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
+            spawnPosition.x = Random.Range(-9f, 9f);
+            spawnPosition.z = Random.Range(-9f, 9f);
+            for(int i=0; i<x;i++)
+            {
+                Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+            }
+        }
 	}
 
 }
