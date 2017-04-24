@@ -16,8 +16,6 @@ public class PlayerCollector : MonoBehaviour
 
 	void OnCollisionEnter (Collision col)
 	{
-		Debug.LogWarning ("Collided");
-		Debug.LogWarning (col);
 		if (col.gameObject.tag != "Player")
 		{
 			Debug.Log ("Collided with something that wasn't a player");
@@ -32,7 +30,10 @@ public class PlayerCollector : MonoBehaviour
 			Debug.LogWarning ("The local player collided");
 			_networking.SwitchToSpecView ();
 		}
-		NetworkEventHandlers.SendEvent (new PlayerLostEvent ());
-		_networking.handlePlayerLost ();
+		if (PhotonNetwork.isMasterClient)
+			_networking.handlePlayerLost ();
+		else
+			NetworkEventHandlers.SendEvent (new PlayerLostEvent ());
+		
 	}
 }
