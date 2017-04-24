@@ -86,7 +86,6 @@ namespace AssemblyCSharp
 					break;
 				case 0x3:
 				// remove walls
-					Invoke ("switchCamera", 3);
 					Invoke ("destroyBox", 5);
 					break;
 				case 0x19:
@@ -163,6 +162,7 @@ namespace AssemblyCSharp
 
 		private void switchCamera ()
 		{
+			Debug.LogWarning ("SWITCHING CAMERAS");
 			if (FlyingCamera.gameObject.GetActive ())
 			{
 				FlyingCamera.gameObject.GetComponent<Camera> ().enabled = false;

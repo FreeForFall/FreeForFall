@@ -16,19 +16,20 @@ public class PlayerCollector : MonoBehaviour
 
 	void OnCollisionEnter (Collision col)
 	{
-		Debug.Log ("Collided");
+		Debug.LogWarning ("Collided");
+		Debug.LogWarning (col);
 		if (col.gameObject.tag != "Player")
 		{
 			Debug.Log ("Collided with something that wasn't a player");
 			return;
 		}
-		Debug.Log ("Collided with a player");
+		Debug.LogWarning ("Collided with a player");
 		GameObject p = col.gameObject.name != "Player" 
 			? col.gameObject.transform.parent.gameObject 
 			: col.gameObject;// I don't think this is ever going to happen but we never know
 		if (p == _localPlayer)
 		{
-			Debug.Log ("The local player collided");
+			Debug.LogWarning ("The local player collided");
 			_networking.SwitchToSpecView ();
 		}
 		NetworkEventHandlers.SendEvent (new PlayerLostEvent ());
