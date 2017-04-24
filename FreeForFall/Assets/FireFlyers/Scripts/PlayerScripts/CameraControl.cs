@@ -33,17 +33,15 @@ public class CameraControl : MonoBehaviour
     private Vector3 current;
     // suposed to calculate the angle on the x axis for the FPS view (but ... mehhhh not really working that great...)
     private Vector3 FPSyaxisInput;
-    private float verticalOrientation;
-    private float horizontalOrientation;
+    private float FPS_updown;
     private Quaternion rotationFPS;
-    public Transform FPSBounds;
+    public float rot;
+
 
 
 
     void Start()
     {
-        verticalOrientation = 0f;
-        horizontalOrientation = 0f;
         Secondaire.enabled = false;
         Principale.enabled = true;
         Cursor.visible = false;
@@ -73,7 +71,9 @@ public class CameraControl : MonoBehaviour
         else
 
         Principale.transform.position = Vector3.MoveTowards(Principale.transform.position, FPSAnchor.position, 50 * Time.deltaTime);
+
         //no matter what mode you are in the rotation for the Horizontal axis is the same
+
         if (target != null)
         {
 
@@ -81,7 +81,9 @@ public class CameraControl : MonoBehaviour
             transform.RotateAround(target.position, Vector3.up, orbitDegreesPerSec * h * 0.125f);
             relativeDistance = transform.position - target.position;
         }
+
         //here is the rotation for the TPS camera (it just raise or decrease the height of the camera).
+
         if (v != 0 && istps)
         {
             if (transform.position.y < target.position.y + MaxCameraAngleUp && v < 0)
@@ -97,22 +99,25 @@ public class CameraControl : MonoBehaviour
                 FPSAnchor.position = FPSAnchor.position + mouvement_up;
 
             }
+            rot += -v*2;
+            if (rot < -18) //Check for lower limit
+                rot = -18;
+            if (rot > 39) //Check for upper limit
+                rot = 39;
         }
 
         //here is the rotation for the fps view 
+
         if (v != 0 && !istps)
         {
-            if (FPSBounds.position.y < Principale.transform.position.y + 5 && v > 0)
-            {
-                Principale.transform.Rotate(-v * 2, 0, 0);
-                verticalOrientation += v;
-            }
-            if (FPSBounds.position.y > Principale.transform.position.y - 5 && v > 0)
-            {
-                Principale.transform.Rotate(-v * 2, 0, 0);
-                verticalOrientation += v;
-            }
+            rot += -v*2;
+            if (rot < -60) //Check for lower limit
+                rot = -60;
+            if (rot > 60) //Check for upper limit
+                rot = 60;
+            Principale.transform.localRotation = Quaternion.AngleAxis(rot, Vector3.right);
         }
+        print(rot);
     }
 
 
