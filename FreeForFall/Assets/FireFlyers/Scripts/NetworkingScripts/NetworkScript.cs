@@ -104,13 +104,19 @@ namespace AssemblyCSharp
 
 		private void endGame ()
 		{
+			/*
+
+			Replace this method by something that shows a prefab
+			When it does, remove the Invoke("endGame") from handlePlayerLost, 
+			because it won't be needed anymore
+
+			*/
 			PhotonNetwork.Disconnect ();
 			SceneManager.LoadScene ("Menu");
 		}
 
 		private int playerLost ()
 		{
-			Debug.LogWarning ("Wtf");
 			return ++_lostCount;
 		}
 
@@ -127,7 +133,7 @@ namespace AssemblyCSharp
 			}
 			Debug.Log ("A player lost and was the last man standing.");
 			NetworkEventHandlers.SendEvent (new EndGameEvent ());
-			//endGame ();
+			Invoke ("endGame", 6);
 		}
 
 		private void removeWalls ()
