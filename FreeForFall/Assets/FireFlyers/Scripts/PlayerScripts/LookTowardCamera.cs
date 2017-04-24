@@ -22,5 +22,6 @@ public class LookTowardCamera : MonoBehaviour
 		transform.position = bottom.position + new Vector3 (-0.02f, 1.45f, 0);
 		Quaternion cam = new Quaternion (0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
         transform.rotation = cam;
+        
 	}
 }
