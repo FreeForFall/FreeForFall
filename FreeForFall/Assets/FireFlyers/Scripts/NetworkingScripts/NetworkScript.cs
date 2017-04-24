@@ -39,6 +39,8 @@ namespace AssemblyCSharp
 
 		private Vector3 _cameraStartPosition;
 
+		private string _nickname;
+
 		public GameObject Player
 		{
 			get
@@ -125,7 +127,7 @@ namespace AssemblyCSharp
 			}
 			Debug.Log ("A player lost and was the last man standing.");
 			NetworkEventHandlers.SendEvent (new EndGameEvent ());
-			//endGame ();
+			endGame ();
 		}
 
 		private void removeWalls ()
@@ -144,8 +146,6 @@ namespace AssemblyCSharp
 		public void SwitchToSpecView ()
 		{
 			switchCamera ();
-			//FlyingCamera.transform.position = Vector3.Lerp (_camera.transform.position, new Vector3 (10, 10, 10), 1f);
-			//FlyingCamera.transform.position = Vector3.MoveTowards (_camera.transform.position, new Vector3 (10, 10, 10), 1f);
 			StartCoroutine (MoveObject (FlyingCamera.transform, _camera.transform.position, _cameraStartPosition, 5f));
 		}
 
@@ -212,11 +212,9 @@ namespace AssemblyCSharp
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
-			//_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 			FlyingCamera.gameObject.SetActive (false);
-			//_camera.SetActive (false);
 			// SET THE NICKNAME CANVAS
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
@@ -275,6 +273,7 @@ namespace AssemblyCSharp
 		private void roomCreationClick ()
 		{
 			Debug.Log ("Creating a room with text : " + _nameInput.text + " by nickname : " + _nicknameInput.text);
+			_nickname = _nicknameInput.text;
 			var options = new RoomOptions ();
 			options.MaxPlayers = 255;
 			PhotonNetwork.JoinOrCreateRoom (_nameInput.text, options, null);
