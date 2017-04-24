@@ -18,16 +18,13 @@ public class PlayerCollector : MonoBehaviour
 	{
 		if (col.gameObject.tag != "Player")
 		{
-			Debug.Log ("Collided with something that wasn't a player");
 			return;
 		}
-		Debug.LogWarning ("Collided with a player");
 		GameObject p = col.gameObject.name != "Player" 
 			? col.gameObject.transform.parent.gameObject 
 			: col.gameObject;// I don't think this is ever going to happen but we never know
 		if (p == _localPlayer)
 		{
-			Debug.LogWarning ("The local player collided");
 			_networking.SwitchToSpecView ();
 		}
 		if (PhotonNetwork.isMasterClient)
