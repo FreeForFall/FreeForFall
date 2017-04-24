@@ -219,11 +219,12 @@ namespace AssemblyCSharp
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 
 			// SET THE NICKNAME CANVAS
-			removeWalls ();
+
 			if (!PhotonNetwork.isMasterClient)
 			{
 				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
 			}
+			removeWalls ();
 		}
 
 		private void init ()
@@ -259,7 +260,7 @@ namespace AssemblyCSharp
 		void OnGUI ()
 		{
 			if (PhotonNetwork.isMasterClient)
-				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString () + " Count in room : " + PhotonNetwork.room.PlayerCount + " Count Loaded : " + _loadedCount);
+				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString () + " Count in room : " + PhotonNetwork.room.PlayerCount + " Count Loaded : " + _loadedCount + " Count Lost : " + _lostCount);
 			else
 				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
 		}
