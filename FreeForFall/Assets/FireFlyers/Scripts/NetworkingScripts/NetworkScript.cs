@@ -36,6 +36,14 @@ namespace AssemblyCSharp
 		private GameObject _player;
 		private GameObject _camera;
 
+		public GameObject Player
+		{
+			get
+			{
+				return _player;
+			}
+		}
+
 		public Camera FlyingCamera;
 
 		private int _loadedCount;
@@ -113,7 +121,7 @@ namespace AssemblyCSharp
 			}
 			Debug.Log ("A player lost and was the last man standing.");
 			NetworkEventHandlers.SendEvent (new EndGameEvent ());
-			endGame ();
+			//endGame ();
 		}
 
 		private void removeWalls ()
@@ -128,6 +136,26 @@ namespace AssemblyCSharp
 				Invoke ("destroyBox", 5);
 			}
 		}
+
+		public void SwitchToSpecView ()
+		{
+			switchCamera ();
+			//FlyingCamera.transform.position = Vector3.Lerp (_camera.transform.position, new Vector3 (10, 10, 10), 1f);
+			//FlyingCamera.transform.position = Vector3.MoveTowards (_camera.transform.position, new Vector3 (10, 10, 10), 1f);
+			StartCoroutine (MoveObject (FlyingCamera.transform, _camera.transform.position, new Vector3 (10, 10, 10), 1f));
+		}
+
+		IEnumerator MoveObject (Transform obj, Vector3 source, Vector3 target, float overTime)
+		{
+			float startTime = Time.time;
+			while (Time.time < startTime + overTime)
+			{
+				obj.position = Vector3.Lerp (source, target, (Time.time - startTime) / overTime);
+				yield return null;
+			}
+			obj.position = target;
+		}
+
 
 		private void switchCamera ()
 		{
