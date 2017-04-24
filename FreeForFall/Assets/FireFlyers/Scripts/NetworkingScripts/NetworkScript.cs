@@ -36,6 +36,8 @@ namespace AssemblyCSharp
 		private GameObject _player;
 		private GameObject _camera;
 
+		private Vector3 _cameraStartPosition;
+
 		public GameObject Player
 		{
 			get
@@ -65,6 +67,7 @@ namespace AssemblyCSharp
 			_matchMakingCanvas = Instantiate (_matchMakingCanvas);
 			init ();
 			connectToServer (GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode);
+			_cameraStartPosition = FlyingCamera.transform.position;
 		}
 
 		// Need to introduce safe casting of the objects sent over the network, this is really dangerous.
@@ -142,7 +145,7 @@ namespace AssemblyCSharp
 			switchCamera ();
 			//FlyingCamera.transform.position = Vector3.Lerp (_camera.transform.position, new Vector3 (10, 10, 10), 1f);
 			//FlyingCamera.transform.position = Vector3.MoveTowards (_camera.transform.position, new Vector3 (10, 10, 10), 1f);
-			StartCoroutine (MoveObject (FlyingCamera.transform, _camera.transform.position, new Vector3 (10, 10, 10), 1f));
+			StartCoroutine (MoveObject (FlyingCamera.transform, _camera.transform.position, _cameraStartPosition, 5f));
 		}
 
 		IEnumerator MoveObject (Transform obj, Vector3 source, Vector3 target, float overTime)
