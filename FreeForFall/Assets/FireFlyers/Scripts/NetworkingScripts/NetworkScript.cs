@@ -202,6 +202,7 @@ namespace AssemblyCSharp
 
 		private void loadMap (string name)
 		{
+			FlyingCamera.gameObject.SetActive (false);
 			Debug.Log ("Loading map " + name);
 			_map = (GameObject)Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
 			Destroy (_waitForGameStartCanvas);
@@ -214,7 +215,6 @@ namespace AssemblyCSharp
 			_player.GetComponent<ShooterB> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
-			FlyingCamera.gameObject.SetActive (false);
 			// SET THE NICKNAME CANVAS
 			removeWalls ();
 			if (!PhotonNetwork.isMasterClient)
