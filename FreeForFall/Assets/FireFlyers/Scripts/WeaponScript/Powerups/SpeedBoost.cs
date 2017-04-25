@@ -11,14 +11,19 @@ public class SpeedBoost : MonoBehaviour
 		Debug.LogWarning ("Something collided with the powerup");
 		if (c.gameObject.tag == "Player")
 		{
+			GameObject g;
 			if (c.name == "bottom")
 			{
-				c = c.transform.parent.gameObject;
+				g = c.transform.parent.gameObject;
 			}
-			if (c.gameObject == LocalPlayer)
+			else
 			{
-				Debug.LogWarning ("Doing SpeedBoost on " + c.gameObject.name);
-				doPowerup (c.gameObject);
+				g = c.gameObject;
+			}
+			if (g == LocalPlayer)
+			{
+				Debug.LogWarning ("Doing SpeedBoost on " + g);
+				doPowerup (g);
 			}
 			else
 			{
@@ -31,6 +36,6 @@ public class SpeedBoost : MonoBehaviour
 	private void doPowerup (GameObject c)
 	{
 		Debug.LogWarning ("Giving the player a speed boost");
-		c.GetComponent<PlayerController> ().SpeedBoost (20);
+		c.GetComponentInChildren<PlayerController> ().SpeedBoost (20);
 	}
 }
