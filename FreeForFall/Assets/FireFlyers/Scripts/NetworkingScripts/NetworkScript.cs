@@ -150,9 +150,34 @@ namespace AssemblyCSharp
 		}
 
 		// public because called from PowerupController
+		/*
+
+		Need an enum later on
+		0 : SpeedBoost
+		1 : ImpairVision
+		2 : CooldownRefresh
+		*/
+
 		public void HandlePowerupSpawn (Vector3 position, int id)
 		{
-			Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);	
+			Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);
+			GameObject p = (GameObject)Instantiate (Resources.Load ("Powerup"), position, Quaternion.identity);
+			switch (id)
+			{
+				case 0:
+					p.AddComponent<SpeedBoost> ();
+					break;
+				case 1:
+					p.AddComponent<ImpairVision> ();
+					break;
+				case 2:
+					p.AddComponent<CooldownRefresh> ();
+					break;
+				default:
+					p.AddComponent<SpeedBoost> ();
+					break;
+			}
+			Debug.LogWarning ("Spawned");
 		}
 
 		private void handleGrapplingHook ()

@@ -67,6 +67,7 @@ public class ShooterB : MonoBehaviour
 
 	public void RefreshCooldowns ()
 	{
+		Debug.LogWarning ("REFRESHING");
 		TimeSinceLastExplosion = CDExplosion;
 		TimeSinceLastGrip = CDGrip;
 	}

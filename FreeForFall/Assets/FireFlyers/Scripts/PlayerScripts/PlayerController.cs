@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 	public void SpeedBoost (float mult)
 	{
 		_speedBoost = mult;
-		Invoke ("removeSpeedBoost", 5);
+		Invoke ("removeSpeedBoost", 2);
 	}
 
 	private void removeSpeedBoost ()

@@ -11,14 +11,13 @@ public class SpeedBoost : MonoBehaviour
 		{
 			Debug.LogWarning ("Doing SpeedBoost on " + c.gameObject.name);
 			doPowerup (c.gameObject);
+			Destroy (gameObject);
 		}
-
-		
 	}
 
 	private void doPowerup (GameObject c)
 	{
 		Debug.LogWarning ("Giving the player a speed boost");
-		c.GetComponent<PlayerController> ().SpeedBoost (2);
+		c.GetComponent<PlayerController> ().SpeedBoost (20);
 	}
 }
