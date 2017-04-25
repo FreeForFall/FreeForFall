@@ -23,26 +23,18 @@ public class PowerupController : MonoBehaviour
 		_timeSinceLastSpawn += Time.deltaTime;
 		if (_timeSinceLastSpawn >= _spawnCD)
 		{
-			spawn ();
+			int id = spawnRandomPowerup ();
+			_networking.HandlePowerupSpawn (_localPlayer.transform.position, id);
 		}
 	}
 
-	private void spawn ()
+	private int spawnRandomPowerup ()
 	{
 		Debug.LogWarning ("Spawning a powerup");
 		// This is pretty bad and should be changed.
 		// Remember to change the value when adding new powerups. 
-		switch (Random.RandomRange (0, 2))
-		{
-			case 0:
-				// SpeedBoost
-				break;
-			case 1:
-				// CooldownRefresh
-				break;
-			case 2:
-				// ImpairVision
-				break;
-		}
+		int id = Random.RandomRange (0, 2);
+		NetworkEventHandlers.SendEvent (new SpawnPowerupEvent (_localPlayer.transform.position, id));
+		return id;
 	}
 }

@@ -14,6 +14,7 @@ namespace AssemblyCSharp
 		TODO : Rewrite this, at the moment I need have 2 find*Objects functions which is not pretty.
 		Instantiating the two menus from the beginning and only rendering one of them could be cool.
 
+		TODO : Use RPCs FFS
 		*/
 
 		/*
@@ -78,7 +79,7 @@ namespace AssemblyCSharp
 		{
 			/*
 
-			0x0 : LoadMapEvent
+			0x0 : LoadMapEvent : c[0] : byte = mapid
 			0x1 : MapLoadedEvent
 			0x3 : RemoveWallsEvent
 			
@@ -87,6 +88,8 @@ namespace AssemblyCSharp
 			0x30 : VisionImpairedEvent
 			0x31 : SpeedBoostEvent // Not implemented, needed for particles
 			0x32 : CooldownRefreshEvent // Not implemented, needed for particles
+
+			0x40 : SpawnPowerupEvent : c[0] : Vector3 = position, c[1] : int = eventid
 
 			0x50 : GrapplingHookEvent // Needed for particles
 			0x51 : BazookaEvent // Needed for particles and forces
@@ -109,8 +112,6 @@ namespace AssemblyCSharp
 					Invoke ("destroyBox", 5);
 					return;
 
-
-
 				case 0x19:
 					// Player lost
 					handlePlayerLost ();
@@ -126,6 +127,9 @@ namespace AssemblyCSharp
 					handleCooldownRefresh ();
 					return;
 
+				case 0x40:
+					HandlePowerupSpawn ((Vector3)c [0], (int)c [1]);
+					return;
 				
 				case 0x50:
 					handleGrapplingHook ();
@@ -143,6 +147,12 @@ namespace AssemblyCSharp
 					Debug.LogWarning ("Received unknown event with code " + eventCode);
 					return;
 			}
+		}
+
+		// public because called from PowerupController
+		public void HandlePowerupSpawn (Vector3 position, int id)
+		{
+			Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);	
 		}
 
 		private void handleGrapplingHook ()
@@ -304,10 +314,15 @@ namespace AssemblyCSharp
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 
 			// SET THE NICKNAME CANVAS
-
+			// Client only stuff
 			if (!PhotonNetwork.isMasterClient)
 			{
 				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
+			}
+			// Master only stuff
+			else
+			{
+				GameObject.Find ("PowerupManager").gameObject.GetComponent<PowerupController> ().enabled = true;
 			}
 			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
 				spawnAI (25);
