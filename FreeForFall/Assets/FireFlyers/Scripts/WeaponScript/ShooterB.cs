@@ -8,6 +8,7 @@ public class ShooterB : MonoBehaviour {
     public GameObject grip;
     public GameObject Camera;
     public GameObject PlayerBody;
+    public GameObject thing;
     public float CDExplosion = 0f;
     public float CDGrip = 0f;
     private float TimeSinceLastExplosion;
@@ -51,4 +52,13 @@ public class ShooterB : MonoBehaviour {
             }
         }
 	}
+
+    void Shoot()
+    {
+        GameObject temp_projectile;
+        temp_projectile = Instantiate(thing, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
+        Rigidbody projectile_body;
+        projectile_body = temp_projectile.GetComponent<Rigidbody>();
+        projectile_body.AddForce(Camera.transform.forward * projectile_force);
+    }
 }
