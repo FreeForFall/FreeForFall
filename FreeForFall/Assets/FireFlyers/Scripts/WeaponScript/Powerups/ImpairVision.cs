@@ -11,6 +11,10 @@ public class ImpairVision : MonoBehaviour
 		Debug.LogWarning ("Something collided with the powerup");
 		if (c.gameObject.tag == "Player")
 		{
+			if (c.name == "bottom")
+			{
+				c = c.transform.parent.gameObject;
+			}
 			if (c.gameObject == LocalPlayer)
 			{
 				Debug.LogWarning ("Doing ImpairVision on " + c.gameObject.name);

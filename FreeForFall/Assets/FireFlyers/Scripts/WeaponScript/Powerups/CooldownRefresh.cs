@@ -11,6 +11,10 @@ public class CooldownRefresh : MonoBehaviour
 		Debug.LogWarning ("Something collided with the powerup");
 		if (c.gameObject.tag == "Player")
 		{
+			if (c.name == "bottom")
+			{
+				c = c.transform.parent.gameObject;
+			}
 			if (c.gameObject == LocalPlayer)
 			{
 				Debug.LogWarning ("Doing CooldownRefresh on " + c.gameObject.name);
@@ -26,13 +30,6 @@ public class CooldownRefresh : MonoBehaviour
 
 	private void doPowerup (GameObject c)
 	{
-		if (c.name == "bottom")
-		{
-			c.transform.parent.GetComponentInChildren<ShooterB> ().RefreshCooldowns ();
-		}
-		else
-		{
-			c.GetComponentInChildren<ShooterB> ().RefreshCooldowns ();
-		}
+		c.GetComponentInChildren<ShooterB> ().RefreshCooldowns ();
 	}
 }

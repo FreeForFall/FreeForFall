@@ -11,6 +11,10 @@ public class SpeedBoost : MonoBehaviour
 		Debug.LogWarning ("Something collided with the powerup");
 		if (c.gameObject.tag == "Player")
 		{
+			if (c.name == "bottom")
+			{
+				c = c.transform.parent.gameObject;
+			}
 			if (c.gameObject == LocalPlayer)
 			{
 				Debug.LogWarning ("Doing SpeedBoost on " + c.gameObject.name);
