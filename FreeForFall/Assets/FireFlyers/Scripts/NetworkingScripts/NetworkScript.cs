@@ -209,8 +209,7 @@ namespace AssemblyCSharp
 		{
 			//Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
             _camera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = true;
-            Thread.Sleep(5000);
-            _camera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
+            Invoke("RemoveVisionImpaired", 5);
 
 
         }
@@ -486,6 +485,11 @@ namespace AssemblyCSharp
 				_loadedCount++;
 			}
 		}
+
+        private void RemoveVisionImpaired()
+        {
+            _camera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
+        }
 	}
 
 }
