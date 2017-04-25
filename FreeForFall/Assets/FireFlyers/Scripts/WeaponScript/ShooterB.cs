@@ -40,12 +40,11 @@ public class ShooterB : MonoBehaviour
 			{
 				TimeSinceLastGrip = 0;
 				GameObject temp_projectile;
-				temp_projectile = Instantiate (projectile, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
+				temp_projectile = Instantiate (grip, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
 				Rigidbody projectile_body;
 				projectile_body = temp_projectile.GetComponent<Rigidbody> ();
 				projectile_body.AddForce (Camera.transform.forward * projectile_force);
 				Destroy (temp_projectile, 10.0f);
-				TimeSinceLastGrip = 0;
 			}
 		}
 
