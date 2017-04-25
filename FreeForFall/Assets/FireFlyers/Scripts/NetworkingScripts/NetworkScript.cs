@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Threading;
 
 
 namespace AssemblyCSharp
@@ -206,8 +207,13 @@ namespace AssemblyCSharp
 
 		private void handleVisionImpaired ()
 		{
-			Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
-		}
+			//Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
+            _camera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = true;
+            Thread.Sleep(5000);
+            _camera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
+
+
+        }
 
 		private void endGame ()
 		{
@@ -353,7 +359,7 @@ namespace AssemblyCSharp
 			{
 				GameObject.Find ("PowerupManager").gameObject.GetComponent<PowerupController> ().enabled = true;
 			}
-			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
+            if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
 				spawnAI (25);
 			removeWalls ();
 		}
