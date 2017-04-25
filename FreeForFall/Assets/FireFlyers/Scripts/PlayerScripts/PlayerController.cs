@@ -2,6 +2,8 @@
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject jumpeffect;
+    public Transform jumpflamelocation;
 	public float JumpCooldown;
 	public float TimeSincePreviousJump;
 	public float speed;
@@ -69,10 +71,12 @@ public class PlayerController : MonoBehaviour
 		    && !this.airbone
 		    && JumpCooldown < TimeSincePreviousJump)
 		{
+            GameObject JumpeffectDone = Instantiate(jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
             jumpsound.Play();
             TimeSincePreviousJump = 0f;
 			jump ();
-		}
+            Destroy(JumpeffectDone, 0.5f);
+        }
 		#if UNITY_STANDALONE_WIN
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
 		#endif

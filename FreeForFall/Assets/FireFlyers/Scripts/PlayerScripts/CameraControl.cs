@@ -46,7 +46,7 @@ public class CameraControl : MonoBehaviour
 		Principale.enabled = true;
 		Cursor.visible = false;
 		//initialisation of the Camera (remember the camera is an empty object that host 2 real camera, the primary and secondary cameras. 
-		initial_distance = new Vector3 (2, 2, -15);
+		initial_distance = new Vector3 (2, 2, -20);
 		if (target != null)
 		{
 			transform.position = player.position + initial_distance;
