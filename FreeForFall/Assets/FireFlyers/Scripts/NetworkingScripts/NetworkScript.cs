@@ -339,7 +339,7 @@ namespace AssemblyCSharp
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
-			_player.transform.Find ("bottom").GetComponentInChildren<Canvas> ().GetComponent<Text> ().text = _nickname;
+			_player.transform.Find ("bottom").GetComponentInChildren<Canvas> ().GetComponentInChildren<Text> ().text = _nickname;
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
