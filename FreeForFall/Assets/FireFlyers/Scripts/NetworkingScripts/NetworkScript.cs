@@ -14,6 +14,7 @@ namespace AssemblyCSharp
 		TODO : Rewrite this, at the moment I need have 2 find*Objects functions which is not pretty.
 		Instantiating the two menus from the beginning and only rendering one of them could be cool.
 
+		TODO : Use RPCs FFS
 		*/
 
 		/*
@@ -76,30 +77,136 @@ namespace AssemblyCSharp
 		// Need to introduce safe casting of the objects sent over the network, this is really dangerous.
 		private void handleNetworkEvents (byte eventCode, object content, int senderId)
 		{
+			/*
+
+			0x0 : LoadMapEvent : c[0] : byte = mapid
+			0x1 : MapLoadedEvent
+			0x3 : RemoveWallsEvent
+			
+			0x19 : PlayerLostEvent
+
+			0x30 : VisionImpairedEvent
+			0x31 : SpeedBoostEvent // Not implemented, needed for particles
+			0x32 : CooldownRefreshEvent // Not implemented, needed for particles
+
+			0x40 : SpawnPowerupEvent : c[0] : Vector3 = position, c[1] : int = eventid
+
+			0x50 : GrapplingHookEvent // Needed for particles
+			0x51 : BazookaEvent // Needed for particles and forces
+
+			0x99 : EndGameEvent
+
+			*/
+			object[] c = (object[])content;
 			switch (eventCode)
 			{
 				case 0x0:
-					handleMapLoadNetworkEvent (((byte[])content) [0]);
-					break;
+					int b = (int)c [0];
+					handleMapLoadNetworkEvent ((byte)b);
+					return;
 				case 0x1:
 					removeWalls ();
-					break;
+					return;
 				case 0x3:
 				// remove walls
 					Invoke ("destroyBox", 5);
-					break;
+					return;
+
 				case 0x19:
 					// Player lost
 					handlePlayerLost ();
-					break;
+					return;
+				
+				case 0x30:
+					handleVisionImpaired ();
+					return;
+				case 0x31:
+					handleSpeedBoost ();
+					return;
+				case 0x32:
+					handleCooldownRefresh ();
+					return;
+
+				case 0x40:
+					HandlePowerupSpawn ((Vector3)c [0], (int)c [1]);
+					return;
+				
+				case 0x50:
+					handleGrapplingHook ();
+					return;
+				case 0x51:
+					handleBazooka ();
+					return;
+				
+				
 				case 0x99:
 					// End of the game
 					endGame ();
-					break;
+					return;
 				default:
 					Debug.LogWarning ("Received unknown event with code " + eventCode);
 					return;
 			}
+		}
+
+		// public because called from PowerupController
+		/*
+
+		Need an enum later on
+		0 : SpeedBoost
+		1 : ImpairVision
+		2 : CooldownRefresh
+		*/
+
+		public void HandlePowerupSpawn (Vector3 position, int id)
+		{
+			Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);
+			GameObject p = (GameObject)Instantiate (Resources.Load ("Powerup"), position, Quaternion.identity);
+			switch (id)
+			{
+				case 0:
+					var sp = p.AddComponent<SpeedBoost> ();
+					sp.LocalPlayer = _player;
+					break;
+				case 1:
+					var im = p.AddComponent<ImpairVision> ();
+					im.LocalPlayer = _player;
+					break;
+				case 2:
+					var cr = p.AddComponent<CooldownRefresh> ();
+					cr.LocalPlayer = _player;
+					break;
+				default:
+					var s = p.AddComponent<SpeedBoost> ();
+					s.LocalPlayer = _player;
+					break;
+			}
+			Debug.LogWarning ("Spawned");
+		}
+
+		private void handleGrapplingHook ()
+		{
+			Debug.LogWarning ("Not implemented");	
+		}
+
+		private void handleBazooka ()
+		{
+			Debug.LogWarning ("Not implemented");
+		}
+
+		private void handleSpeedBoost ()
+		{
+			Debug.LogWarning ("Not implemented");
+		}
+
+		private void handleCooldownRefresh ()
+		{
+			Debug.LogWarning ("Not implemented");
+		}
+
+		private void handleVisionImpaired ()
+		{
+			Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
 		}
 
 		private void endGame ()
@@ -231,14 +338,20 @@ namespace AssemblyCSharp
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
+			_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 
 			// SET THE NICKNAME CANVAS
-
+			// Client only stuff
 			if (!PhotonNetwork.isMasterClient)
 			{
 				NetworkEventHandlers.SendEvent (new MapLoadedEvent ());
+			}
+			// Master only stuff
+			else
+			{
+				GameObject.Find ("PowerupManager").gameObject.GetComponent<PowerupController> ().enabled = true;
 			}
 			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
 				spawnAI (25);
