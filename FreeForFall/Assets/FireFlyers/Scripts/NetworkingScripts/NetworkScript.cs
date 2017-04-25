@@ -342,6 +342,7 @@ namespace AssemblyCSharp
 			_player.transform.Find ("bottom").GetComponentInChildren<Canvas> ().GetComponentInChildren<Text> ().text = _nickname;
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponent<UI> ().enabled = true;
+			_player.transform.Find ("Canvas").gameObject.SetActive (true);
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
 			_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
