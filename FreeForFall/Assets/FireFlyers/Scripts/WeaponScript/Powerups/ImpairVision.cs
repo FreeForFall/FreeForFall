@@ -36,6 +36,6 @@ public class ImpairVision : MonoBehaviour
 
 	private void doPowerup (GameObject c)
 	{
-        NetworkEventHandlers.SendEvent(new VisionImpairedEvent());
-    }
+		NetworkEventHandlers.SendEvent (new VisionImpairedEvent ());
+	}
 }
