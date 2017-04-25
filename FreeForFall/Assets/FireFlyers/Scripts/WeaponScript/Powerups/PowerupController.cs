@@ -25,6 +25,7 @@ public class PowerupController : MonoBehaviour
 		{
 			int id = spawnRandomPowerup ();
 			_networking.HandlePowerupSpawn (_localPlayer.transform.position, id);
+			_timeSinceLastSpawn = 0f;
 		}
 	}
 
