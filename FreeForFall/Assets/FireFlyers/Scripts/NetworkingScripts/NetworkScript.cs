@@ -341,10 +341,12 @@ namespace AssemblyCSharp
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
 			_player.transform.Find ("bottom").GetComponentInChildren<Canvas> ().GetComponentInChildren<Text> ().text = _nickname;
 			_player.GetComponent<CrosshairUI> ().enabled = true;
+			_player.GetComponent<UI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
 			_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
+
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 
 			// SET THE NICKNAME CANVAS
