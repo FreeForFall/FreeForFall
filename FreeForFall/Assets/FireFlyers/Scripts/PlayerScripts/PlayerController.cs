@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
 	public Transform playerCamera;
 	private Quaternion startrotation;
 	private Vector3 initial_Camera;
+	public Transform spawn;
+	public bool ground_powerup = true;
 	private float _speedBoost;
 
 	// Use this for initialization
@@ -93,7 +95,14 @@ public class PlayerController : MonoBehaviour
 			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
 				speed * sprintMultiplier * Time.deltaTime * _speedBoost);
 		}
+		if (Input.GetKey (KeyCode.R) || Input.GetKey (KeyCode.Joystick1Button6))
+		{
+			if (spawn != null)
+				transform.position = spawn.position;
+		}
 	}
+
+	// Update is called once per frame
 
 	public void SpeedBoost (float mult)
 	{
@@ -105,6 +114,7 @@ public class PlayerController : MonoBehaviour
 	{
 		_speedBoost = 1f;
 	}
+
 	// Update is called once per frame
 	void Update ()
 	{

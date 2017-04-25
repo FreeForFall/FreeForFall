@@ -19,13 +19,15 @@ public class WaitToFall : MonoBehaviour
 	}
 
 
-	void Goback ()
+	public void Goback ()
 	{
+        print("Goback");
 		Renderer Ren = GetComponent<Renderer> ();
 		MeshCollider Mcol = GetComponent<MeshCollider> ();
 		Mcol.enabled = true;
-		Ren.enabled = true;
-		GetComponent<ReturnToPosition> ().enabled = true;
+        Mcol.enabled = true;
+        GetComponent<ReturnToPosition> ().enabled = true;
+ 
 	}
 
 	void IsFallen ()
