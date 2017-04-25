@@ -97,7 +97,7 @@ namespace AssemblyCSharp
 			switch (eventCode)
 			{
 				case 0x0:
-					handleMapLoadNetworkEvent (((object[])content) [0]);
+					handleMapLoadNetworkEvent ((byte)((object[])content) [0]);
 					return;
 				case 0x1:
 					removeWalls ();
