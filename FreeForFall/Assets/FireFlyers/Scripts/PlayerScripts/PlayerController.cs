@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
 	public Transform spawn;
 	public bool ground_powerup = true;
 	private float _speedBoost;
+    public AudioSource motorsound;
+    public AudioSource jumpsound;
 
 	// Use this for initialization
 	void Start ()
@@ -50,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
 	private void jump ()
 	{
+
 		this.rigidBody.AddForce (new Vector3 (0f, jumpforce, 0f));
 		Invoke ("jumpDown", 0.3f);
 	}
@@ -66,7 +69,8 @@ public class PlayerController : MonoBehaviour
 		    && !this.airbone
 		    && JumpCooldown < TimeSincePreviousJump)
 		{
-			TimeSincePreviousJump = 0f;
+            jumpsound.Play();
+            TimeSincePreviousJump = 0f;
 			jump ();
 		}
 		#if UNITY_STANDALONE_WIN
@@ -94,6 +98,7 @@ public class PlayerController : MonoBehaviour
 			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
 			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
 				speed * sprintMultiplier * Time.deltaTime * _speedBoost);
+            motorsound.Play();
 		}
 		if (Input.GetKey (KeyCode.R) || Input.GetKey (KeyCode.Joystick1Button6))
 		{
