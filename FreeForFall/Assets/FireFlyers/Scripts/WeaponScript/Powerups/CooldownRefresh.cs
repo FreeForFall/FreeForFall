@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CooldownRefresh : Powerup
+public class CooldownRefresh : MonoBehaviour
 {
-	public override void DoPowerup (GameObject c)
+	public void DoPowerup (GameObject c)
 	{
-		Debug.LogWarning ("NOT IMPLEMENTED : Refreshing the player's cooldowns");
+		Debug.LogWarning ("Refreshing the powerups");
+		c.GetComponentInChildren<ShooterB> ().RefreshCooldowns ();
 	}
 }

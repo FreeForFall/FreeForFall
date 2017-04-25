@@ -2,10 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedBoost : Powerup
+public class SpeedBoost : MonoBehaviour
 {
-	public override void DoPowerup (GameObject c)
+	void OnTriggerEnter (Collider c)
 	{
-		Debug.LogWarning ("NOT IMPLEMENTED : Giving the player a speed boost");
+		Debug.LogWarning ("Something collided with the powerup");
+		if (c.gameObject.tag == "Player")
+		{
+			Debug.LogWarning ("Doing SpeedBoost on " + c.gameObject.name);
+			doPowerup (c.gameObject);
+		}
+
+		
+	}
+
+	private void doPowerup (GameObject c)
+	{
+		Debug.LogWarning ("Giving the player a speed boost");
+		c.GetComponent<PlayerController> ().SpeedBoost (2);
 	}
 }

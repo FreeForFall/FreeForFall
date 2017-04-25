@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ImpairVision : Powerup
+public class ImpairVision : MonoBehaviour
 {
-	public override void DoPowerup (GameObject c)
+	public void DoPowerup (GameObject c)
 	{
 		Debug.LogWarning ("NOT IMPLEMENTED : Impairing the vision");
 	}
