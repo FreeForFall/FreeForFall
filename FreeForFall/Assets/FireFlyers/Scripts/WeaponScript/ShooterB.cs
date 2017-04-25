@@ -12,8 +12,8 @@ public class ShooterB : MonoBehaviour
 	public GameObject thing;
 	public float CDExplosion = 3f;
 	public float CDGrip = 3f;
-	private float TimeSinceLastExplosion;
-	private float TimeSinceLastGrip;
+	public float TimeSinceLastExplosion;
+	public float TimeSinceLastGrip;
 	public float projectile_force;
 	// Use this for initialization
 	void Start ()
