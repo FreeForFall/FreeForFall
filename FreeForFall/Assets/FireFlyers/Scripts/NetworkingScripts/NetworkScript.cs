@@ -165,16 +165,20 @@ namespace AssemblyCSharp
 			switch (id)
 			{
 				case 0:
-					p.AddComponent<SpeedBoost> ();
+					var sp = p.AddComponent<SpeedBoost> ();
+					sp.LocalPlayer = _player;
 					break;
 				case 1:
-					p.AddComponent<ImpairVision> ();
+					var im = p.AddComponent<ImpairVision> ();
+					im.LocalPlayer = _player;
 					break;
 				case 2:
-					p.AddComponent<CooldownRefresh> ();
+					var cr = p.AddComponent<CooldownRefresh> ();
+					cr.LocalPlayer = _player;
 					break;
 				default:
-					p.AddComponent<SpeedBoost> ();
+					var s = p.AddComponent<SpeedBoost> ();
+					s.LocalPlayer = _player;
 					break;
 			}
 			Debug.LogWarning ("Spawned");
