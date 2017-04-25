@@ -21,8 +21,10 @@ public class NetworkPlayerController : MonoBehaviour
 		_photonView = GetComponent<PhotonView> ();
 		_bottom = gameObject.transform.Find ("bottom");
 		_torso = gameObject.transform.Find ("Torso");
+		Debug.LogWarning (_torso);
 		_targetPosition = _bottom.position;
 		_targetBottomRotation = Quaternion.Euler (0, 0, 0);
+		_targetTorsoRotation = Quaternion.Euler (0, 0, 0);
 	}
 	
 	// Update is called once per frame
@@ -50,6 +52,7 @@ public class NetworkPlayerController : MonoBehaviour
 			_targetPosition = (Vector3)pStream.ReceiveNext ();
 			_targetBottomRotation = (Quaternion)pStream.ReceiveNext ();
 			_targetTorsoRotation = (Quaternion)pStream.ReceiveNext ();
+			Debug.LogWarning (_targetTorsoRotation);
 		}
 	}
 }
