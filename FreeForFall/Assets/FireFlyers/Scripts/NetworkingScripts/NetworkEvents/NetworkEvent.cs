@@ -5,7 +5,7 @@ namespace AssemblyCSharp
 	public abstract class NetworkEvent
 	{
 		protected byte eventCode;
-		protected byte[] content;
+		protected object[] content;
 		protected bool reliable;
 
 		public byte NetworkEventCode
@@ -32,17 +32,17 @@ namespace AssemblyCSharp
 			}
 		}
 
-		public NetworkEvent (byte eventCode, byte[] content = null, bool reliable = true)
+		public NetworkEvent (byte eventCode, object[] content = null, bool reliable = true)
 		{
 			this.eventCode = eventCode;
 			this.content = content;
 			this.reliable = reliable;
 		}
 
-		public NetworkEvent (byte eventCode, byte content, bool reliable = true)
+		public NetworkEvent (byte eventCode, object content, bool reliable = true)
 		{
 			this.eventCode = eventCode;
-			this.content = new byte[]{ content };
+			this.content = new object[]{ content };
 			this.reliable = reliable;
 		}
 	}

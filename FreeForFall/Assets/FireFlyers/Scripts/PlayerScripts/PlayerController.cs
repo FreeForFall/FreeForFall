@@ -17,8 +17,9 @@ public class PlayerController : MonoBehaviour
 	public Transform playerCamera;
 	private Quaternion startrotation;
 	private Vector3 initial_Camera;
-    public Transform spawn;
-    public bool ground_powerup = true;
+	public Transform spawn;
+	public bool ground_powerup = true;
+	private float _speedBoost;
 
 	// Use this for initialization
 	void Start ()
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
 		this.airbone = false;
 		this.rigidBody = this.GetComponent<Rigidbody> ();
 		rb = GetComponent<Rigidbody> ();
+		_speedBoost = 1f;
 	}
 
 	void OnCollisionEnter (Collision other)
@@ -91,18 +93,30 @@ public class PlayerController : MonoBehaviour
 			rb.rotation = Quaternion.RotateTowards (transform.rotation, cam * rotation, 800 * Time.deltaTime);
 			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
 			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
-				speed * sprintMultiplier * Time.deltaTime);
+				speed * sprintMultiplier * Time.deltaTime * _speedBoost);
 		}
-        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Joystick1Button6))
-        {
-            if (spawn != null)
-            transform.position = spawn.position;
-        }
-    }
+		if (Input.GetKey (KeyCode.R) || Input.GetKey (KeyCode.Joystick1Button6))
+		{
+			if (spawn != null)
+				transform.position = spawn.position;
+		}
+	}
 
-    // Update is called once per frame
+	// Update is called once per frame
 
-    void Update ()
+	public void SpeedBoost (float mult)
+	{
+		_speedBoost = mult;
+		Invoke ("removeSpeedBoost", 2);
+	}
+
+	private void removeSpeedBoost ()
+	{
+		_speedBoost = 1f;
+	}
+
+	// Update is called once per frame
+	void Update ()
 	{
 		TimeSincePreviousJump += Time.deltaTime;
 		doMovement ();
