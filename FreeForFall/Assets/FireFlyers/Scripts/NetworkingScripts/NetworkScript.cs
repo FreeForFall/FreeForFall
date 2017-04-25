@@ -88,6 +88,9 @@ namespace AssemblyCSharp
 			0x31 : SpeedBoostEvent // Not implemented, needed for particles
 			0x32 : CooldownRefreshEvent // Not implemented, needed for particles
 
+			0x50 : GrapplingHookEvent // Needed for particles
+			0x51 : BazookaEvent // Needed for particles and forces
+
 			0x99 : EndGameEvent
 
 			*/
@@ -110,10 +113,23 @@ namespace AssemblyCSharp
 					// Player lost
 					handlePlayerLost ();
 					return;
-
-
+				
 				case 0x30:
 					handleVisionImpaired ();
+					return;
+				case 0x31:
+					handleSpeedBoost ();
+					return;
+				case 0x32:
+					handleCooldownRefresh ();
+					return;
+
+				
+				case 0x50:
+					handleGrapplingHook ();
+					return;
+				case 0x51:
+					handleBazooka ();
 					return;
 				
 				
@@ -125,6 +141,26 @@ namespace AssemblyCSharp
 					Debug.LogWarning ("Received unknown event with code " + eventCode);
 					return;
 			}
+		}
+
+		private void handleGrapplingHook ()
+		{
+			Debug.LogWarning ("Not implemented");	
+		}
+
+		private void handleBazooka ()
+		{
+			
+		}
+
+		private void handleSpeedBoost ()
+		{
+			Debug.LogWarning ("Not implemented");
+		}
+
+		private void handleCooldownRefresh ()
+		{
+			Debug.LogWarning ("Not implemented");
 		}
 
 		private void handleVisionImpaired ()
