@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Threading;
 
 
 namespace AssemblyCSharp
@@ -206,7 +207,10 @@ namespace AssemblyCSharp
 
 		private void handleVisionImpaired ()
 		{
-			Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
+			_camera.GetComponent<CameraFilterPack_FX_Glitch1> ().enabled = true;
+			Invoke ("RemoveVisionImpaired", 5);
+
+
 		}
 
 		private void endGame ()
@@ -335,6 +339,7 @@ namespace AssemblyCSharp
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
+			_player.transform.Find ("bottom").GetComponentInChildren<Canvas> ().GetComponentInChildren<Text> ().text = _nickname;
 			_player.GetComponent<CrosshairUI> ().enabled = true;
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
@@ -479,6 +484,11 @@ namespace AssemblyCSharp
 				Instantiate (Resources.Load ("IA"), spawnPosition, Quaternion.identity);
 				_loadedCount++;
 			}
+		}
+
+		private void RemoveVisionImpaired ()
+		{
+			_camera.GetComponent<CameraFilterPack_FX_Glitch1> ().enabled = false;
 		}
 	}
 
