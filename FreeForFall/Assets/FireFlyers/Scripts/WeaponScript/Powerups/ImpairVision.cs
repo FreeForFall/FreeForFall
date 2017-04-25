@@ -36,7 +36,6 @@ public class ImpairVision : MonoBehaviour
 
 	private void doPowerup (GameObject c)
 	{
-		//Debug.LogWarning ("NOT IMPLEMENTED : Impairing the vision");
         NetworkEventHandlers.SendEvent(new VisionImpairedEvent());
     }
 }

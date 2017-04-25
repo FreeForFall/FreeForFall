@@ -207,7 +207,6 @@ namespace AssemblyCSharp
 
 		private void handleVisionImpaired ()
 		{
-			//Debug.LogWarning ("Not implemented yet. Add a filter to the camera");
             _camera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = true;
             Invoke("RemoveVisionImpaired", 5);
 
