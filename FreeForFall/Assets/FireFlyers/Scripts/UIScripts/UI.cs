@@ -10,19 +10,28 @@ public class UI : MonoBehaviour
     private Image launcher;
     private Image jump;
     private Image hook;
-    private bool coolingDown;
-    public float gripCD;
-    public float launcherCD;
+    private float gripCD;
+    private float launcherCD;
+    private float lastExplosion;
+    private float lastGrip;
+    private float JumpCD;
+    private float lastJump;
+
 
     void Start()
     {
         GameObject launchLabel = GameObject.Find("Canvas/Rockets/Filled");
         GameObject jumpLabel = GameObject.Find("Canvas/Jump/Filled");
         GameObject hookLabel = GameObject.Find("Canvas/GrapplingHook/Filled");
+        
         launcher = launchLabel.GetComponent<Image>();
         jump = jumpLabel.GetComponent<Image>();
         hook = hookLabel.GetComponent<Image>();
         launcherCD = GetComponent<ShooterB>().CDExplosion;
+        gripCD = GetComponent<ShooterB>().CDGrip;
+        JumpCD = GameObject.Find("bottom").GetComponent<PlayerController>().JumpCooldown;
+        lastExplosion = GetComponent<ShooterB>().TimeSinceLastExplosion;
+        lastGrip = GetComponent<ShooterB>().TimeSinceLastGrip;
         launcher.fillAmount = 1f;
         jump.fillAmount = 1f;
         hook.fillAmount = 1f;
@@ -32,16 +41,28 @@ public class UI : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Joystick1Button5))
-        {
-            launcher.fillAmount = 0f;
-            while (launcher.fillAmount < 1f)
-            {
-                
-                launcher.fillAmount += 1f / launcherCD * Time.deltaTime;
-            }
-        }
+        lastExplosion = GetComponent<ShooterB>().TimeSinceLastExplosion;
+        lastGrip = GetComponent<ShooterB>().TimeSinceLastGrip;
+        lastJump = GameObject.Find("bottom").GetComponent<PlayerController>().TimeSincePreviousJump;
+        launcher.fillAmount = lastExplosion / launcherCD;
+        hook.fillAmount = lastGrip / gripCD;
+        jump.fillAmount = lastJump / JumpCD;
+
+        if (launcher.fillAmount == 1f)
+            launcher.color = Color.green;
+        else launcher.color = new Color32(0, 160, 255, 255);
+
+        if (hook.fillAmount == 1f) 
+        hook.color = Color.green;
+        else hook.color = new Color32(0, 160, 255, 255);
+        
+        if (jump.fillAmount == 1f)
+        jump.color = Color.green;
+        else jump.color = new Color32(0, 160, 255, 255);
+        
+        
     }
+    
 
     void Timer()
     {
