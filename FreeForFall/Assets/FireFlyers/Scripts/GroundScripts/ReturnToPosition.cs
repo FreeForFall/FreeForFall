@@ -21,7 +21,7 @@ public class ReturnToPosition : MonoBehaviour {
         Renderer Ren = GetComponent<Renderer>();
         MeshCollider Mcol = GetComponent<MeshCollider>();
         Rigidbody rb = GetComponent<Rigidbody>();
-        float step = 5 * Time.deltaTime;
+        float step = 20 * Time.deltaTime;
         float rotate = 360 * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, _initialPosition, step);
         rb.rotation = Quaternion.RotateTowards(transform.rotation, _initialRotation, rotate);

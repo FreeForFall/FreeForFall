@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
 	public Transform playerCamera;
 	private Quaternion startrotation;
 	private Vector3 initial_Camera;
+    public Transform spawn;
+    public bool ground_powerup = true;
 
 	// Use this for initialization
 	void Start ()
@@ -91,10 +93,16 @@ public class PlayerController : MonoBehaviour
 			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
 				speed * sprintMultiplier * Time.deltaTime);
 		}
-	}
+        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Joystick1Button6))
+        {
+            if (spawn != null)
+            transform.position = spawn.position;
+        }
+    }
 
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+
+    void Update ()
 	{
 		TimeSincePreviousJump += Time.deltaTime;
 		doMovement ();

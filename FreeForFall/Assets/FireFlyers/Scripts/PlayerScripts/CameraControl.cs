@@ -117,7 +117,6 @@ public class CameraControl : MonoBehaviour
                 rot = 60;
             Principale.transform.localRotation = Quaternion.AngleAxis(rot, Vector3.right);
         }
-        print(rot);
     }
 
 
