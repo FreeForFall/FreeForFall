@@ -8,8 +8,8 @@ public class ShooterB : MonoBehaviour {
     public GameObject grip;
     public GameObject Camera;
     public GameObject PlayerBody;
-    public float CDExplosion = 4f;
-    public float CDGrip = 4f;
+    public float CDExplosion = 0f;
+    public float CDGrip = 0f;
     private float TimeSinceLastExplosion;
     private float TimeSinceLastGrip;
     public float projectile_force;
