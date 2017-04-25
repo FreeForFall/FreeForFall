@@ -128,9 +128,6 @@ namespace AssemblyCSharp
 					HandlePowerupSpawn ((Vector3)c [0], (int)c [1]);
 					return;
 				
-				case 0x50:
-					handleGrapplingHook ();
-					return;
 				case 0x51:
 					HandleBazooka ((Vector3)c [0], (Quaternion)c [1], (Vector3)c [2]);
 					return;
@@ -179,11 +176,6 @@ namespace AssemblyCSharp
 					break;
 			}
 			Debug.LogWarning ("Spawned");
-		}
-
-		private void handleGrapplingHook ()
-		{
-			Debug.LogWarning ("Not implemented");	
 		}
 
 		// Public because accessed from ShooterB
