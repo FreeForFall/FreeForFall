@@ -6,7 +6,7 @@ public class StayOverBottom : MonoBehaviour
 {
 	public Transform bottom;
 
-	void Update ()
+	void LateUpdate ()
 	{
 		transform.position = bottom.position + new Vector3 (-0.02f, 1.45f, 0);
 	}
