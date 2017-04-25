@@ -49,9 +49,6 @@ public class NetworkPlayerController : MonoBehaviour
 		else
 		if (pStream.isReading)
 		{
-			_bottom.position = _targetPosition;
-			_bottom.rotation = _targetBottomRotation;
-			_torso.rotation = _targetTorsoRotation;
 			_targetPosition = (Vector3)pStream.ReceiveNext ();
 			_targetBottomRotation = (Quaternion)pStream.ReceiveNext ();
 			_targetTorsoRotation = (Quaternion)pStream.ReceiveNext ();
