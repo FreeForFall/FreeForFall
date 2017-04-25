@@ -94,14 +94,12 @@ namespace AssemblyCSharp
 			0x99 : EndGameEvent
 
 			*/
+			object[] c = (object[])content;
 			switch (eventCode)
 			{
 				case 0x0:
-					object[] c = (object[])content;
-					Debug.LogWarning (c.Length);
-					byte b = (byte)c [0];
-					Debug.LogWarning (b);
-					handleMapLoadNetworkEvent (b);
+					int b = (int)c [0];
+					handleMapLoadNetworkEvent ((byte)b);
 					return;
 				case 0x1:
 					removeWalls ();
