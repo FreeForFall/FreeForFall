@@ -7,7 +7,7 @@ public class PowerupController : MonoBehaviour
 {
 	private NetworkScript _networking;
 	private GameObject _localPlayer;
-	private Transform _playerTrs;
+	private GameObject[] _spawners;
 
 	private float _timeSinceLastSpawn;
 	private const float _spawnCD = 5f;
@@ -17,7 +17,8 @@ public class PowerupController : MonoBehaviour
 		_timeSinceLastSpawn = 0f;
 		_networking = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ();
 		_localPlayer = _networking.Player;
-		_playerTrs = _localPlayer.transform.Find ("bottom").transform;
+		_spawners = GameObject.FindGameObjectsWithTag ("PowerupSpawner");
+		Debug.LogWarning (_spawners.Length);
 	}
 
 	void Update ()
@@ -25,19 +26,22 @@ public class PowerupController : MonoBehaviour
 		_timeSinceLastSpawn += Time.deltaTime;
 		if (_timeSinceLastSpawn >= _spawnCD)
 		{
-			int id = spawnRandomPowerup ();
-			_networking.HandlePowerupSpawn (_playerTrs.position, id);
+			foreach (var g in _spawners)
+			{
+				int id = spawnRandomPowerup (g.transform.position);
+				_networking.HandlePowerupSpawn (g.transform.position, id);
+			}
 			_timeSinceLastSpawn = 0f;
 		}
 	}
 
-	private int spawnRandomPowerup ()
+	private int spawnRandomPowerup (Vector3 position)
 	{
 		Debug.LogWarning ("Spawning a powerup");
 		// This is pretty bad and should be changed.
 		// Remember to change the value when adding new powerups. 
 		int id = Random.RandomRange (0, 3);
-		NetworkEventHandlers.SendEvent (new SpawnPowerupEvent (_playerTrs.position, id));
+		NetworkEventHandlers.SendEvent (new SpawnPowerupEvent (position, id));
 		return id;
 	}
 }
