@@ -38,16 +38,14 @@ public class ShooterB : MonoBehaviour
 		{
 			if (Input.GetMouseButtonDown (0) || Input.GetKey (KeyCode.Joystick1Button5))
 			{
-				TimeSinceLastExplosion = 0;
-//				GameObject temp_projectile;
-//				temp_projectile = Instantiate (projectile, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
-//				Rigidbody projectile_body;
-//				projectile_body = temp_projectile.GetComponent<Rigidbody> ();
-//				projectile_body.AddForce (Camera.transform.forward * projectile_force);
-//				Destroy (temp_projectile, 10.0f);
 				TimeSinceLastGrip = 0;
-				NetworkEventHandlers.SendEvent (new BazookaEvent (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force));
-				_network.HandleBazooka (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force);
+				GameObject temp_projectile;
+				temp_projectile = Instantiate (projectile, Launcher.transform.position, Launcher.transform.rotation) as GameObject;
+				Rigidbody projectile_body;
+				projectile_body = temp_projectile.GetComponent<Rigidbody> ();
+				projectile_body.AddForce (Camera.transform.forward * projectile_force);
+				Destroy (temp_projectile, 10.0f);
+				TimeSinceLastGrip = 0;
 			}
 		}
 
@@ -55,7 +53,7 @@ public class ShooterB : MonoBehaviour
 		{
 			if (Input.GetMouseButtonDown (1) || Input.GetKey (KeyCode.Joystick1Button4))
 			{
-				TimeSinceLastGrip = 0;
+				TimeSinceLastExplosion = 0;
 				NetworkEventHandlers.SendEvent (new BazookaEvent (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force));
 				_network.HandleBazooka (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force);
 			}

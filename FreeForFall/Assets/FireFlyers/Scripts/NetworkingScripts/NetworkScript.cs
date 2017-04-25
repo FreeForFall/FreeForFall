@@ -123,12 +123,6 @@ namespace AssemblyCSharp
 				case 0x30:
 					handleVisionImpaired ();
 					return;
-				case 0x31:
-					handleSpeedBoost ();
-					return;
-				case 0x32:
-					handleCooldownRefresh ();
-					return;
 
 				case 0x40:
 					HandlePowerupSpawn ((Vector3)c [0], (int)c [1]);
@@ -200,22 +194,10 @@ namespace AssemblyCSharp
 			Destroy (shell, 10f);
 		}
 
-		private void handleSpeedBoost ()
-		{
-			Debug.LogWarning ("Not implemented");
-		}
-
-		private void handleCooldownRefresh ()
-		{
-			Debug.LogWarning ("Not implemented");
-		}
-
 		private void handleVisionImpaired ()
 		{
 			_camera.GetComponent<CameraFilterPack_FX_Glitch1> ().enabled = true;
 			Invoke ("RemoveVisionImpaired", 5);
-
-
 		}
 
 		private void endGame ()
