@@ -242,9 +242,9 @@ namespace AssemblyCSharp
 			if (handlePlayerLoaded () >= PhotonNetwork.room.PlayerCount)
 			{
 				Debug.Log ("REMOVING WALLS");
-				//NetworkEventHandlers.SendEvent (new RemoveWallsEvent ());
+				NetworkEventHandlers.SendEvent (new RemoveWallsEvent ());
 				//Invoke ("switchCamera", 3);
-				//Invoke ("destroyBox", 5);
+				Invoke ("destroyBox", 5);
 			}
 		}
 
