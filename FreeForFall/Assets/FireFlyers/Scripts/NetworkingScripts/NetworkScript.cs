@@ -41,6 +41,8 @@ namespace AssemblyCSharp
 
 		private Vector3 _cameraStartPosition;
 
+		private ShooterB _shooterB;
+
 		private string _nickname;
 
 		public GameObject Player
@@ -93,7 +95,7 @@ namespace AssemblyCSharp
 			0x40 : SpawnPowerupEvent : c[0] : Vector3 = position, c[1] : int = eventid
 
 			0x50 : GrapplingHookEvent // Needed for particles
-			0x51 : BazookaEvent // Needed for particles and forces
+			0x51 : BazookaEvent c[0] : Vector3 = start, c[1] : Quaternion = angle, c[2] : Vector3 = force
 
 			0x99 : EndGameEvent
 
@@ -136,7 +138,7 @@ namespace AssemblyCSharp
 					handleGrapplingHook ();
 					return;
 				case 0x51:
-					handleBazooka ();
+					HandleBazooka ((Vector3)c [0], (Quaternion)c [1], (Vector3)c [2]);
 					return;
 				
 				
@@ -190,9 +192,12 @@ namespace AssemblyCSharp
 			Debug.LogWarning ("Not implemented");	
 		}
 
-		private void handleBazooka ()
+		// Public because accessed from ShooterB
+		public void HandleBazooka (Vector3 start, Quaternion angle, Vector3 force)
 		{
-			Debug.LogWarning ("Not implemented");
+			GameObject shell = Instantiate (_shooterB.projectile, start, angle);
+			shell.GetComponent<Rigidbody> ().AddForce (force);
+			Destroy (shell, 10f);
 		}
 
 		private void handleSpeedBoost ()
@@ -345,9 +350,9 @@ namespace AssemblyCSharp
 			_player.transform.Find ("Canvas").gameObject.SetActive (true);
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
+			_shooterB = _player.GetComponent<ShooterB> ();
 			_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
-
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 
 			// SET THE NICKNAME CANVAS

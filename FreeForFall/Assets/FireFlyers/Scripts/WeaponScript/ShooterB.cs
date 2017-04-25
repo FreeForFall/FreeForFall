@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
+
 
 public class ShooterB : MonoBehaviour
 {
@@ -15,11 +17,16 @@ public class ShooterB : MonoBehaviour
 	public float TimeSinceLastExplosion;
 	public float TimeSinceLastGrip;
 	public float projectile_force;
+	private PhotonView _pView;
+	private NetworkScript _network;
+
+	private 
 	// Use this for initialization
 	void Start ()
 	{
 		TimeSinceLastExplosion = 10f;
 		TimeSinceLastGrip = 10f;
+		_network = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ();
 	}
 	
 	// Update is called once per frame
@@ -46,23 +53,10 @@ public class ShooterB : MonoBehaviour
 			if (Input.GetMouseButtonDown (1) || Input.GetKey (KeyCode.Joystick1Button4))
 			{
 				TimeSinceLastGrip = 0;
-				GameObject temp_projectile;
-				temp_projectile = Instantiate (grip, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
-				Rigidbody projectile_body;
-				projectile_body = temp_projectile.GetComponent<Rigidbody> ();
-				projectile_body.AddForce (Camera.transform.forward * projectile_force);
-				Destroy (temp_projectile, 10.0f);
+				NetworkEventHandlers.SendEvent (new BazookaEvent (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force));
+				_network.HandleBazooka (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force);
 			}
 		}
-	}
-
-	void Shoot ()
-	{
-		GameObject temp_projectile;
-		temp_projectile = Instantiate (thing, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
-		Rigidbody projectile_body;
-		projectile_body = temp_projectile.GetComponent<Rigidbody> ();
-		projectile_body.AddForce (Camera.transform.forward * projectile_force);
 	}
 
 	public void RefreshCooldowns ()
