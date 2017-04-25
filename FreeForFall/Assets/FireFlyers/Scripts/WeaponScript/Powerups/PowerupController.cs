@@ -28,8 +28,12 @@ public class PowerupController : MonoBehaviour
 		{
 			foreach (var g in _spawners)
 			{
+				var p = g.GetComponent<PowerupSpawner> ();
+				if (p.Spawned)
+					break;
 				int id = spawnRandomPowerup (g.transform.position);
 				_networking.HandlePowerupSpawn (g.transform.position, id);
+				p.Spawned = true;
 			}
 			_timeSinceLastSpawn = 0f;
 		}
