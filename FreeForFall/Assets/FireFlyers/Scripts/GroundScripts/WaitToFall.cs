@@ -10,8 +10,10 @@ public class WaitToFall : MonoBehaviour
 	private GameObject cell;
 	public float speed = 5;
 	public float rotateSpeed = 360;
+    public GameObject impactParticle;
+    public Vector3 impactNormal;
 
-	void Start ()
+    void Start ()
 	{
 		_dropDelay = 0.2f;
 		_destroyDelay = 20000000000000;
@@ -39,7 +41,9 @@ public class WaitToFall : MonoBehaviour
 		Ren.enabled = false;
 		rb.isKinematic = true;
 		_isFallen = true;
-	}
+        impactParticle = Instantiate(impactParticle, transform.position, Quaternion.FromToRotation(Vector3.up, impactNormal)) as GameObject;
+
+    }
 
 	void Drop ()
 	{
