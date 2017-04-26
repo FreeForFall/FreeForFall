@@ -35,11 +35,16 @@ namespace AssemblyCSharp
 		private Text _roomList;
 		private Text _playerCountText;
 		private Button _startGameButton;
+		private Dropdown _mapChooser;
+
+		private string _mapName;
 
 		private GameObject _player;
 		private GameObject _camera;
 
 		private Vector3 _cameraStartPosition;
+
+		private ShooterB _shooterB;
 
 		private string _nickname;
 
@@ -93,7 +98,7 @@ namespace AssemblyCSharp
 			0x40 : SpawnPowerupEvent : c[0] : Vector3 = position, c[1] : int = eventid
 
 			0x50 : GrapplingHookEvent // Needed for particles
-			0x51 : BazookaEvent // Needed for particles and forces
+			0x51 : BazookaEvent c[0] : Vector3 = start, c[1] : Quaternion = angle, c[2] : Vector3 = force
 
 			0x99 : EndGameEvent
 
@@ -102,8 +107,9 @@ namespace AssemblyCSharp
 			switch (eventCode)
 			{
 				case 0x0:
-					int b = (int)c [0];
-					handleMapLoadNetworkEvent ((byte)b);
+					Debug.LogError ("c[0] " + c [0]);
+					byte b = (byte)c [0];
+					handleMapLoadNetworkEvent (b);
 					return;
 				case 0x1:
 					removeWalls ();
@@ -121,22 +127,13 @@ namespace AssemblyCSharp
 				case 0x30:
 					handleVisionImpaired ();
 					return;
-				case 0x31:
-					handleSpeedBoost ();
-					return;
-				case 0x32:
-					handleCooldownRefresh ();
-					return;
 
 				case 0x40:
 					HandlePowerupSpawn ((Vector3)c [0], (int)c [1]);
 					return;
 				
-				case 0x50:
-					handleGrapplingHook ();
-					return;
 				case 0x51:
-					handleBazooka ();
+					HandleBazooka ((Vector3)c [0], (Quaternion)c [1], (Vector3)c [2]);
 					return;
 				
 				
@@ -185,32 +182,18 @@ namespace AssemblyCSharp
 			Debug.LogWarning ("Spawned");
 		}
 
-		private void handleGrapplingHook ()
+		// Public because accessed from ShooterB
+		public void HandleBazooka (Vector3 start, Quaternion angle, Vector3 force)
 		{
-			Debug.LogWarning ("Not implemented");	
-		}
-
-		private void handleBazooka ()
-		{
-			Debug.LogWarning ("Not implemented");
-		}
-
-		private void handleSpeedBoost ()
-		{
-			Debug.LogWarning ("Not implemented");
-		}
-
-		private void handleCooldownRefresh ()
-		{
-			Debug.LogWarning ("Not implemented");
+			GameObject shell = Instantiate (_shooterB.projectile, start, angle);
+			shell.GetComponent<Rigidbody> ().AddForce (force);
+			Destroy (shell, 10f);
 		}
 
 		private void handleVisionImpaired ()
 		{
 			_camera.GetComponent<CameraFilterPack_FX_Glitch1> ().enabled = true;
 			Invoke ("RemoveVisionImpaired", 5);
-
-
 		}
 
 		private void endGame ()
@@ -318,10 +301,17 @@ namespace AssemblyCSharp
 
 		private void handleMapLoadNetworkEvent (byte map)
 		{
+			Debug.LogError ("GOING TO LOAD " + map);
 			switch (map)
 			{
 				case 0x0:
 					loadMap ("Map");
+					return;
+				case 0x1:
+					loadMap ("Map2");
+					return;
+				case 0x99:
+					loadMap ("TestMap");
 					return;
 				default:
 					Debug.LogWarning ("Tried to load a map that didn't exist with id : " + map);
@@ -335,7 +325,7 @@ namespace AssemblyCSharp
 			Debug.Log ("Loading map " + name);
 			_map = (GameObject)Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
 			Destroy (_waitForGameStartCanvas);
-			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
+			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 15;
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
@@ -345,9 +335,9 @@ namespace AssemblyCSharp
 			_player.transform.Find ("Canvas").gameObject.SetActive (true);
 			_player.GetComponentInChildren<PlayerController> ().enabled = true;
 			_player.GetComponent<ShooterB> ().enabled = true;
+			_shooterB = _player.GetComponent<ShooterB> ();
 			_player.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 			_player.GetComponentInChildren<CameraControl> ().enabled = true;
-
 			_camera = _player.transform.Find ("TPScamera/firstCamera").gameObject;
 
 			// SET THE NICKNAME CANVAS
@@ -411,12 +401,19 @@ namespace AssemblyCSharp
 			_nameInput = GameObject.Find ("RoomNameInput").GetComponent<InputField> ();
 			_roomList = GameObject.Find ("RoomListView").GetComponent<Text> ();
 			_nicknameInput = GameObject.Find ("NicknameInput").GetComponent<InputField> ();
+			_mapChooser = GameObject.Find ("MapChoosingDropdown").GetComponent<Dropdown> ();
 		}
 
 		private void roomCreationClick ()
 		{
-			Debug.Log ("Creating a room with text : " + _nameInput.text + " by nickname : " + _nicknameInput.text);
+			string mapText = _mapChooser.GetComponentInChildren<Text> ().text;
+			if (mapText == "Test Map")
+			{
+				SceneManager.LoadScene ("TestScene");
+			}
+			Debug.Log ("Creating a room with text : " + _nameInput.text + " by nickname : " + _nicknameInput.text + " on map " + mapText);
 			_nickname = _nicknameInput.text;
+			_mapName = mapText;
 			var options = new RoomOptions ();
 			options.MaxPlayers = 255;
 			PhotonNetwork.JoinOrCreateRoom (_nameInput.text, options, null);
@@ -472,9 +469,18 @@ namespace AssemblyCSharp
 		{
 			if (!PhotonNetwork.isMasterClient)
 				return;
+			Debug.Log (_mapName);
+			if (_mapName == "Map1")
+			{
+				NetworkEventHandlers.SendEvent (new LoadMapEvent (0x0));
+				loadMap ("Map");
+			}
+			if (_mapName == "Map2")
+			{
+				NetworkEventHandlers.SendEvent (new LoadMapEvent (0x1));
+				loadMap ("Map2");
+			}
 			//_startGameButton.interactable = false;
-			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
-			loadMap ("Map");
 		}
 
 		private void spawnAI (int x)
