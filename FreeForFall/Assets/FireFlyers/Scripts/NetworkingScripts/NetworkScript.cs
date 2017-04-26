@@ -107,8 +107,9 @@ namespace AssemblyCSharp
 			switch (eventCode)
 			{
 				case 0x0:
-					int b = (int)c [0];
-					handleMapLoadNetworkEvent ((byte)b);
+					Debug.LogError ("c[0] " + c [0]);
+					byte b = (byte)c [0];
+					handleMapLoadNetworkEvent (b);
 					return;
 				case 0x1:
 					removeWalls ();
@@ -300,6 +301,7 @@ namespace AssemblyCSharp
 
 		private void handleMapLoadNetworkEvent (byte map)
 		{
+			Debug.LogError ("GOING TO LOAD " + map);
 			switch (map)
 			{
 				case 0x0:
