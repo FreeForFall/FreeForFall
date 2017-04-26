@@ -12,7 +12,7 @@ namespace AssemblyCSharp
 		the corresponding byte.
 		
 		*/
-		public LoadMapEvent () : base (0x0, 0x0, true)
+		public LoadMapEvent (byte map) : base (0x0, map, true)
 		{
 		}
 	}
