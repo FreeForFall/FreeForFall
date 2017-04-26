@@ -23,7 +23,6 @@ public class WaitToFall : MonoBehaviour
 
 	public void Goback ()
 	{
-        print("Goback");
 		Renderer Ren = GetComponent<Renderer> ();
 		MeshCollider Mcol = GetComponent<MeshCollider> ();
 		Mcol.enabled = true;

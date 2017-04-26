@@ -198,13 +198,14 @@ namespace AssemblyCSharp
 
 		private void endGame ()
 		{
-			/*
+            /*
 
 			Replace this method by something that shows a prefab
 			When it does, remove the Invoke("endGame") from handlePlayerLost, 
 			because it won't be needed anymore
 
 			*/
+            Cursor.visible = true;
 			PhotonNetwork.Disconnect ();
 			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
 				Destroy (GameObject.Find ("SettingsManager"));
