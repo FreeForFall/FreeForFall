@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -77,8 +78,14 @@ public class PlayerController : MonoBehaviour
 			jump ();
             Destroy(JumpeffectDone, 0.5f);
         }
-		#if UNITY_STANDALONE_WIN
-		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
+
+        if (Input.GetKey(KeyCode.P) || Input.GetKey(KeyCode.Joystick1Button7))
+        {
+            SceneManager.LoadScene("Menu");
+            Cursor.visible = true;
+        }
+        #if UNITY_STANDALONE_WIN
+        if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
 		#endif
 		#if UNITY_STANDALONE_LINUX
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.JoystickButton9))
