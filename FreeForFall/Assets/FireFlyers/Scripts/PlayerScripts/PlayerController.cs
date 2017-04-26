@@ -2,6 +2,8 @@
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject jumpeffect;
+    public Transform jumpflamelocation;
 	public float JumpCooldown;
 	public float TimeSincePreviousJump;
 	public float speed;
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour
 	public Transform spawn;
 	public bool ground_powerup = true;
 	private float _speedBoost;
+    public AudioSource motorsound;
+    public AudioSource jumpsound;
 
 	// Use this for initialization
 	void Start ()
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
 	private void jump ()
 	{
+
 		this.rigidBody.AddForce (new Vector3 (0f, jumpforce, 0f));
 		Invoke ("jumpDown", 0.3f);
 	}
@@ -66,9 +71,12 @@ public class PlayerController : MonoBehaviour
 		    && !this.airbone
 		    && JumpCooldown < TimeSincePreviousJump)
 		{
-			TimeSincePreviousJump = 0f;
+            GameObject JumpeffectDone = Instantiate(jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
+            jumpsound.Play();
+            TimeSincePreviousJump = 0f;
 			jump ();
-		}
+            Destroy(JumpeffectDone, 0.5f);
+        }
 		#if UNITY_STANDALONE_WIN
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
 		#endif
@@ -94,6 +102,7 @@ public class PlayerController : MonoBehaviour
 			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
 			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
 				speed * sprintMultiplier * Time.deltaTime * _speedBoost);
+            motorsound.Play();
 		}
 		if (Input.GetKey (KeyCode.R) || Input.GetKey (KeyCode.Joystick1Button6))
 		{
