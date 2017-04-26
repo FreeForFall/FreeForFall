@@ -206,6 +206,8 @@ namespace AssemblyCSharp
 
 			*/
 			PhotonNetwork.Disconnect ();
+			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
+				Destroy (GameObject.Find ("SettingsManager"));
 			SceneManager.LoadScene ("Menu");
 		}
 
@@ -352,7 +354,7 @@ namespace AssemblyCSharp
 				GameObject.Find ("PowerupManager").gameObject.GetComponent<PowerupController> ().enabled = true;
 			}
 			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
-				spawnAI (25);
+				spawnAI (5);
 			removeWalls ();
 		}
 
@@ -470,6 +472,10 @@ namespace AssemblyCSharp
 			if (!PhotonNetwork.isMasterClient)
 				return;
 			Debug.Log (_mapName);
+			if (_mapName == null)
+			{
+				loadMap ("Map");
+			}
 			if (_mapName == "Map1")
 			{
 				NetworkEventHandlers.SendEvent (new LoadMapEvent (0x0));
