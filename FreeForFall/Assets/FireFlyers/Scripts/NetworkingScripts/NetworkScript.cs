@@ -35,6 +35,9 @@ namespace AssemblyCSharp
 		private Text _roomList;
 		private Text _playerCountText;
 		private Button _startGameButton;
+		private Dropdown _mapChooser;
+
+		private string _mapName;
 
 		private GameObject _player;
 		private GameObject _camera;
@@ -302,6 +305,12 @@ namespace AssemblyCSharp
 				case 0x0:
 					loadMap ("Map");
 					return;
+				case 0x1:
+					loadMap ("Map2");
+					return;
+				case 0x99:
+					loadMap ("TestMap");
+					return;
 				default:
 					Debug.LogWarning ("Tried to load a map that didn't exist with id : " + map);
 					return;
@@ -314,7 +323,7 @@ namespace AssemblyCSharp
 			Debug.Log ("Loading map " + name);
 			_map = (GameObject)Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
 			Destroy (_waitForGameStartCanvas);
-			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 10;
+			Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 15;
 			spawnPosition.x = Random.Range (-9f, 9f);
 			spawnPosition.z = Random.Range (-9f, 9f);
 			_player = PhotonNetwork.Instantiate ("Player", spawnPosition, Quaternion.identity, 0);
@@ -390,12 +399,19 @@ namespace AssemblyCSharp
 			_nameInput = GameObject.Find ("RoomNameInput").GetComponent<InputField> ();
 			_roomList = GameObject.Find ("RoomListView").GetComponent<Text> ();
 			_nicknameInput = GameObject.Find ("NicknameInput").GetComponent<InputField> ();
+			_mapChooser = GameObject.Find ("MapChoosingDropdown").GetComponent<Dropdown> ();
 		}
 
 		private void roomCreationClick ()
 		{
-			Debug.Log ("Creating a room with text : " + _nameInput.text + " by nickname : " + _nicknameInput.text);
+			string mapText = _mapChooser.GetComponentInChildren<Text> ().text;
+			if (mapText == "Test Map")
+			{
+				SceneManager.LoadScene ("TestScene");
+			}
+			Debug.Log ("Creating a room with text : " + _nameInput.text + " by nickname : " + _nicknameInput.text + " on map " + mapText);
 			_nickname = _nicknameInput.text;
+			_mapName = mapText;
 			var options = new RoomOptions ();
 			options.MaxPlayers = 255;
 			PhotonNetwork.JoinOrCreateRoom (_nameInput.text, options, null);
@@ -451,9 +467,18 @@ namespace AssemblyCSharp
 		{
 			if (!PhotonNetwork.isMasterClient)
 				return;
+			Debug.Log (_mapName);
+			if (_mapName == "Map1")
+			{
+				NetworkEventHandlers.SendEvent (new LoadMapEvent (0x0));
+				loadMap ("Map");
+			}
+			if (_mapName == "Map2")
+			{
+				NetworkEventHandlers.SendEvent (new LoadMapEvent (0x1));
+				loadMap ("Map2");
+			}
 			//_startGameButton.interactable = false;
-			NetworkEventHandlers.SendEvent (new LoadMapEvent ());
-			loadMap ("Map");
 		}
 
 		private void spawnAI (int x)
