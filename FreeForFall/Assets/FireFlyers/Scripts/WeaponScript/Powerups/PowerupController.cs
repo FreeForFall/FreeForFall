@@ -18,7 +18,7 @@ public class PowerupController : MonoBehaviour
 		_networking = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ();
 		_localPlayer = _networking.Player;
 		_spawners = GameObject.FindGameObjectsWithTag ("PowerupSpawner");
-		Debug.LogWarning (_spawners.Length);
+		//Debug.LogWarning (_spawners.Length);
 	}
 
 	void Update ()
@@ -41,7 +41,7 @@ public class PowerupController : MonoBehaviour
 
 	private int spawnRandomPowerup (Vector3 position)
 	{
-		Debug.LogWarning ("Spawning a powerup");
+		//Debug.LogWarning ("Spawning a powerup");
 		// This is pretty bad and should be changed.
 		// Remember to change the value when adding new powerups. 
 		int id = Random.RandomRange (0, 3);
