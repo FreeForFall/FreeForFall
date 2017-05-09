@@ -390,7 +390,7 @@ namespace AssemblyCSharp
 			_roomList.text = str;
 		}
 
-
+		/*
 		void OnGUI ()
 		{
 			if (PhotonNetwork.isMasterClient)
@@ -398,6 +398,7 @@ namespace AssemblyCSharp
 			else
 				GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
 		}
+		*/
 
 		private void findMatchmakingObjects ()
 		{
