@@ -7,15 +7,11 @@ public class UI : MonoBehaviour
 {
 	public Text timerLabel;
 	private float time = 0f;
-	private bool timerOn = true;
 	private Image launcher;
 	private Image jump;
 	private Image hook;
-	private float gripCD;
-	private float launcherCD;
 	private float lastExplosion;
 	private float lastGrip;
-	private float JumpCD;
 	private float lastJump;
 
 	private GameObject _localPlayer;
@@ -36,9 +32,6 @@ public class UI : MonoBehaviour
 		launcher = launchLabel.GetComponent<Image> ();
 		jump = jumpLabel.GetComponent<Image> ();
 		hook = hookLabel.GetComponent<Image> ();
-		launcherCD = _shooterB.CDExplosion;
-		gripCD = _shooterB.CDGrip;
-		JumpCD = _pController.JumpCooldown;
 		launcher.fillAmount = 1f;
 		jump.fillAmount = 1f;
 		hook.fillAmount = 1f;
@@ -52,9 +45,9 @@ public class UI : MonoBehaviour
 		lastExplosion = _shooterB.TimeSinceLastExplosion;
 		lastGrip = _shooterB.TimeSinceLastGrip;
 		lastJump = _pController.TimeSincePreviousJump;
-		launcher.fillAmount = lastExplosion / launcherCD;
-		hook.fillAmount = lastGrip / gripCD;
-		jump.fillAmount = lastJump / JumpCD;
+		launcher.fillAmount = lastExplosion / Constants.BAZOOKA_CD;
+		hook.fillAmount = lastGrip / Constants.GRIP_CD;
+		jump.fillAmount = lastJump / Constants.JUMP_CD;
 
 		if (launcher.fillAmount == 1f)
 			launcher.color = Color.green;

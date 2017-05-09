@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using AssemblyCSharp;
 
 public class NetworkPlayerController : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class NetworkPlayerController : MonoBehaviour
 		_photonView = GetComponent<PhotonView> ();
 		_bottom = gameObject.transform.Find ("bottom");
 		_torso = gameObject.transform.Find ("Torso");
-		Debug.LogWarning (_torso);
 		_targetPosition = _bottom.position;
 		_targetBottomRotation = Quaternion.Euler (0, 0, 0);
 		_targetTorsoRotation = Quaternion.Euler (0, 0, 0);
@@ -32,9 +32,9 @@ public class NetworkPlayerController : MonoBehaviour
 	{
 		if (!_photonView.isMine)
 		{
-			_bottom.position = Vector3.Lerp (_bottom.position, _targetPosition, 0.1f); // Maybe add velocity scaling
-			_bottom.rotation = Quaternion.Lerp (_bottom.rotation, _targetBottomRotation, 0.1f);
-			_torso.rotation = Quaternion.Lerp (_torso.rotation, _targetTorsoRotation, 0.1f);
+			_bottom.position = Vector3.Lerp (_bottom.position, _targetPosition, Constants.NETWORK_SMOOTHING);
+			_bottom.rotation = Quaternion.Lerp (_bottom.rotation, _targetBottomRotation, Constants.NETWORK_SMOOTHING);
+			_torso.rotation = Quaternion.Lerp (_torso.rotation, _targetTorsoRotation, Constants.NETWORK_SMOOTHING);
 		}
 	}
 
@@ -52,7 +52,6 @@ public class NetworkPlayerController : MonoBehaviour
 			_targetPosition = (Vector3)pStream.ReceiveNext ();
 			_targetBottomRotation = (Quaternion)pStream.ReceiveNext ();
 			_targetTorsoRotation = (Quaternion)pStream.ReceiveNext ();
-			Debug.LogWarning (_targetTorsoRotation);
 		}
 	}
 }

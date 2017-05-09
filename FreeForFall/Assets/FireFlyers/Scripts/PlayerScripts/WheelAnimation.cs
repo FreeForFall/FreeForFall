@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
 
 public class WheelAnimation : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class WheelAnimation : MonoBehaviour
 		float v = Input.GetAxis ("Vertical");
 		if (h != 0 || v != 0)
 		{
-			transform.Rotate (Vector3.left * Time.deltaTime * sensivity, Space.Self);
+			transform.Rotate (Vector3.left * Time.deltaTime * Constants.WHEEL_SPEED, Space.Self);
 		}
 	}
 }

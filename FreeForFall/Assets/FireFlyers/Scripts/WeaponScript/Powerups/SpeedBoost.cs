@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
 
 public class SpeedBoost : MonoBehaviour
 {
@@ -36,6 +37,6 @@ public class SpeedBoost : MonoBehaviour
 	private void doPowerup (GameObject c)
 	{
 		Debug.LogWarning ("Giving the player a speed boost");
-		c.GetComponentInChildren<PlayerController> ().SpeedBoost (20);
+		c.GetComponentInChildren<PlayerController> ().SpeedBoost (Constants.SPEED_BOOST_POWERUP_MULT);
 	}
 }
