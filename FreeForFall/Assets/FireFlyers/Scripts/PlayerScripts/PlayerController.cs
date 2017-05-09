@@ -105,7 +105,6 @@ public class PlayerController : MonoBehaviour
 			rotation = Quaternion.LookRotation (direction, Vector3.up);
 			cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
 			rb.rotation = Quaternion.RotateTowards (transform.rotation, cam * rotation, 800 * Time.deltaTime);
-            print(Quaternion.RotateTowards(transform.rotation, cam * rotation, 800 * Time.deltaTime));
 			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
 			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
 				speed * sprintMultiplier * Time.deltaTime * _speedBoost);

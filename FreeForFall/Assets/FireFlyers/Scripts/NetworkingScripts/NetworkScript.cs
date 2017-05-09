@@ -158,7 +158,7 @@ namespace AssemblyCSharp
 
 		public void HandlePowerupSpawn (Vector3 position, int id)
 		{
-			Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);
+			//Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);
 			GameObject p = (GameObject)Instantiate (Resources.Load ("Powerup"), position, Quaternion.identity);
 			switch (id)
 			{
