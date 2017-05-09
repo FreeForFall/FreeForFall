@@ -12,11 +12,8 @@ public class ShooterB : MonoBehaviour
 	public GameObject Camera;
 	public GameObject PlayerBody;
 	public GameObject thing;
-	public float CDExplosion = 3f;
-	public float CDGrip = 3f;
 	public float TimeSinceLastExplosion;
 	public float TimeSinceLastGrip;
-	public float projectile_force;
 	private PhotonView _pView;
 	private NetworkScript _network;
 
@@ -34,17 +31,17 @@ public class ShooterB : MonoBehaviour
 	{
 		TimeSinceLastExplosion += Time.deltaTime;
 		TimeSinceLastGrip += Time.deltaTime;
-		if (CDExplosion - TimeSinceLastExplosion <= 0)
+		if (Constants.BAZOOKA_CD - TimeSinceLastExplosion <= 0)
 		{
 			if (Input.GetMouseButtonDown (0) || Input.GetKey (KeyCode.Joystick1Button5))
 			{
 				TimeSinceLastExplosion = 0;
-				NetworkEventHandlers.SendEvent (new BazookaEvent (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force));
-				_network.HandleBazooka (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * projectile_force);
+				NetworkEventHandlers.SendEvent (new BazookaEvent (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * Constants.PROJECTILE_FORCE));
+				_network.HandleBazooka (Launcher.transform.position, Launcher.transform.rotation, Camera.transform.forward * Constants.PROJECTILE_FORCE);
 			}
 		}
 
-		if (CDGrip - TimeSinceLastGrip <= 0)
+		if (Constants.GRIP_CD - TimeSinceLastGrip <= 0)
 		{
 			if (Input.GetMouseButtonDown (1) || Input.GetKey (KeyCode.Joystick1Button4))
 			{
@@ -53,7 +50,7 @@ public class ShooterB : MonoBehaviour
 				temp_projectile = Instantiate (grip, Launcher.transform.position, Launcher.transform.rotation, PlayerBody.transform) as GameObject;
 				Rigidbody projectile_body;
 				projectile_body = temp_projectile.GetComponent<Rigidbody> ();
-				projectile_body.AddForce (Camera.transform.forward * projectile_force);
+				projectile_body.AddForce (Camera.transform.forward * Constants.PROJECTILE_FORCE);
 				Destroy (temp_projectile, 10.0f);
 			}
 		}
@@ -62,7 +59,7 @@ public class ShooterB : MonoBehaviour
 	public void RefreshCooldowns ()
 	{
 		Debug.LogWarning ("REFRESHING");
-		TimeSinceLastExplosion = CDExplosion;
-		TimeSinceLastGrip = CDGrip;
+		TimeSinceLastExplosion = Constants.BAZOOKA_CD;
+		TimeSinceLastGrip = Constants.GRIP_CD;
 	}
 }

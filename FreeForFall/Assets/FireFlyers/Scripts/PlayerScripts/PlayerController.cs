@@ -1,29 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using AssemblyCSharp;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject jumpeffect;
-    public Transform jumpflamelocation;
-	public float JumpCooldown;
+	public GameObject jumpeffect;
+	public Transform jumpflamelocation;
 	public float TimeSincePreviousJump;
-	public float speed;
-	public float maxSprintSpeed;
 	private float sprintMultiplier;
-	public float jumpforce;
 	private bool airbone;
 	private Rigidbody rigidBody;
 	private Quaternion rotation = Quaternion.identity;
-    private Quaternion cam = Quaternion.identity;
-	public float rotateSpeed = 1f;
+	private Quaternion cam = Quaternion.identity;
 	private Rigidbody rb;
 	public Transform playerCamera;
 	private Vector3 initial_Camera;
 	public Transform spawn;
 	public bool ground_powerup = true;
 	private float _speedBoost;
-    public AudioSource motorsound;
-    public AudioSource jumpsound;
+	public AudioSource motorsound;
+	public AudioSource jumpsound;
 
 	// Use this for initialization
 	void Start ()
@@ -55,13 +51,13 @@ public class PlayerController : MonoBehaviour
 	private void jump ()
 	{
 
-		this.rigidBody.AddForce (new Vector3 (0f, jumpforce, 0f));
+		this.rigidBody.AddForce (new Vector3 (0f, Constants.JUMP_FORCE, 0f));
 		Invoke ("jumpDown", 0.3f);
 	}
 
 	private void jumpDown ()
 	{
-		this.rigidBody.AddForce (new Vector3 (0f, -jumpforce * 1.5f, 0f));
+		this.rigidBody.AddForce (new Vector3 (0f, -Constants.JUMP_FORCE * 1.5f, 0f));
 	}
 
 	private void doMovement ()
@@ -69,28 +65,28 @@ public class PlayerController : MonoBehaviour
 		if ((Input.GetKeyDown (KeyCode.Joystick1Button0)
 		    || Input.GetKeyDown (KeyCode.Space))
 		    && !this.airbone
-		    && JumpCooldown < TimeSincePreviousJump)
+		    && Constants.JUMP_CD < TimeSincePreviousJump)
 		{
-            GameObject JumpeffectDone = Instantiate(jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
-            jumpsound.Play();
-            TimeSincePreviousJump = 0f;
+			GameObject JumpeffectDone = Instantiate (jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
+			jumpsound.Play ();
+			TimeSincePreviousJump = 0f;
 			jump ();
-            Destroy(JumpeffectDone, 0.5f);
-        }
+			Destroy (JumpeffectDone, 0.5f);
+		}
 
-        if (Input.GetKey(KeyCode.P) || Input.GetKey(KeyCode.Joystick1Button7))
-        {
-            SceneManager.LoadScene("Menu");
-            Cursor.visible = true;
-        }
-        #if UNITY_STANDALONE_WIN
+		if (Input.GetKey (KeyCode.P) || Input.GetKey (KeyCode.Joystick1Button7))
+		{
+			SceneManager.LoadScene ("Menu");
+			Cursor.visible = true;
+		}
+		#if UNITY_STANDALONE_WIN
         if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
 		#endif
 		#if UNITY_STANDALONE_LINUX
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.JoystickButton9))
 		#endif
 		{
-			this.sprintMultiplier = this.maxSprintSpeed;
+			this.sprintMultiplier = Constants.SPRINT_SPEED;
 		}
 		else
 		{
@@ -100,15 +96,12 @@ public class PlayerController : MonoBehaviour
 		float v = Input.GetAxis ("Vertical");
 		if (h > 0 || h < 0 || v > 0 || v < 0)
 		{
-			float rotate = rotateSpeed;
 			Vector3 direction = new Vector3 (h, 0, v);
 			rotation = Quaternion.LookRotation (direction, Vector3.up);
-			cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
+			cam = new Quaternion (0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
 			rb.rotation = Quaternion.Lerp (transform.rotation, cam * rotation, 800 * Time.deltaTime);
-			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
 			transform.position = Vector3.Lerp (transform.position, transform.position + transform.forward, 
-				speed * sprintMultiplier * Time.deltaTime * _speedBoost);
-            //motorsound.Play();
+				Constants.MOVEMENT_SPEED * sprintMultiplier * Time.deltaTime * _speedBoost);
 		}
 		if (Input.GetKey (KeyCode.R) || Input.GetKey (KeyCode.Joystick1Button6))
 		{

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
 
 public class Explosives : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class Explosives : MonoBehaviour
 	public float power;
 	public GameObject impactParticle;
 	public Vector3 impactNormal;
-	private float explosionPhysics = 15f;
 
 	// Use this for initialization
 	void Start ()
@@ -32,7 +32,7 @@ public class Explosives : MonoBehaviour
 		{
 			if (colliders [i].GetComponent<Rigidbody> ())
 			{
-				colliders [i].GetComponent<Rigidbody> ().AddExplosionForce (power, explosion_epicenter, radius, explosionPhysics);
+				colliders [i].GetComponent<Rigidbody> ().AddExplosionForce (power, explosion_epicenter, radius, Constants.BAZOOKA_EXPLOSION_FORCE);
 			}
 		}
 	}

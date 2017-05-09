@@ -6,17 +6,14 @@ using AssemblyCSharp;
 public class PowerupController : MonoBehaviour
 {
 	private NetworkScript _networking;
-	private GameObject _localPlayer;
 	private GameObject[] _spawners;
 
 	private float _timeSinceLastSpawn;
-	private const float _spawnCD = 5f;
 
 	void Start ()
 	{
 		_timeSinceLastSpawn = 0f;
 		_networking = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ();
-		_localPlayer = _networking.Player;
 		_spawners = GameObject.FindGameObjectsWithTag ("PowerupSpawner");
 		//Debug.LogWarning (_spawners.Length);
 	}
@@ -24,7 +21,7 @@ public class PowerupController : MonoBehaviour
 	void Update ()
 	{
 		_timeSinceLastSpawn += Time.deltaTime;
-		if (_timeSinceLastSpawn >= _spawnCD)
+		if (_timeSinceLastSpawn >= Constants.POWERUP_SPAWN_CD)
 		{
 			foreach (var g in _spawners)
 			{
@@ -44,7 +41,7 @@ public class PowerupController : MonoBehaviour
 		//Debug.LogWarning ("Spawning a powerup");
 		// This is pretty bad and should be changed.
 		// Remember to change the value when adding new powerups. 
-		int id = Random.RandomRange (0, 3);
+		int id = Random.Range (0, 3);
 		NetworkEventHandlers.SendEvent (new SpawnPowerupEvent (position, id));
 		return id;
 	}
