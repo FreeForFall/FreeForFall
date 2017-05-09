@@ -66,10 +66,10 @@ public class CameraControl : MonoBehaviour
 		if (istps)
 		{
 
-			Principale.transform.position = Vector3.MoveTowards (Principale.transform.position, transform.position, 50 * Time.deltaTime);
+			Principale.transform.position = Vector3.Lerp (Principale.transform.position, transform.position, 50 * Time.deltaTime);
 		}
 		else
-			Principale.transform.position = Vector3.MoveTowards (Principale.transform.position, FPSAnchor.position, 50 * Time.deltaTime);
+			Principale.transform.position = Vector3.Lerp (Principale.transform.position, FPSAnchor.position, 50 * Time.deltaTime);
 
 		//no matter what mode you are in the rotation for the Horizontal axis is the same
 
@@ -139,7 +139,7 @@ public class CameraControl : MonoBehaviour
 		if (istps && Principale.transform.position == transform.position)
 		{
 			Vector3 lookto = new Vector3 (target.position.x, target.position.y + 2, target.position.z);
-			Principale.transform.rotation = Quaternion.RotateTowards (Principale.transform.rotation,
+			Principale.transform.rotation = Quaternion.Lerp (Principale.transform.rotation,
 				Quaternion.LookRotation (lookto - Principale.transform.position), 200 * Time.deltaTime);
 		}
 	}

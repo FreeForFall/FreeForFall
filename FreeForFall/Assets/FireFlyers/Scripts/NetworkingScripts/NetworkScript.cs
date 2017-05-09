@@ -158,7 +158,7 @@ namespace AssemblyCSharp
 
 		public void HandlePowerupSpawn (Vector3 position, int id)
 		{
-			Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);
+			//Debug.LogWarning ("Spawning powerup with id " + id + " at position " + position);
 			GameObject p = (GameObject)Instantiate (Resources.Load ("Powerup"), position, Quaternion.identity);
 			switch (id)
 			{
@@ -198,14 +198,14 @@ namespace AssemblyCSharp
 
 		private void endGame ()
 		{
-            /*
+			/*
 
 			Replace this method by something that shows a prefab
 			When it does, remove the Invoke("endGame") from handlePlayerLost, 
 			because it won't be needed anymore
 
 			*/
-            Cursor.visible = true;
+			Cursor.visible = true;
 			PhotonNetwork.Disconnect ();
 			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
 				Destroy (GameObject.Find ("SettingsManager"));
@@ -279,6 +279,7 @@ namespace AssemblyCSharp
 			if (FlyingCamera.gameObject.GetActive ())
 			{
 				FlyingCamera.gameObject.GetComponent<Camera> ().enabled = false;
+				FlyingCamera.GetComponent<AudioListener> ().enabled = false;
 				FlyingCamera.gameObject.SetActive (false);
 				_camera.SetActive (true);
 			}
@@ -286,6 +287,7 @@ namespace AssemblyCSharp
 			{
 				FlyingCamera.gameObject.GetComponent<Camera> ().enabled = true;
 				FlyingCamera.gameObject.SetActive (true);
+				FlyingCamera.GetComponent<AudioListener> ().enabled = true;
 				_camera.SetActive (false); 
 			}
 

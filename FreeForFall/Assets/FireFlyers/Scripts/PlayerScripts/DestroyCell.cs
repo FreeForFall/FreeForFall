@@ -11,7 +11,6 @@ public class DestroyCell : MonoBehaviour {
         {
             other.gameObject.BroadcastMessage("IsFallen");
             FallenCells.Add(other.gameObject);
-            print("added to Fallen");
         }
     }
 }

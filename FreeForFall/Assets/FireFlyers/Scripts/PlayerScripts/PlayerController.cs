@@ -13,12 +13,11 @@ public class PlayerController : MonoBehaviour
 	public float jumpforce;
 	private bool airbone;
 	private Rigidbody rigidBody;
-	private Quaternion rotation;
-	private Quaternion camera_rotation;
+	private Quaternion rotation = Quaternion.identity;
+    private Quaternion cam = Quaternion.identity;
 	public float rotateSpeed = 1f;
 	private Rigidbody rb;
 	public Transform playerCamera;
-	private Quaternion startrotation;
 	private Vector3 initial_Camera;
 	public Transform spawn;
 	public bool ground_powerup = true;
@@ -104,12 +103,12 @@ public class PlayerController : MonoBehaviour
 			float rotate = rotateSpeed;
 			Vector3 direction = new Vector3 (h, 0, v);
 			rotation = Quaternion.LookRotation (direction, Vector3.up);
-			Quaternion cam = new Quaternion (0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
-			rb.rotation = Quaternion.RotateTowards (transform.rotation, cam * rotation, 800 * Time.deltaTime);
+			cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
+			rb.rotation = Quaternion.Lerp (transform.rotation, cam * rotation, 800 * Time.deltaTime);
 			Vector3 Moveto = new Vector3 (0, transform.position.y, 1);
-			transform.position = Vector3.MoveTowards (transform.position, transform.position + transform.forward, 
+			transform.position = Vector3.Lerp (transform.position, transform.position + transform.forward, 
 				speed * sprintMultiplier * Time.deltaTime * _speedBoost);
-            motorsound.Play();
+            //motorsound.Play();
 		}
 		if (Input.GetKey (KeyCode.R) || Input.GetKey (KeyCode.Joystick1Button6))
 		{
