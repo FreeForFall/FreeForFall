@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter (Collision other)
 	{
-		if (other.gameObject.tag == "Ground")
+		if (other.gameObject.name == "ground")
 		{
 			this.airbone = false;
 		}
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionExit (Collision other)
 	{
-		if (other.gameObject.tag == "Ground")
+		if (other.gameObject.name == "ground")
 		{
 			this.airbone = true;
 		}
