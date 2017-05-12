@@ -18,7 +18,7 @@ namespace AssemblyCSharp
 
 		public const float DROP_FORCE = 300f;
 
-		public const float POWERUP_SPAWN_CD = 5f;
+		public const float POWERUP_SPAWN_CD = 10f;
 
 		public const float BAZOOKA_CD = 3f;
 
@@ -43,6 +43,27 @@ namespace AssemblyCSharp
 			SPACE_MAP,
 			BASIC_MAP,
 			TEST_MAP
+		}
+
+		public enum POWERUP_IDS
+		{
+			VISION_IMPAIRED_POWERUP,
+			SPEED_BOOST_POWERUP,
+			COOLDOWN_REFRESH_POWERUP
+		}
+
+		public enum EVENT_IDS
+		{
+			LOAD_MAP,
+			REMOVE_WALLS,
+			PLAYER_LOST,
+			VISION_IMPAIRED,
+			SPEED_BOOST,
+			COOLDOWN_REFRESH,
+			SPAWN_POWERUP,
+			GRAPPLING_HOOK,
+			BAZOOKA_SHOT,
+			END_GAME
 		}
 	}
 }

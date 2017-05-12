@@ -15,7 +15,6 @@ public class PowerupController : MonoBehaviour
 		_timeSinceLastSpawn = 0f;
 		_networking = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ();
 		_spawners = GameObject.FindGameObjectsWithTag ("PowerupSpawner");
-		//Debug.LogWarning (_spawners.Length);
 	}
 
 	void Update ()
@@ -27,7 +26,7 @@ public class PowerupController : MonoBehaviour
 			{
 				var p = g.GetComponent<PowerupSpawner> ();
 				if (p.Spawned)
-					break;
+					continue;
 				int id = spawnRandomPowerup (g.transform.position);
 				_networking.HandlePowerupSpawn (g.transform.position, id);
 				p.Spawned = true;
