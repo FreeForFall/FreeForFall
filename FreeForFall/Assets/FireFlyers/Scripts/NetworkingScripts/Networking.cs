@@ -12,6 +12,7 @@ public class Networking : MonoBehaviour
 	private InputField _roomNameInput;
 	private InputField _nicknameInput;
 	private Text _roomList;
+	private Text _waitingForGameStartText;
 	private Button _startGameButton;
 	private Dropdown _mapChooser;
 
@@ -51,11 +52,13 @@ public class Networking : MonoBehaviour
 		Debug.Log ("Joined a room");
 		GameObject.Find ("WaitForGameStartCanvas").GetComponent<Canvas> ().enabled = true;
 		GameObject.Find ("MatchmakingCanvas").GetComponent<Canvas> ().enabled = false;
+		if (!PhotonNetwork.isMasterClient)
+			_waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
 	}
 
 	void OnPhotonPlayerConnected (PhotonPlayer other)
 	{
-		Debug.Log ("Another player joined the room...");
+		_waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
 		if (PhotonNetwork.isMasterClient)
 			_startGameButton.interactable = true;
 	}
@@ -82,6 +85,7 @@ public class Networking : MonoBehaviour
 		_mapChooser = GameObject.Find ("MapChoosingDropdown").GetComponent<Dropdown> ();
 		_startGameButton = GameObject.Find ("StartGameButton").GetComponent<Button> ();
 		_roomNameInput = GameObject.Find ("RoomNameInput").GetComponent<InputField> ();
+		_waitingForGameStartText = GameObject.Find ("WaitForGameStartCanvas").transform.FindChild ("Text").GetComponent<Text> ();
 	}
 
 	private void registerEventHandlers ()
@@ -102,6 +106,13 @@ public class Networking : MonoBehaviour
 	private void refreshRooms ()
 	{
 		Debug.Log ("Refreshing the room list");
+		var rooms = PhotonNetwork.GetRoomList ();
+		var str = "";
+		foreach (var r in rooms)
+		{
+			str += r.Name + " - " + r.PlayerCount + "/" + r.MaxPlayers + " players.\n";
+		}
+		_roomList.text = str;
 	}
 
 	private void startGame ()
