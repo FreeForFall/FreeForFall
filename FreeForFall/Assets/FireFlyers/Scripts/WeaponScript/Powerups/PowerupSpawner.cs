@@ -8,8 +8,10 @@ public class PowerupSpawner : MonoBehaviour
 
 	void OnTriggerEnter (Collider c)
 	{
+		Debug.Log ("COLLIDED");
 		if (c.gameObject.tag != "Player")
 			return;
-		Spawned = Spawned ? false : true;
+		if (Spawned)
+			Spawned = false;
 	}
 }
