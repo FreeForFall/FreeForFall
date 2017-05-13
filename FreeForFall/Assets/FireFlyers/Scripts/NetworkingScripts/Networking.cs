@@ -90,7 +90,9 @@ public class Networking : MonoBehaviour
 		if (!online)
 		{
 			PhotonNetwork.offlineMode = true;
-			PhotonNetwork.CreateRoom ("Offline Game");
+			_startGameButton.interactable = true;
+			_roomNameInput.gameObject.SetActive (false);
+			_refreshButton.gameObject.SetActive (false);
 		}
 		else
 		{
