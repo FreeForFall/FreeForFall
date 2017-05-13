@@ -11,6 +11,7 @@ public class GameEngine
 	private int _loadedCount;
 	private int _lostCount;
 	private int _playerCount;
+	private int _playerSpawned;
 	private Constants.MAPS_IDS _mapID;
 	private PhotonView _localPhotonView;
 
@@ -26,11 +27,27 @@ public class GameEngine
 
 	private Networking _network;
 
+	public Constants.MAPS_IDS MapID
+	{
+		get
+		{
+			return _mapID;
+		}
+	}
+
 	public GameObject Player
 	{
 		get
 		{
 			return _localPlayer;
+		}
+	}
+
+	public Networking Network
+	{
+		get
+		{
+			return _network;
 		}
 	}
 
@@ -42,6 +59,7 @@ public class GameEngine
 	{
 		_loadedCount = 0;
 		_lostCount = 0;
+		_playerSpawned = 0;
 		_mapID = map;
 		_network = GameObject.Find ("NetworkManager").GetComponent<Networking> ();
 		_flyingCamera = GameObject.Find ("FlyingCamera").GetComponent<Camera> ();
@@ -56,21 +74,41 @@ public class GameEngine
 		if (!PhotonNetwork.isMasterClient)
 			Debug.LogError ("NON MASTER CLIENT TRIED TO START A GAME WTF");
 		_playerCount = PhotonNetwork.room.PlayerCount;
-		NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.LOAD_MAP, _mapID);
-		LoadMap (_mapID);
-		if (PlayerJoined ())
-		{
-			_network.RemoveWalls ();
-		}
+		_loadedCount++;
+		LoadScene (_mapID);
 	}
 
 	/// <summary>
 	/// To be called when a player loaded the map.
 	/// </summary>
 	/// <returns><c>true</c>, if the walls should be removed, <c>false</c> otherwise.</returns>
-	public bool PlayerJoined ()
+	public bool PlayerLoadedScene ()
 	{
-		return ++_loadedCount >= _playerCount;
+		Debug.Log ("A player loaded the scene");
+		return PhotonNetwork.isMasterClient && ++_loadedCount >= _playerCount;
+	}
+
+	/// <summary>
+	/// To be called when a player is done executing ReadyMap
+	/// </summary>
+	public void PlayerSpawned ()
+	{
+		Debug.Log ("A player spawned");
+		if (++_playerSpawned < _playerCount)
+			return;
+		_network.RemoveWalls ();
+	}
+
+	/// <summary>
+	/// Spawns the players.
+	/// </summary>
+	public void SpawnPlayers ()
+	{
+		if (!PhotonNetwork.isMasterClient)
+			return;
+		Debug.Log ("Spawning all the players");
+		ReadyMap ();
+		NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.SPAWN_PLAYER);
 	}
 
 	/// <summary>
@@ -84,17 +122,26 @@ public class GameEngine
 	/// <summary>
 	/// Loads the map and instantiates the player.
 	/// </summary>
-	public void LoadMap (Constants.MAPS_IDS id)
+	public void LoadScene (Constants.MAPS_IDS id)
 	{
-		string name = Constants.MAPS_NAMES [(int)id];
-		_map = (GameObject)GameObject.Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
+		_mapID = id;
+		string name = Constants.MAP_SCENES_NAMES [(int)id];
+		SceneManager.LoadScene (name);
+		//_map = (GameObject)GameObject.Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
+	}
+
+	/// <summary>
+	/// Sets the map up
+	/// </summary>
+	public void ReadyMap ()
+	{
+		Debug.Log ("Spawning");
+		_map = GameObject.Find (Constants.MAPS_NAMES [(int)_mapID]);
 		createPlayer ();
+		_flyingCamera = GameObject.Find ("FlyingCamera").GetComponent<Camera> ();
 		_camera = _localPlayer.transform.Find ("TPScamera/firstCamera").gameObject;
 		_flyingCamera.gameObject.SetActive (false);
 		_cameraStartPosition = _flyingCamera.transform.position;
-		GameObject.Find ("WaitForGameStartCanvas").GetComponent<Canvas> ().enabled = false;
-		if (!PhotonNetwork.isMasterClient)
-			NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.MAP_LOADED);
 	}
 
 	/// <summary>
@@ -102,6 +149,7 @@ public class GameEngine
 	/// </summary>
 	private void createPlayer ()
 	{
+		_playerSpawned++;
 		Vector3 spawnPosition = _map.transform.Find ("BoxPrefab").transform.position + Vector3.up * 15;
 		spawnPosition.x = Random.Range (-9f, 9f);
 		spawnPosition.z = Random.Range (-9f, 9f);
@@ -115,6 +163,8 @@ public class GameEngine
 		//_shooterB = _localPlayer.GetComponent<ShooterB> ();
 		_localPlayer.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 		_localPlayer.GetComponentInChildren<CameraControl> ().enabled = true;
+		if (!PhotonNetwork.isMasterClient)
+			NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.PLAYER_SPAWNED);
 	}
 
 	/// <summary>

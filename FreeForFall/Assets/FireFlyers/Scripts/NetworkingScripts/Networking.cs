@@ -60,6 +60,7 @@ public class Networking : MonoBehaviour
 
 	void Start ()
 	{
+		DontDestroyOnLoad (this);
 		findAllUIElements ();
 		registerEventHandlers ();
 		PhotonNetwork.OnEventCall += handler;
@@ -77,18 +78,27 @@ public class Networking : MonoBehaviour
 	{
 		object[] c = (object[])content;
 		Constants.EVENT_IDS eventID = (Constants.EVENT_IDS)eventCode;
+		Debug.Log ("RECEIVED : " + eventID.ToString ());
 		switch (eventID)
 		{
-			case Constants.EVENT_IDS.LOAD_MAP:
-				_engine.LoadMap ((Constants.MAPS_IDS)c [0]);
+			case Constants.EVENT_IDS.LOAD_SCENE:
+				_engine.LoadScene ((Constants.MAPS_IDS)c [0]);
 				return;
-			case Constants.EVENT_IDS.MAP_LOADED:
-				if (!_engine.PlayerJoined ())
+			case Constants.EVENT_IDS.SCENE_LOADED:
+				if (!_engine.PlayerLoadedScene ())
 					return;
-				RemoveWalls ();
+				_engine.SpawnPlayers ();
 				return;
 			case Constants.EVENT_IDS.REMOVE_WALLS:
 				_engine.RemoveWalls ();
+				return;
+			case Constants.EVENT_IDS.SPAWN_PLAYER:
+				_engine.ReadyMap ();
+				return;
+			case Constants.EVENT_IDS.PLAYER_SPAWNED:
+				if (!PhotonNetwork.isMasterClient)
+					return;
+				_engine.PlayerSpawned ();
 				return;
 			default:
 				Debug.LogError ("UNKNOWN EVENT");
@@ -266,14 +276,15 @@ public class Networking : MonoBehaviour
 		_engine.StartGame ();
 	}
 
-
-
-
-
-
-
 	#region utils
 
+	/// <summary>
+	/// Moves an object from a position to another over a time period.
+	/// </summary>
+	/// <param name="o">The object to move.</param>
+	/// <param name="from">Start position.</param>
+	/// <param name="to">End position.</param>
+	/// <param name="time">Movement duration.</param>
 	public void MoveObject (GameObject o, Vector3 from, Vector3 to, float time)
 	{
 		StartCoroutine (_moveObject (o.transform, from, to, time));
