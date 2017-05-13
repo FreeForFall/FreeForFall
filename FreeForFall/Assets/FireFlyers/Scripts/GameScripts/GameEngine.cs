@@ -48,8 +48,8 @@ public class GameEngine
 		if (!PhotonNetwork.isMasterClient)
 			Debug.LogError ("NON MASTER CLIENT TRIED TO START A GAME WTF");
 		_playerCount = PhotonNetwork.room.PlayerCount;
-		NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.LOAD_MAP);
-		LoadMap ();
+		NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.LOAD_MAP, _mapID);
+		LoadMap (_mapID);
 		if (PlayerJoined ())
 		{
 			_network.RemoveWalls ();
@@ -76,9 +76,9 @@ public class GameEngine
 	/// <summary>
 	/// Loads the map and instantiates the player.
 	/// </summary>
-	public void LoadMap ()
+	public void LoadMap (Constants.MAPS_IDS id)
 	{
-		string name = Constants.MAPS_NAMES [(int)_mapID];
+		string name = Constants.MAPS_NAMES [(int)id];
 		_map = (GameObject)GameObject.Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
 		createPlayer ();
 		_camera = _localPlayer.transform.Find ("TPScamera/firstCamera").gameObject;

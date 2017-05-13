@@ -70,7 +70,7 @@ public class Networking : MonoBehaviour
 		switch (eventID)
 		{
 			case Constants.EVENT_IDS.LOAD_MAP:
-				_engine.LoadMap ();
+				_engine.LoadMap ((Constants.MAPS_IDS)c [0]);
 				return;
 			case Constants.EVENT_IDS.MAP_LOADED:
 				if (!_engine.PlayerJoined ())
@@ -125,9 +125,6 @@ public class Networking : MonoBehaviour
 		if (!PhotonNetwork.isMasterClient)
 			_waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
 		_engine = new GameEngine (_mapID);
-
-		// TODO : Remove that when not needed anymore.
-		_startGameButton.interactable = true;
 	}
 
 	/// <summary>
