@@ -61,6 +61,15 @@ namespace AssemblyCSharp
 			"TestMap"
 		};
 
+		/*
+		Same as MAPS_NAMES
+		*/
+		public static string[] MAP_SCENES_NAMES = new string[] {
+			"SpaceArena",
+			"BasicArena",
+			"TestArena"
+		};
+
 		public enum POWERUP_IDS
 		{
 			VISION_IMPAIRED_POWERUP,
@@ -70,8 +79,10 @@ namespace AssemblyCSharp
 
 		public enum EVENT_IDS
 		{
-			LOAD_MAP,
-			MAP_LOADED,
+			LOAD_SCENE,
+			SCENE_LOADED,
+			SPAWN_PLAYER,
+			PLAYER_SPAWNED,
 			REMOVE_WALLS
 		}
 	}

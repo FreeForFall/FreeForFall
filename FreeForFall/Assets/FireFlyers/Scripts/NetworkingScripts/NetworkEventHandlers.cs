@@ -18,7 +18,7 @@ namespace AssemblyCSharp
 
 		public static void Broadcast (Constants.EVENT_IDS id, object content = null)
 		{
-			PhotonNetwork.RaiseEvent ((byte)id, new object[] { content }, true, null);
+			Broadcast (id, new object[] { content });
 		}
 	}
 }
