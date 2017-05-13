@@ -26,6 +26,14 @@ public class GameEngine
 
 	private Networking _network;
 
+	public GameObject Player
+	{
+		get
+		{
+			return _localPlayer;
+		}
+	}
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GameEngine"/> class.
 	/// </summary>
@@ -83,6 +91,7 @@ public class GameEngine
 		createPlayer ();
 		_camera = _localPlayer.transform.Find ("TPScamera/firstCamera").gameObject;
 		_flyingCamera.gameObject.SetActive (false);
+		_cameraStartPosition = _flyingCamera.transform.position;
 		GameObject.Find ("WaitForGameStartCanvas").GetComponent<Canvas> ().enabled = false;
 		if (!PhotonNetwork.isMasterClient)
 			NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.MAP_LOADED);
@@ -106,5 +115,36 @@ public class GameEngine
 		//_shooterB = _localPlayer.GetComponent<ShooterB> ();
 		_localPlayer.GetComponentInChildren<LookTowardCamera> ().enabled = true;
 		_localPlayer.GetComponentInChildren<CameraControl> ().enabled = true;
+	}
+
+	/// <summary>
+	/// Switches to spectator view.
+	/// </summary>
+	public void SwitchToSpecView ()
+	{
+		switchCamera ();
+		_network.MoveObject (_flyingCamera.gameObject, _camera.transform.position, _cameraStartPosition, Constants.SPEC_CAMERA_TRAVEL_TIME);
+	}
+
+	/// <summary>
+	/// Swicthes from the flying camera to the player camera and vice versa.
+	/// </summary>
+	private void switchCamera ()
+	{
+		Debug.LogWarning ("SWITCHING CAMERAS");
+		if (_flyingCamera.gameObject.GetActive ())
+		{
+			_flyingCamera.gameObject.GetComponent<Camera> ().enabled = false;
+			_flyingCamera.GetComponent<AudioListener> ().enabled = false;
+			_flyingCamera.gameObject.SetActive (false);
+			_camera.SetActive (true);
+		}
+		else
+		{
+			_flyingCamera.gameObject.GetComponent<Camera> ().enabled = true;
+			_flyingCamera.gameObject.SetActive (true);
+			_flyingCamera.GetComponent<AudioListener> ().enabled = true;
+			_camera.SetActive (false); 
+		}
 	}
 }

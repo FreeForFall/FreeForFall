@@ -35,6 +35,22 @@ public class Networking : MonoBehaviour
 
 	private GameEngine _engine;
 
+	public GameObject Player
+	{
+		get
+		{
+			return _engine.Player;
+		}
+	}
+
+	public GameEngine Engine
+	{
+		get
+		{
+			return _engine;
+		}
+	}
+
 	#if UNITY_EDITOR
 	void OnGUI ()
 	{
@@ -50,12 +66,6 @@ public class Networking : MonoBehaviour
 		PhotonNetwork.autoJoinLobby = true;
 		connectToServer (GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode);
 	}
-
-
-
-
-
-
 
 	/// <summary>
 	/// Handles the events received by the client.
@@ -254,8 +264,51 @@ public class Networking : MonoBehaviour
 	{
 		Debug.Log ("Starting the game");
 		_engine.StartGame ();
-
 	}
+
+
+
+
+
+
+
+	#region utils
+
+	public void MoveObject (GameObject o, Vector3 from, Vector3 to, float time)
+	{
+		StartCoroutine (_moveObject (o.transform, from, to, time));
+	}
+
+	private IEnumerator _moveObject (Transform obj, Vector3 source, Vector3 target, float overTime)
+	{
+		float startTime = Time.time;
+		while (Time.time < startTime + overTime)
+		{
+			obj.position = Vector3.Lerp (source, target, (Time.time - startTime) / overTime);
+			yield return null;
+		}
+		obj.position = target;
+	}
+
+
+	#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/// <summary>
 	/// Gets the room options.

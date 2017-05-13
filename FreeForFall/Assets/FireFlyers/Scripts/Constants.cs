@@ -42,6 +42,8 @@ namespace AssemblyCSharp
 
 		public const float START_GAME_DELAY = 5f;
 
+		public const float SPEC_CAMERA_TRAVEL_TIME = 5f;
+
 		public enum MAPS_IDS
 		{
 			SPACE_MAP,
