@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 /*
@@ -99,6 +100,9 @@ public class Networking : MonoBehaviour
 				if (!PhotonNetwork.isMasterClient)
 					return;
 				_engine.PlayerSpawned ();
+				return;
+			case Constants.EVENT_IDS.END_GAME:
+				EndGame ((string[])c);
 				return;
 			default:
 				Debug.LogError ("UNKNOWN EVENT");
@@ -276,6 +280,17 @@ public class Networking : MonoBehaviour
 		_engine.StartGame ();
 	}
 
+
+	/// <summary>
+	/// Ends the game.
+	/// </summary>
+	private void doEndGame ()
+	{
+		SceneManager.LoadScene ("Menu");
+	}
+
+
+
 	#region utils
 
 	/// <summary>
@@ -305,22 +320,6 @@ public class Networking : MonoBehaviour
 	#endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/// <summary>
 	/// Gets the room options.
 	/// </summary>
@@ -348,4 +347,17 @@ public class Networking : MonoBehaviour
 				return Constants.MAPS_IDS.SPACE_MAP;
 		}
 	}
+
+	/// <summary>
+	/// Wrapper around doEndGame. This is what should display and leaderboard.
+	/// </summary>
+	public void EndGame (string[] leaderboard)
+	{
+		foreach (var v in leaderboard)
+		{
+			Debug.Log (v);
+		}
+		Invoke ("doEndGame", 5f);
+	}
+
 }

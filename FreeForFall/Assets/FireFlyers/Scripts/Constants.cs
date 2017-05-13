@@ -83,7 +83,10 @@ namespace AssemblyCSharp
 			SCENE_LOADED,
 			SPAWN_PLAYER,
 			PLAYER_SPAWNED,
-			REMOVE_WALLS
+			REMOVE_WALLS,
+
+
+			END_GAME
 		}
 	}
 }

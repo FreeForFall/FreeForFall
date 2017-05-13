@@ -27,6 +27,8 @@ public class GameEngine
 
 	private Networking _network;
 
+	private Stack<string> _lostList;
+
 	public Constants.MAPS_IDS MapID
 	{
 		get
@@ -61,6 +63,7 @@ public class GameEngine
 		_lostCount = 0;
 		_playerSpawned = 0;
 		_mapID = map;
+		_lostList = new Stack<string> ();
 		_network = GameObject.Find ("NetworkManager").GetComponent<Networking> ();
 		_flyingCamera = GameObject.Find ("FlyingCamera").GetComponent<Camera> ();
 	}
@@ -70,7 +73,6 @@ public class GameEngine
 	/// </summary>
 	public void StartGame ()
 	{
-		
 		if (!PhotonNetwork.isMasterClient)
 			Debug.LogError ("NON MASTER CLIENT TRIED TO START A GAME WTF");
 		_playerCount = PhotonNetwork.room.PlayerCount;
@@ -168,12 +170,29 @@ public class GameEngine
 	}
 
 	/// <summary>
+	/// To be called when a player has collided with the bottom of the map.
+	/// </summary>
+	/// <param name="p">The player that collided</param>
+	public void PlayerLost (GameObject p)
+	{
+		Debug.Log ("A player lost");
+		_lostList.Push (p.GetComponent<PhotonView> ().owner.NickName);
+		if (_lostList.Count >= _playerCount)
+		{
+			string[] arr = _lostList.ToArray ();
+			NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.END_GAME, arr);
+			_network.EndGame (arr);
+		}
+	}
+
+	/// <summary>
 	/// Switches to spectator view.
 	/// </summary>
 	public void SwitchToSpecView ()
 	{
 		switchCamera ();
-		_network.MoveObject (_flyingCamera.gameObject, _camera.transform.position, _cameraStartPosition, Constants.SPEC_CAMERA_TRAVEL_TIME);
+		_network.MoveObject (_flyingCamera.gameObject, 
+			_camera.transform.position, _cameraStartPosition, Constants.SPEC_CAMERA_TRAVEL_TIME);
 	}
 
 	/// <summary>

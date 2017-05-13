@@ -26,6 +26,10 @@ public class PlayerCollector : MonoBehaviour
 		{
 			_networking.Engine.SwitchToSpecView ();
 		}
+		if (PhotonNetwork.isMasterClient)
+		{
+			_networking.Engine.PlayerLost (p);
+		}
 		// Add server stuff
 		Destroy (p);
 	}
