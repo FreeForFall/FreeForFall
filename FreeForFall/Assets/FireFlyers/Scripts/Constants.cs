@@ -45,6 +45,16 @@ namespace AssemblyCSharp
 			TEST_MAP
 		}
 
+		/*
+		 WATCH OUT
+		 The order of the values here has to match the order of the values in MAPS_IDS
+		*/
+		public static string[] MAPS_NAMES = new string[] {
+			"Map",
+			"Map2",
+			"TestMap"
+		};
+
 		public enum POWERUP_IDS
 		{
 			VISION_IMPAIRED_POWERUP,

@@ -4,6 +4,15 @@ using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
 
+
+
+
+/*
+
+This time, I'll be using RPCs as often as possible.
+
+*/
+
 public class Networking : MonoBehaviour
 {
 
@@ -18,6 +27,7 @@ public class Networking : MonoBehaviour
 
 	private Constants.MAPS_IDS _mapID;
 
+	private GameEngine _engine;
 
 	#if UNITY_EDITOR
 	void OnGUI ()
@@ -26,16 +36,27 @@ public class Networking : MonoBehaviour
 	}
 	#endif
 
-
-
-
 	void Start ()
 	{
 		findAllUIElements ();
 		registerEventHandlers ();
-
+		PhotonNetwork.OnEventCall += handler;
 		PhotonNetwork.autoJoinLobby = true;
 		connectToServer (GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode);
+	}
+
+	private void handler (byte eventCode, object content, int senderId)
+	{
+		object[] c = (object[])content;
+		switch ((Constants.EVENT_IDS)eventCode)
+		{
+			case Constants.EVENT_IDS.LOAD_MAP:
+				_engine.LoadMap ();
+				break;
+			default:
+				Debug.LogError ("UNKNOWN EVENT");
+				break;
+		}
 	}
 
 
@@ -54,6 +75,7 @@ public class Networking : MonoBehaviour
 		GameObject.Find ("MatchmakingCanvas").GetComponent<Canvas> ().enabled = false;
 		if (!PhotonNetwork.isMasterClient)
 			_waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
+		_engine = new GameEngine (_mapID);
 	}
 
 	void OnPhotonPlayerConnected (PhotonPlayer other)
@@ -118,7 +140,14 @@ public class Networking : MonoBehaviour
 	private void startGame ()
 	{
 		Debug.Log ("Starting the game");
+		_engine.StartGame ();
 	}
+
+	/*
+
+	These are the functions that you can modify
+
+	*/
 
 	private RoomOptions getRoomOptions ()
 	{
