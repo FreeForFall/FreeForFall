@@ -38,6 +38,10 @@ namespace AssemblyCSharp
 
 		public const float GRIP_PULL_FORCE = 300000f;
 
+		public const int NUMBER_OF_AI = 5;
+
+		public const float START_GAME_DELAY = 5f;
+
 		public enum MAPS_IDS
 		{
 			SPACE_MAP,
@@ -65,15 +69,8 @@ namespace AssemblyCSharp
 		public enum EVENT_IDS
 		{
 			LOAD_MAP,
-			REMOVE_WALLS,
-			PLAYER_LOST,
-			VISION_IMPAIRED,
-			SPEED_BOOST,
-			COOLDOWN_REFRESH,
-			SPAWN_POWERUP,
-			GRAPPLING_HOOK,
-			BAZOOKA_SHOT,
-			END_GAME
+			MAP_LOADED,
+			REMOVE_WALLS
 		}
 	}
 }

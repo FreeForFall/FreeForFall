@@ -5,11 +5,16 @@ using AssemblyCSharp;
 using UnityEngine.UI;
 
 
-
-
 /*
 
 This time, I'll be using RPCs as often as possible.
+
+
+There are a few race conditions that should be fixed if we go large scale : createRoom and joinRoom rely on the fact
+that no room is created with the name they're looking for while they're processing the room list.
+
+After a quick glance at the source of PUN it appears that calling GetRoomList() is actually not an issue as the 
+result is cached. 
 
 */
 
@@ -23,6 +28,7 @@ public class Networking : MonoBehaviour
 	private Text _roomList;
 	private Text _waitingForGameStartText;
 	private Button _startGameButton;
+	private Button _joinRoomButton;
 	private Dropdown _mapChooser;
 
 	private Constants.MAPS_IDS _mapID;
@@ -45,21 +51,61 @@ public class Networking : MonoBehaviour
 		connectToServer (GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode);
 	}
 
+
+
+
+
+
+
+	/// <summary>
+	/// Handles the events received by the client.
+	/// </summary>
+	/// <param name="eventCode">Event code.</param>
+	/// <param name="content">Content.</param>
+	/// <param name="senderId">Sender identifier.</param>
 	private void handler (byte eventCode, object content, int senderId)
 	{
 		object[] c = (object[])content;
-		switch ((Constants.EVENT_IDS)eventCode)
+		Constants.EVENT_IDS eventID = (Constants.EVENT_IDS)eventCode;
+		switch (eventID)
 		{
 			case Constants.EVENT_IDS.LOAD_MAP:
 				_engine.LoadMap ();
-				break;
+				return;
+			case Constants.EVENT_IDS.MAP_LOADED:
+				if (!_engine.PlayerJoined ())
+					return;
+				RemoveWalls ();
+				return;
+			case Constants.EVENT_IDS.REMOVE_WALLS:
+				_engine.RemoveWalls ();
+				return;
 			default:
 				Debug.LogError ("UNKNOWN EVENT");
-				break;
+				return;
 		}
 	}
 
+	/// <summary>
+	/// A wrapper around a wrapper, because Unity sucks. Removes the walls in Constants.START_GAME_DELAY seconds.
+	/// </summary>
+	public void RemoveWalls ()
+	{
+		Invoke ("doRemove", Constants.START_GAME_DELAY);
+	}
 
+	/// <summary>
+	/// Removes the walls and sends the event to all the players.
+	/// </summary>
+	private void doRemove ()
+	{
+		NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.REMOVE_WALLS);
+		_engine.RemoveWalls ();
+	}
+
+	/// <summary>
+	/// Raised when the player joins the lobby.
+	/// </summary>
 	void OnJoinedLobby ()
 	{
 		Debug.Log ("Joined a lobby.");
@@ -68,6 +114,9 @@ public class Networking : MonoBehaviour
 		refreshRooms ();
 	}
 
+	/// <summary>
+	/// Raised when the player joins a room.
+	/// </summary>
 	void OnJoinedRoom ()
 	{
 		Debug.Log ("Joined a room");
@@ -76,8 +125,15 @@ public class Networking : MonoBehaviour
 		if (!PhotonNetwork.isMasterClient)
 			_waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
 		_engine = new GameEngine (_mapID);
+
+		// TODO : Remove that when not needed anymore.
+		_startGameButton.interactable = true;
 	}
 
+	/// <summary>
+	/// Raised when another player joins your room.
+	/// </summary>
+	/// <param name="other">Other player</param>
 	void OnPhotonPlayerConnected (PhotonPlayer other)
 	{
 		_waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
@@ -85,6 +141,10 @@ public class Networking : MonoBehaviour
 			_startGameButton.interactable = true;
 	}
 
+	/// <summary>
+	/// Connects to the server.
+	/// </summary>
+	/// <param name="online">If set to <c>true</c> online.</param>
 	private void connectToServer (bool online)
 	{
 		if (!online)
@@ -93,6 +153,11 @@ public class Networking : MonoBehaviour
 			_startGameButton.interactable = true;
 			_roomNameInput.gameObject.SetActive (false);
 			_refreshButton.gameObject.SetActive (false);
+			_joinRoomButton.gameObject.SetActive (false);
+
+			// this is a hack and won't work if the mapChooser changes too much
+			Vector3 pos = _roomCreationButton.transform.position;
+			_roomCreationButton.transform.position = new Vector3 (_mapChooser.transform.position.x, pos.y, pos.z);
 		}
 		else
 		{
@@ -100,9 +165,13 @@ public class Networking : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Finds all the UI elements needed to make the pre-game menus work.
+	/// </summary>
 	private void findAllUIElements ()
 	{
 		_roomCreationButton = GameObject.Find ("CreateRoomButton").GetComponent<Button> ();
+		_joinRoomButton = GameObject.Find ("JoinRoomButton").GetComponent<Button> ();
 		_refreshButton = GameObject.Find ("RefreshButton").GetComponent<Button> ();
 		_roomList = GameObject.Find ("RoomListView").GetComponent<Text> ();
 		_nicknameInput = GameObject.Find ("NicknameInput").GetComponent<InputField> ();
@@ -112,26 +181,68 @@ public class Networking : MonoBehaviour
 		_waitingForGameStartText = GameObject.Find ("WaitForGameStartCanvas").transform.FindChild ("Text").GetComponent<Text> ();
 	}
 
+	/// <summary>
+	/// Registers the event handlers.
+	/// </summary>
 	private void registerEventHandlers ()
 	{
 		_roomCreationButton.onClick.AddListener (createRoom);
 		_refreshButton.onClick.AddListener (refreshRooms);
 		_startGameButton.onClick.AddListener (startGame);
+		_joinRoomButton.onClick.AddListener (joinRoom);
 	}
 
+	/// <summary>
+	/// Tries to join the room.
+	/// </summary>
+	private void joinRoom ()
+	{
+		string name = _roomNameInput.text;
+		RoomInfo[] roomList = PhotonNetwork.GetRoomList ();
+
+		bool found = false;
+		for (int i = 0; i < roomList.Length && !found; i++)
+			found = name == roomList [i].Name;
+		
+		if (!found)
+		{
+			Debug.LogError ("Room doesn't exist!");
+			return;
+		}
+
+		PhotonNetwork.playerName = _nicknameInput.text;
+		PhotonNetwork.JoinRoom (name);
+	}
+
+	/// <summary>
+	/// Tries to create a room.
+	/// </summary>
 	private void createRoom ()
 	{
 		Debug.Log ("Creating a room");
+		string name = _roomNameInput.text;
+		RoomInfo[] roomList = PhotonNetwork.GetRoomList ();
+		int i = 0;
+		for (; i < roomList.Length && roomList [i].Name != name; i++)
+			continue;
+		if (i != roomList.Length)
+		{
+			Debug.LogError ("Room Already exists!");
+			return;
+		}
 		_mapID = chooseMap ();
 		PhotonNetwork.playerName = _nicknameInput.text;
-		PhotonNetwork.JoinOrCreateRoom (_roomNameInput.text, getRoomOptions (), null);
+		PhotonNetwork.CreateRoom (_roomNameInput.text, getRoomOptions (), null);
 	}
 
+	/// <summary>
+	/// Refreshs the room list.
+	/// </summary>
 	private void refreshRooms ()
 	{
 		Debug.Log ("Refreshing the room list");
-		var rooms = PhotonNetwork.GetRoomList ();
-		var str = "";
+		RoomInfo[] rooms = PhotonNetwork.GetRoomList ();
+		string str = "";
 		foreach (var r in rooms)
 		{
 			str += r.Name + " - " + r.PlayerCount + "/" + r.MaxPlayers + " players.\n";
@@ -139,25 +250,31 @@ public class Networking : MonoBehaviour
 		_roomList.text = str;
 	}
 
+	/// <summary>
+	/// Starts the game.
+	/// </summary>
 	private void startGame ()
 	{
 		Debug.Log ("Starting the game");
 		_engine.StartGame ();
+
 	}
 
-	/*
-
-	These are the functions that you can modify
-
-	*/
-
+	/// <summary>
+	/// Gets the room options.
+	/// </summary>
+	/// <returns>The room options.</returns>
 	private RoomOptions getRoomOptions ()
 	{
-		var opt = new RoomOptions ();
+		RoomOptions opt = new RoomOptions ();
 		opt.MaxPlayers = 255;
 		return opt;
 	}
 
+	/// <summary>
+	/// Returns the map selected by the player.
+	/// </summary>
+	/// <returns>The map.</returns>
 	private Constants.MAPS_IDS chooseMap ()
 	{
 		switch (_mapChooser.GetComponentInChildren<Text> ().text)
