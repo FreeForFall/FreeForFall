@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using AssemblyCSharp;
 using UnityEngine;
 
 public class SimpleAI : MonoBehaviour {
 
     public AudioSource jumpsound;
+    public AudioSource Fallsound;
     public GameObject jumpeffect;
     public Transform jumpflamelocation;
     public float sensorLength = 2f;
@@ -12,15 +14,17 @@ public class SimpleAI : MonoBehaviour {
     public float turnspeed = 1000f;
     private int turnValue = 0;
     private System.Random rng;
-    public const float JUMP_FORCE = 150000f; // to remove
-    public const float JUMP_CD = 2f; // to remove
     private float Timesincelastjump;
     private bool airbone;
     private bool jumping;
+    private bool playfrogs;
 
     // Use this for initialization
     void Start () {
         Timesincelastjump = 3;
+        turnValue = 1;
+        this.playfrogs = false;
+        Invoke("autisticfrogs", 10f);
         this.airbone = false;
         this.jumping = false;
 	}
@@ -56,7 +60,7 @@ public class SimpleAI : MonoBehaviour {
         int flag = 0;
         if (!Physics.Raycast(transform.position + 0.5f * transform.forward + transform.up, transform.forward + -transform.up, out hit, (sensorLength + transform.localScale.z)))
         {
-            if (Physics.Raycast(transform.position + 1 * transform.forward * 8, -transform.up, out hit, 3) && JUMP_CD < Timesincelastjump) //change here
+            if (Physics.Raycast(transform.position + 1 * transform.forward * 8, -transform.up, out hit, 3) && Constants.JUMP_CD_AI < Timesincelastjump)
             {
                 jump();
             }
@@ -93,15 +97,15 @@ public class SimpleAI : MonoBehaviour {
         GameObject JumpeffectDone = Instantiate(jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
         jumpsound.Play();
         Timesincelastjump = 0;
-        GetComponent<Rigidbody>().AddForce(new Vector3(0f,  JUMP_FORCE, 0f)); //change here
-        Invoke("jumpDown", 0.3f);
+        GetComponent<Rigidbody>().AddForce(new Vector3(0f,  Constants.JUMP_FORCE, 0f));
+        Invoke("jumpDown", 0.5f);
         Destroy(JumpeffectDone, 0.5f);
 
     }
 
     private void jumpDown()
     {
-        GetComponent<Rigidbody>().AddForce(new Vector3(0f, -JUMP_FORCE * 1.5f, 0f)); //change here
+        GetComponent<Rigidbody>().AddForce(new Vector3(0f, -Constants.JUMP_FORCE * 1.5f, 0f)); 
         Invoke("canceljump", 0.3f);
     }
 
@@ -114,6 +118,11 @@ public class SimpleAI : MonoBehaviour {
             && !Physics.Raycast(transform.position - transform.up * 1f + -transform.right - transform.forward, -transform.up, out hit, (0.5f)))
         {
             airbone = true;
+            if (playfrogs)
+            {
+                Fallsound.Play();
+            }
+
         }
         else
         {
@@ -124,5 +133,10 @@ public class SimpleAI : MonoBehaviour {
     private void canceljump()
     {
         jumping = false;
+    }
+
+    private void autisticfrogs()
+    {
+        playfrogs = false;
     }
 }

@@ -6,7 +6,6 @@ using AssemblyCSharp;
 public class Explosives : MonoBehaviour
 {
 	public float radius;
-	public float power;
 	public GameObject impactParticle;
 	public Vector3 impactNormal;
 
@@ -32,7 +31,7 @@ public class Explosives : MonoBehaviour
 		{
 			if (colliders [i].GetComponent<Rigidbody> ())
 			{
-				colliders [i].GetComponent<Rigidbody> ().AddExplosionForce (power, explosion_epicenter, radius, Constants.BAZOOKA_EXPLOSION_FORCE);
+				colliders [i].GetComponent<Rigidbody> ().AddExplosionForce (Constants.BAZOOKA_EXPLOSION_FORCE, explosion_epicenter, radius, 1f);
 			}
 		}
 	}

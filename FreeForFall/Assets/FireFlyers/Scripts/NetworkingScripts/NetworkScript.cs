@@ -357,7 +357,7 @@ namespace AssemblyCSharp
 				GameObject.Find ("PowerupManager").gameObject.GetComponent<PowerupController> ().enabled = true;
 			}
 			if (!GameObject.Find ("SettingsManager").GetComponent<Settings> ().OnlineMode)
-				spawnAI (5);
+				spawnAI (7);
 			removeWalls ();
 		}
 
