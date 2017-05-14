@@ -114,10 +114,32 @@ public class GameEngine
 	}
 
 	/// <summary>
+	/// Sets the nicknames.
+	/// </summary>
+	private void setNicknames ()
+	{
+		foreach (GameObject o in GameObject.FindGameObjectsWithTag ("Player"))
+		{
+			PhotonView p = o.GetComponent<PhotonView> ();
+			if (p == null)
+				continue;
+			o.transform
+				.Find ("bottom")
+				.Find ("Canvas").gameObject.SetActive (true);
+			o.transform
+				.Find ("bottom")
+				.Find ("Canvas")
+				.Find ("Text")
+				.GetComponent<Text> ().text = p.owner.NickName;
+		}
+	}
+
+	/// <summary>
 	/// Removes the walls.
 	/// </summary>
 	public void RemoveWalls ()
 	{
+		setNicknames ();
 		GameObject.Destroy (_map.transform.Find ("BoxPrefab").gameObject);
 	}
 
@@ -130,6 +152,19 @@ public class GameEngine
 		string name = Constants.MAP_SCENES_NAMES [(int)id];
 		SceneManager.LoadScene (name);
 		//_map = (GameObject)GameObject.Instantiate (Resources.Load (name), Vector3.zero, Quaternion.identity);
+	}
+
+	/// <summary>
+	/// Sets the nickname canvas.
+	/// </summary>
+	/// <param name="id">PhotonView identifier.</param>
+	public void setNicknameCanvas (int id)
+	{
+		Debug.Log ("NICKNAME");
+		Debug.Log (id);
+		var p = PhotonView.Find (id);
+		Debug.Log (p);
+		//p.gameObject.transform.Find ("bottom").Find ("Canvas").Find ("Text").GetComponent<Text> ().text = p.owner.NickName;
 	}
 
 	/// <summary>
@@ -159,7 +194,7 @@ public class GameEngine
 		_localPlayer.GetComponent<CrosshairUI> ().enabled = true;
 		_localPhotonView = _localPlayer.GetComponent<PhotonView> ();
 		//_localPlayer.GetComponent<UI> ().enabled = true;
-		//_localPlayer.transform.Find ("Canvas").gameObject.SetActive (true);
+		//_localPlayer.transform.Find ("bottom").Find ("Canvas").Find ("Text").GetComponent<Text> ().text = PhotonNetwork.playerName;
 		_localPlayer.GetComponentInChildren<PlayerController> ().enabled = true;
 		//_localPlayer.GetComponent<ShooterB> ().enabled = true;
 		//_shooterB = _localPlayer.GetComponent<ShooterB> ();

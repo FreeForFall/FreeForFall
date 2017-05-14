@@ -10,7 +10,6 @@ public class PlayerCollector : MonoBehaviour
 	void Start ()
 	{
 		_networking = GameObject.Find ("NetworkManager").GetComponent<Networking> ();
-		Debug.Log (_networking.Player);
 	}
 
 	void OnCollisionEnter (Collision col)
