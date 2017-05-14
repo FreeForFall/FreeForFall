@@ -31,7 +31,7 @@ public class Explosives : MonoBehaviour
 		{
 			if (colliders [i].GetComponent<Rigidbody> ())
 			{
-				colliders [i].GetComponent<Rigidbody> ().AddExplosionForce (Constants.BAZOOKA_EXPLOSION_FORCE, explosion_epicenter, radius, 1f);
+				colliders [i].GetComponent<Rigidbody> ().AddExplosionForce (Constants.BAZOOKA_EXPLOSION_FORCE, explosion_epicenter, radius, 3f);
 			}
 		}
 	}
