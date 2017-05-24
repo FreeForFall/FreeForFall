@@ -84,8 +84,6 @@ namespace AssemblyCSharp
 			SPAWN_PLAYER,
 			PLAYER_SPAWNED,
 			REMOVE_WALLS,
-
-
 			END_GAME
 		}
 	}
