@@ -5,37 +5,37 @@ using AssemblyCSharp;
 
 public class ImpairVision : MonoBehaviour
 {
-	public GameObject LocalPlayer;
+    public GameObject LocalPlayer;
 
-	void OnTriggerEnter (Collider c)
-	{
-		Debug.LogWarning ("Something collided with the powerup");
-		if (c.gameObject.tag == "Player")
-		{
-			GameObject g;
-			if (c.name == "bottom")
-			{
-				g = c.transform.parent.gameObject;
-			}
-			else
-			{
-				g = c.gameObject;
-			}
-			if (g == LocalPlayer)
-			{
-				Debug.LogWarning ("Doing ImpairVision on " + g);
-				doPowerup (g);
-			}
-			else
-			{
-				Debug.LogWarning ("Someone else collided with the powerup, removing it");
-			}
-			Destroy (gameObject);
-		}
-	}
+    void OnTriggerEnter(Collider c)
+    {
+        Debug.LogWarning("Something collided with the powerup");
+        if (c.gameObject.tag == "Player")
+        {
+            GameObject g;
+            if (c.name == "bottom")
+            {
+                g = c.transform.parent.gameObject;
+            }
+            else
+            {
+                g = c.gameObject;
+            }
+            if (g == LocalPlayer)
+            {
+                Debug.LogWarning("Doing ImpairVision on " + g);
+                doPowerup(g);
+            }
+            else
+            {
+                Debug.LogWarning("Someone else collided with the powerup, removing it");
+            }
+            Destroy(gameObject);
+        }
+    }
 
-	private void doPowerup (GameObject c)
-	{
-        NetworkEventHandlers.SendEvent(new VisionImpairedEvent());
+    private void doPowerup(GameObject c)
+    {
+        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.IMPAIR_VISION_EFFECT);
     }
 }

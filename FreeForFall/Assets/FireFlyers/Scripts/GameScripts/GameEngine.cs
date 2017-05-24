@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using AssemblyCSharp;
 
+
 public class GameEngine
 {
     private int _loadedCount;
@@ -53,6 +54,14 @@ public class GameEngine
         }
     }
 
+    public GameObject FPSCamera
+    {
+        get
+        {
+            return _camera;
+        }
+    }
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="GameEngine"/> class.
     /// </summary>
@@ -209,6 +218,10 @@ public class GameEngine
         _camera.GetComponent<AudioListener>().enabled = true;
         if (!PhotonNetwork.isMasterClient)
             NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.PLAYER_SPAWNED);
+        else
+        {
+            GameObject.Instantiate(Resources.Load("PowerupManager"));
+        }
     }
 
     /// <summary>
@@ -256,6 +269,34 @@ public class GameEngine
             _flyingCamera.gameObject.SetActive(true);
             _flyingCamera.GetComponent<AudioListener>().enabled = true;
             _camera.SetActive(false); 
+        }
+    }
+
+    public void SpawnPowerup(Vector3 position, Constants.POWERUP_IDS id)
+    {
+        var p = (GameObject)Object.Instantiate(
+                    Resources.Load("Powerup"), 
+                    position, 
+                    Quaternion.identity);
+         
+        switch (id)
+        {
+            case Constants.POWERUP_IDS.SPEED_BOOST_POWERUP:
+                var sp = p.AddComponent<SpeedBoost>();
+                sp.LocalPlayer = _localPlayer;
+                break;
+            case Constants.POWERUP_IDS.VISION_IMPAIRED_POWERUP:
+                var im = p.AddComponent<ImpairVision>();
+                im.LocalPlayer = _localPlayer;
+                break;
+            case Constants.POWERUP_IDS.COOLDOWN_REFRESH_POWERUP:
+                var cr = p.AddComponent<CooldownRefresh>();
+                cr.LocalPlayer = _localPlayer;
+                break;
+            default:
+                var s = p.AddComponent<SpeedBoost>();
+                s.LocalPlayer = _localPlayer;
+                break;
         }
     }
 }

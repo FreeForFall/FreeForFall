@@ -113,6 +113,12 @@ public class Networking : MonoBehaviour
                 _engine.RemoveWalls();
                 return;
 
+
+            case Constants.EVENT_IDS.IMPAIR_VISION_EFFECT:
+                _engine.FPSCamera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = true;
+                Invoke("removeVisionImpaired", Constants.VISION_IMPAIRED_POWERUP_DURATION); 
+                return;   
+
             case Constants.EVENT_IDS.END_GAME:
                 EndGame((string[])c);
                 return;
@@ -381,4 +387,8 @@ public class Networking : MonoBehaviour
         Invoke("doEndGame", 5f);
     }
 
+    private void removeVisionImpaired()
+    {
+        _engine.FPSCamera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
+    }
 }
