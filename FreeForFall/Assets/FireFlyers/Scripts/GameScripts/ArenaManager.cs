@@ -1,23 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using AssemblyCSharp;
 
 public class ArenaManager : MonoBehaviour
 {
-	void Start ()
-	{
-		if (!PhotonNetwork.isMasterClient)
-		{
-			NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.SCENE_LOADED);
-			return;
-		}
-		var e = GameObject.Find ("NetworkManager").GetComponent<Networking> ().Engine;
-		NetworkEventHandlers.Broadcast (Constants.EVENT_IDS.LOAD_SCENE, e.MapID);
-		if (PhotonNetwork.offlineMode)
-		{
-			e.ReadyMap ();
-			e.Network.RemoveWalls ();
-		}
-	}
+    void Start()
+    {
+        Debug.Log("ARENA MANAGER START");
+        var e = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
+
+        e.ReadyMap();
+        if (PhotonNetwork.offlineMode)
+        {
+            e.SpawnPlayers();
+            e.Network.RemoveWalls();
+            return;
+        }
+        else if (!PhotonNetwork.isMasterClient)
+        {
+            NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.SCENE_LOADED);
+            return;
+        }
+        else
+            NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.LOAD_SCENE, e.MapID);
+    }
 }
