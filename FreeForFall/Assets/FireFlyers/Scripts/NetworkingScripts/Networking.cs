@@ -122,6 +122,9 @@ public class Networking : MonoBehaviour
                 Invoke("removeVisionImpaired", Constants.VISION_IMPAIRED_POWERUP_DURATION); 
                 return;   
 
+            case Constants.EVENT_IDS.BAZOOKA_SHOT:
+                _engine.BazookaShoot((Vector3)c[0], (Quaternion)c[1], (Vector3)c[2]);
+                return;
             case Constants.EVENT_IDS.END_GAME:
                 EndGame((string[])c);
                 return;
