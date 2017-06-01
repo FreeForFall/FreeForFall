@@ -52,6 +52,7 @@ namespace AssemblyCSharp
 			COOLDOWN_REFRESH_POWERUP
 		}
 
+<<<<<<< Updated upstream
 		public enum EVENT_IDS
 		{
 			LOAD_MAP,
@@ -66,5 +67,58 @@ namespace AssemblyCSharp
 			END_GAME
 		}
 	}
+=======
+        public const float SPEC_CAMERA_TRAVEL_TIME = 5f;
+
+        public enum MAPS_IDS
+        {
+            SPACE_MAP,
+            BASIC_MAP,
+            TEST_MAP
+        }
+
+        /*
+		 WATCH OUT
+		 The order of the values here has to match the order of the values in MAPS_IDS
+		*/
+        public static string[] MAPS_NAMES = new string[]
+        {
+            "Map",
+            "Map2",
+            "TestMap"
+        };
+
+        /*
+		Same as MAPS_NAMES
+		*/
+        public static string[] MAP_SCENES_NAMES = new string[]
+        {
+            "SpaceArena",
+            "BasicArena",
+            "TestArena"
+        };
+
+        public enum POWERUP_IDS
+        {
+            VISION_IMPAIRED_POWERUP,
+            SPEED_BOOST_POWERUP,
+            COOLDOWN_REFRESH_POWERUP
+        }
+
+        public enum EVENT_IDS
+        {
+            LOAD_SCENE,
+            SCENE_LOADED,
+            SPAWN_PLAYER,
+            PLAYER_SPAWNED,
+            REMOVE_WALLS,
+
+            SPAWN_POWERUP,
+            IMPAIR_VISION_EFFECT,
+
+            END_GAME
+        }
+    }
+>>>>>>> Stashed changes
 }
 
