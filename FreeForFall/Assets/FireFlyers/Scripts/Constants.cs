@@ -87,6 +87,7 @@ namespace AssemblyCSharp
             PLAYER_SPAWNED,
             REMOVE_WALLS,
 
+            SPAWN_POWERUP,
             IMPAIR_VISION_EFFECT,
 
             END_GAME

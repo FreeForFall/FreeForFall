@@ -113,6 +113,9 @@ public class Networking : MonoBehaviour
                 _engine.RemoveWalls();
                 return;
 
+            case Constants.EVENT_IDS.SPAWN_POWERUP:
+                _engine.SpawnPowerup((Vector3)c[0], (Constants.POWERUP_IDS)c[1]);
+                return;     
 
             case Constants.EVENT_IDS.IMPAIR_VISION_EFFECT:
                 _engine.FPSCamera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = true;

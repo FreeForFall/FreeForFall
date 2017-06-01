@@ -3,7 +3,7 @@ using AssemblyCSharp;
 
 public class PowerupController : MonoBehaviour
 {
-    private NetworkScript _networking;
+    private Networking _networking;
     private GameObject[] _spawners;
 
     private float _timeSinceLastSpawn;
@@ -11,7 +11,7 @@ public class PowerupController : MonoBehaviour
     void Start()
     {
         _timeSinceLastSpawn = 0f;
-        _networking = GameObject.Find("NetworkManager").GetComponent<NetworkScript>();
+        _networking = GameObject.Find("NetworkManager").GetComponent<Networking>();
         _spawners = GameObject.FindGameObjectsWithTag("PowerupSpawner");
     }
 
@@ -26,7 +26,8 @@ public class PowerupController : MonoBehaviour
                 if (p.Spawned)
                     continue;
                 int id = spawnRandomPowerup(g.transform.position);
-                _networking.HandlePowerupSpawn(g.transform.position, id);
+                //_networking.HandlePowerupSpawn(g.transform.position, id);
+                _networking.Engine.SpawnPowerup(g.transform.position, (Constants.POWERUP_IDS)id); 
                 p.Spawned = true;
             }
             _timeSinceLastSpawn = 0f;
@@ -39,7 +40,7 @@ public class PowerupController : MonoBehaviour
         // This is pretty bad and should be changed.
         // Remember to change the value when adding new powerups. 
         int id = Random.Range(0, 3);
-        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.IMPAIR_VISION_EFFECT, 
+        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.SPAWN_POWERUP, 
             new object[] { (object)position, id });
         return id;
     }
