@@ -209,8 +209,8 @@ public class GameEngine
         //_localPlayer.GetComponent<UI> ().enabled = true;
         //_localPlayer.transform.Find ("bottom").Find ("Canvas").Find ("Text").GetComponent<Text> ().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
-        _localPlayer.GetComponent<ShooterB>().enabled = true;
-        _shooterB = _localPlayer.GetComponent<ShooterB>();
+        //_localPlayer.GetComponent<ShooterB> ().enabled = true;
+        //_shooterB = _localPlayer.GetComponent<ShooterB> ();
         _localPlayer.GetComponentInChildren<LookTowardCamera>().enabled = true;
         _localPlayer.GetComponentInChildren<CameraControl>().enabled = true;
         _flyingCamera.gameObject.SetActive(false);
@@ -298,12 +298,5 @@ public class GameEngine
                 s.LocalPlayer = _localPlayer;
                 break;
         }
-    }
-
-    public void BazookaShoot(Vector3 start, Quaternion angle, Vector3 force)
-    {
-        GameObject shell = GameObject.Instantiate(_shooterB.projectile, start, angle);
-        shell.GetComponent<Rigidbody>().AddForce(force);
-        GameObject.Destroy(shell, 10f);
     }
 }
