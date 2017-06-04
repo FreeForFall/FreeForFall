@@ -1,15 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PowerupSpawner : MonoBehaviour
 {
-	public bool Spawned = false;
+    public bool Spawned = false;
 
-	void OnTriggerEnter (Collider c)
-	{
-		if (c.gameObject.tag != "Player")
-			return;
-		Spawned = Spawned ? false : true;
-	}
+    void OnTriggerEnter(Collider c)
+    {
+        Debug.Log("COLLIDED");
+        if (c.gameObject.tag != "Player")
+            return;
+        if (Spawned)
+            Spawned = false;
+    }
 }
