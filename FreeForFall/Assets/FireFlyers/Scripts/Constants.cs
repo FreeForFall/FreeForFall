@@ -44,6 +44,8 @@ namespace AssemblyCSharp
 
         public const float SPEC_CAMERA_TRAVEL_TIME = 5f;
 
+        public const float JUMP_CD_AI = 2f;
+
         public enum MAPS_IDS
         {
             SPACE_MAP,

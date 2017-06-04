@@ -223,6 +223,9 @@ public class GameEngine
         {
             GameObject.Instantiate(Resources.Load("PowerupManager"));
         }
+
+        if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
+            spawnAI(Constants.NUMBER_OF_AI);
     }
 
     /// <summary>
@@ -306,5 +309,17 @@ public class GameEngine
         GameObject shell = GameObject.Instantiate(_shooterB.projectile, start, angle);
         shell.GetComponent<Rigidbody>().AddForce(force);
         GameObject.Destroy(shell, 10f);
+    }
+
+
+    private void spawnAI(int x)
+    {
+        Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
+        spawnPosition.x = Random.Range(-9f, 9f);
+        spawnPosition.z = Random.Range(-9f, 9f);
+        for (int i = 0; i < x; i++)
+        {
+            GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+        }
     }
 }
