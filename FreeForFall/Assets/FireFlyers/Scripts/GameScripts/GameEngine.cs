@@ -204,13 +204,14 @@ public class GameEngine
         spawnPosition.x = Random.Range(-9f, 9f);
         spawnPosition.z = Random.Range(-9f, 9f);
         _localPlayer = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity, 0);
+        _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
-        //_localPlayer.GetComponent<UI> ().enabled = true;
-        //_localPlayer.transform.Find ("bottom").Find ("Canvas").Find ("Text").GetComponent<Text> ().text = PhotonNetwork.playerName;
+        _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
+        _localPlayer.GetComponent<UI>().enabled = true;
         _localPlayer.GetComponentInChildren<LookTowardCamera>().enabled = true;
         _localPlayer.GetComponentInChildren<CameraControl>().enabled = true;
         _flyingCamera.gameObject.SetActive(false);
