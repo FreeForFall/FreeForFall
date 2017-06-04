@@ -90,6 +90,7 @@ namespace AssemblyCSharp
             SPAWN_POWERUP,
             IMPAIR_VISION_EFFECT,
 
+            BAZOOKA_SHOT,
             END_GAME
         }
     }
