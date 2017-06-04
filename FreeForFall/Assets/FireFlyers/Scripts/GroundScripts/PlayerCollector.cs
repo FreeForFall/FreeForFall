@@ -5,13 +5,11 @@ using AssemblyCSharp;
 
 public class PlayerCollector : MonoBehaviour
 {
-	private GameObject _localPlayer;
-	private NetworkScript _networking;
+	private Networking _networking;
 
 	void Start ()
 	{
-		_localPlayer = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ().Player;
-		_networking = GameObject.Find ("NetworkManager").GetComponent<NetworkScript> ();
+		_networking = GameObject.Find ("NetworkManager").GetComponent<Networking> ();
 	}
 
 	void OnCollisionEnter (Collision col)
@@ -23,12 +21,15 @@ public class PlayerCollector : MonoBehaviour
 		GameObject p = col.gameObject.name != "Player" 
 			? col.gameObject.transform.parent.gameObject 
 			: col.gameObject;// I don't think this is ever going to happen but we never know
-		if (p == _localPlayer)
+		if (p == _networking.Player)
 		{
-			_networking.SwitchToSpecView ();
+			_networking.Engine.SwitchToSpecView ();
 		}
 		if (PhotonNetwork.isMasterClient)
-			_networking.handlePlayerLost ();
+		{
+			_networking.Engine.PlayerLost (p);
+		}
+		// Add server stuff
 		Destroy (p);
 	}
 }

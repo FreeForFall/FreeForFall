@@ -16,9 +16,7 @@ public class NetworkPlayerController : MonoBehaviour
 	private Transform _torso;
 	// Use this for initialization
 	void Start ()
-	{
-		Debug.LogError (gameObject);
-		
+	{		
 		_photonView = GetComponent<PhotonView> ();
 		_bottom = gameObject.transform.Find ("bottom");
 		_torso = gameObject.transform.Find ("Torso");
