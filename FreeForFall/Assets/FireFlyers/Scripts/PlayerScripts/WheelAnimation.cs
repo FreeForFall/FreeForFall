@@ -22,7 +22,14 @@ public class WheelAnimation : MonoBehaviour
 		float v = Input.GetAxis ("Vertical");
 		if (h != 0 || v != 0)
 		{
-			transform.Rotate (Vector3.left * Time.deltaTime * Constants.WHEEL_SPEED, Space.Self);
+            if(left)
+            {
+                transform.Rotate(Vector3.left * Time.deltaTime * Constants.WHEEL_SPEED, Space.Self);
+            }
+            else
+            {
+                transform.Rotate(Vector3.left * Time.deltaTime * -Constants.WHEEL_SPEED, Space.Self);
+            }
 		}
 	}
 }
