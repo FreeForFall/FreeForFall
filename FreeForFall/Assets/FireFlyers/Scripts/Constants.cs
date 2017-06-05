@@ -46,6 +46,18 @@ namespace AssemblyCSharp
 
         public const float JUMP_CD_AI = 2f;
 
+        public static string[] ROBOT_NAMES = new string[]
+        {
+            "Robot1",
+            "Robot2"
+        };
+
+        public enum ROBOT_IDS
+        {
+            ROBOT_1,
+            ROBOT_2
+        }
+
         public enum MAPS_IDS
         {
             SPACE_MAP,

@@ -31,6 +31,7 @@ public class Networking : MonoBehaviour
     private Button _startGameButton;
     private Button _joinRoomButton;
     private Dropdown _mapChooser;
+    private Dropdown _robotChooser;
 
     private Constants.MAPS_IDS _mapID;
 
@@ -172,7 +173,8 @@ public class Networking : MonoBehaviour
         GameObject.Find("MatchmakingCanvas").GetComponent<Canvas>().enabled = false;
         if (!PhotonNetwork.isMasterClient)
             _waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
-        _engine = new GameEngine(_mapID);
+        string selected = 
+            _engine = new GameEngine(_mapID);
     }
 
     /// <summary>
@@ -224,6 +226,7 @@ public class Networking : MonoBehaviour
         _startGameButton = GameObject.Find("StartGameButton").GetComponent<Button>();
         _roomNameInput = GameObject.Find("RoomNameInput").GetComponent<InputField>();
         _waitingForGameStartText = GameObject.Find("WaitForGameStartCanvas").transform.FindChild("Text").GetComponent<Text>();
+        _robotChooser = GameObject.Find("RobotChoosingDropdown").GetComponent<Dropdown>();
     }
 
     /// <summary>
