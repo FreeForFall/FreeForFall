@@ -50,7 +50,8 @@ namespace AssemblyCSharp
         {
             SPACE_MAP,
             BASIC_MAP,
-            TEST_MAP
+            TEST_MAP,
+            VOLCANO_MAP
         }
 
         /*
@@ -61,7 +62,8 @@ namespace AssemblyCSharp
         {
             "Map",
             "Map2",
-            "TestMap"
+            "TestMap",
+            "Map-Volcano"
         };
 
         /*
@@ -71,7 +73,8 @@ namespace AssemblyCSharp
         {
             "SpaceArena",
             "BasicArena",
-            "TestArena"
+            "TestArena",
+            "Volcano"
         };
 
         public enum POWERUP_IDS
