@@ -376,6 +376,8 @@ public class Networking : MonoBehaviour
                 return Constants.MAPS_IDS.SPACE_MAP;
             case "Map2":
                 return Constants.MAPS_IDS.BASIC_MAP;
+            case "Volcano":
+                return Constants.MAPS_IDS.VOLCANO_MAP;
             default:
                 return Constants.MAPS_IDS.SPACE_MAP;
         }
