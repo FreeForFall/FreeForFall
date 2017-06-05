@@ -6,9 +6,9 @@ namespace AssemblyCSharp
     {
         public const string GAME_VERSION = "0.2";
 
-        public const float MOVEMENT_SPEED = 20f;
+        public const float MOVEMENT_SPEED = 50f;
 
-        public const float SPRINT_SPEED = 4f;
+        public const float SPRINT_SPEED = 1.5f;
 
         public const float JUMP_CD = 2f;
 
@@ -28,7 +28,7 @@ namespace AssemblyCSharp
 
         public const float NETWORK_SMOOTHING = 0.1f;
 
-        public const float WHEEL_SPEED = 200f;
+        public const float WHEEL_SPEED = 300f;
 
         public const int SPEED_BOOST_POWERUP_MULT = 20;
 
