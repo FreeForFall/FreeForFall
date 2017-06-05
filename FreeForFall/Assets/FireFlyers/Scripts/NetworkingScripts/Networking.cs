@@ -129,6 +129,11 @@ public class Networking : MonoBehaviour
             case Constants.EVENT_IDS.END_GAME:
                 EndGame((string[])c);
                 return;
+
+            case Constants.EVENT_IDS.CHAT_MESSAGE:
+                _engine.ReceiveChatMessage((string)c[0], (string)c[1]);
+                return;
+
             default:
                 Debug.LogError("UNKNOWN EVENT");
                 return;

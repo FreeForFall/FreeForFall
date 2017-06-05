@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -31,6 +32,10 @@ public class GameEngine
     private Stack<string> _lostList;
 
     private Constants.ROBOT_IDS _robotID;
+
+    private Text _chatText;
+
+    private List<string> _chatMessages;
 
     public Constants.MAPS_IDS MapID
     {
@@ -70,6 +75,7 @@ public class GameEngine
     /// <param name="map">The map.</param>
     public GameEngine(Constants.MAPS_IDS map, Constants.ROBOT_IDS robot)
     {
+        _chatMessages = new List<string>();
         _robotID = robot;
         _hasAlreadySpawned = false;
         _loadedCount = 0;
@@ -211,6 +217,7 @@ public class GameEngine
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
         //_localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
+        _chatText = _localPlayer.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
         _localPlayer.GetComponent<UI>().enabled = true;
@@ -219,6 +226,7 @@ public class GameEngine
         _flyingCamera.gameObject.SetActive(false);
         _camera = _localPlayer.transform.Find("TPScamera/firstCamera").gameObject;
         _camera.GetComponent<AudioListener>().enabled = true;
+        _localPlayer.GetComponent<Chat>().enabled = true;
         if (!PhotonNetwork.isMasterClient)
             NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.PLAYER_SPAWNED);
         else
@@ -336,6 +344,31 @@ public class GameEngine
         for (int i = 0; i < x; i++)
         {
             GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+        }
+    }
+
+    public void ReceiveChatMessage(string name, string content)
+    {
+        Debug.Log("Received message from " + name + " : " + content);
+        _chatMessages.Add(name + " - " + content + "\n");
+        updateChatDisplay();
+    }
+
+    private void updateChatDisplay()
+    {
+        if (_chatMessages.Count < 9)
+        {
+            _chatText.text += _chatMessages.Last();
+            return;
+        }
+
+        while (_chatMessages.Count > 9)
+            _chatMessages.RemoveAt(0);
+       
+        _chatText.text = "";
+        foreach (var msg in _chatMessages)
+        {
+            _chatText.text += msg;
         }
     }
 }
