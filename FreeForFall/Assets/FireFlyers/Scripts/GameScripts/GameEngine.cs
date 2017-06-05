@@ -164,6 +164,7 @@ public class GameEngine
     public void RemoveWalls()
     {
         GameObject.Destroy(GameObject.Find("BoxPrefab"));
+        setNametags();
     }
 
     /// <summary>
@@ -176,8 +177,6 @@ public class GameEngine
         Debug.Log(_playerCount + " - " + _playerSpawned);
         SceneManager.LoadScene(name);
     }
-    
-
 
     /// <summary>
     /// Sets the map up
@@ -210,7 +209,7 @@ public class GameEngine
         _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
-        _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
+        //_localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
@@ -229,6 +228,20 @@ public class GameEngine
 
         if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
             spawnAI(Constants.NUMBER_OF_AI);
+    }
+
+    private void setNametags()
+    {
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (player == _localPlayer)
+                Debug.Log("LOCAL PLAYER");
+            var bottom = player.transform.Find("bottom");
+            if (bottom == null)
+                continue;
+            bottom.Find("Canvas").Find("Text").GetComponent<Text>().text 
+                = player.GetComponent<PhotonView>().owner.NickName;
+        } 
     }
 
     /// <summary>
