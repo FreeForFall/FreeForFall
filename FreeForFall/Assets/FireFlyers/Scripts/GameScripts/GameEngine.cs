@@ -30,6 +30,8 @@ public class GameEngine
 
     private Stack<string> _lostList;
 
+    private Constants.ROBOT_IDS _robotID;
+
     public Constants.MAPS_IDS MapID
     {
         get
@@ -66,8 +68,9 @@ public class GameEngine
     /// Initializes a new instance of the <see cref="GameEngine"/> class.
     /// </summary>
     /// <param name="map">The map.</param>
-    public GameEngine(Constants.MAPS_IDS map)
+    public GameEngine(Constants.MAPS_IDS map, Constants.ROBOT_IDS robot)
     {
+        _robotID = robot;
         _hasAlreadySpawned = false;
         _loadedCount = 0;
         _lostCount = 0;
@@ -203,7 +206,7 @@ public class GameEngine
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 15;
         spawnPosition.x = Random.Range(-9f, 9f);
         spawnPosition.z = Random.Range(-9f, 9f);
-        _localPlayer = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity, 0);
+        _localPlayer = PhotonNetwork.Instantiate(Constants.ROBOT_NAMES[(int)_robotID], spawnPosition, Quaternion.identity, 0);
         _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
