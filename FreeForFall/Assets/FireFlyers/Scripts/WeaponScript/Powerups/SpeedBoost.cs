@@ -6,11 +6,12 @@ using AssemblyCSharp;
 public class SpeedBoost : MonoBehaviour
 {
 	public GameObject LocalPlayer;
-
+    public PowerUpsHud playerscript;
 	void OnTriggerEnter (Collider c)
 	{
 		Debug.LogWarning ("Something collided with the powerup");
-		if (c.gameObject.tag == "Player")
+        playerscript = c.GetComponent<PowerUpsHud>();
+        if (c.gameObject.tag == "Player" && !playerscript.OnePowerUp)
 		{
 			GameObject g;
 			if (c.name == "bottom")
@@ -24,7 +25,7 @@ public class SpeedBoost : MonoBehaviour
 			if (g == LocalPlayer)
 			{
 				Debug.LogWarning ("Doing SpeedBoost on " + g);
-				doPowerup (g);
+                playerscript.DoUpdate("1");
 			}
 			else
 			{
@@ -32,11 +33,5 @@ public class SpeedBoost : MonoBehaviour
 			}
 			Destroy (gameObject);
 		}
-	}
-
-	private void doPowerup (GameObject c)
-	{
-		Debug.LogWarning ("Giving the player a speed boost");
-		c.GetComponentInChildren<PlayerController> ().SpeedBoost (Constants.SPEED_BOOST_POWERUP_MULT);
 	}
 }

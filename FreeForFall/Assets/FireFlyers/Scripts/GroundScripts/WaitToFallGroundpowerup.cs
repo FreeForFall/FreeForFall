@@ -16,18 +16,16 @@ public class WaitToFallGroundpowerup : MonoBehaviour
 	{
 		print ("Goback");
 		Renderer Ren = GetComponent<Renderer> ();
-		MeshCollider Mcol = GetComponent<MeshCollider> ();
 		Ren.enabled = true;
-		GetComponent<ReturnToPosition> ().enabled = true;
-		Mcol.enabled = true;
-
+        GetComponent<ReturnToPosition> ().enabled = true;
+        _isFallen = false;
 	}
 
 	void IsFallen ()
 	{
 		Rigidbody rb = GetComponent<Rigidbody> ();
 		MeshCollider Mcol = GetComponent<MeshCollider> ();
-		Mcol.enabled = false;
+        Destroy(Mcol);
 		rb.isKinematic = true;
 		_isFallen = true;
 		Invoke ("Goback", 0.1f);

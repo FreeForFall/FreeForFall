@@ -4,33 +4,34 @@ using UnityEngine;
 
 public class GroundPowerup : MonoBehaviour {
 
-    public float powerradius = 1;
-    SphereCollider groundpowerCollider;
-    public GameObject beam;
+    public GameObject LocalPlayer;
+    public PowerUpsHud playerscript;
 
-    // Use this for initialization
-    void Start ()
+    void OnTriggerEnter(Collider c)
     {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Joystick1Button1))
+        Debug.LogWarning("Something collided with the powerup");
+        playerscript = c.GetComponent<PowerUpsHud>();
+        if (c.gameObject.tag == "Player" && !playerscript.OnePowerUp)
         {
-            print("input");
-            Grounpowerup();
-        }
-    }
-
-    public void Grounpowerup()
-    {
-        List<GameObject> fallenCell = beam.GetComponent<DestroyCell>().FallenCells;
-        foreach(GameObject cell in fallenCell)
-        {
-            cell.GetComponent<WaitToFall>().Goback();
-            print("cells");
+            GameObject g;
+            if (c.name == "bottom")
+            {
+                g = c.transform.parent.gameObject;
+            }
+            else
+            {
+                g = c.gameObject;
+            }
+            if (g == LocalPlayer)
+            {
+                Debug.LogWarning("Doing Ground on " + g);
+                playerscript.DoUpdate("2");
+            }
+            else
+            {
+                Debug.LogWarning("Someone else collided with the powerup, removing it");
+            }
+            Destroy(gameObject);
         }
     }
 }

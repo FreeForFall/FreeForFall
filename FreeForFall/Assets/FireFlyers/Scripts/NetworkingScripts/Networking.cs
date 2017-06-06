@@ -4,6 +4,7 @@ using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 
 /*
@@ -32,7 +33,10 @@ public class Networking : MonoBehaviour
     private Button _joinRoomButton;
     private Dropdown _mapChooser;
     private Dropdown _robotChooser;
+    private Canvas _leaderboard;
+    private Text _leaderboardText;
 
+    private int _round;
     private Constants.MAPS_IDS _mapID;
 
     private GameEngine _engine;
@@ -62,11 +66,13 @@ public class Networking : MonoBehaviour
 
     void Start()
     {
+        _round = 1;
         Debug.Log("NETWORKING START");
         DontDestroyOnLoad(this);
         findAllUIElements();
         registerEventHandlers();
         PhotonNetwork.OnEventCall += handler;
+        Debug.Log("Handler count : ");
         Debug.Log(PhotonNetwork.OnEventCall.GetInvocationList().Length);
         PhotonNetwork.autoJoinLobby = true;
         connectToServer(GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode);
@@ -83,9 +89,13 @@ public class Networking : MonoBehaviour
         object[] c = (object[])content;
         Constants.EVENT_IDS eventID = (Constants.EVENT_IDS)eventCode;
         Debug.Log("RECEIVED : " + eventID + " FROM " + senderId);
+
+        Debug.Log("Handler count : ");
+        Debug.Log(PhotonNetwork.OnEventCall.GetInvocationList().Length);
         switch (eventID)
         {
             case Constants.EVENT_IDS.LOAD_SCENE:
+                _engine.Reset();
                 _engine.LoadScene((Constants.MAPS_IDS)c[0]);
                 return;
             case Constants.EVENT_IDS.SCENE_LOADED:
@@ -162,10 +172,13 @@ public class Networking : MonoBehaviour
     /// </summary>
     void OnJoinedLobby()
     {
+        GameObject.Find("MatchmakingCanvas/TitleText").GetComponent<Text>().text = "CREATE ROOM";
         Debug.Log("Joined a lobby.");
         var rooms = PhotonNetwork.GetRoomList();
         Debug.Log(rooms.Length + " rooms available");
         refreshRooms();
+        _joinRoomButton.interactable = true;
+        _roomCreationButton.interactable = true;
     }
 
     /// <summary>
@@ -175,6 +188,10 @@ public class Networking : MonoBehaviour
     {
         Debug.Log("Joined a room");
         GameObject.Find("WaitForGameStartCanvas").GetComponent<Canvas>().enabled = true;
+        if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
+        {
+            GameObject.Find("WaitForGameStartCanvas/Text").GetComponent<Text>().text = "START THE GAME";
+        }    
         GameObject.Find("MatchmakingCanvas").GetComponent<Canvas>().enabled = false;
         if (!PhotonNetwork.isMasterClient)
             _waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
@@ -219,7 +236,12 @@ public class Networking : MonoBehaviour
 
             // this is a hack and won't work if the mapChooser changes too much
             Vector3 pos = _roomCreationButton.transform.position;
-            _roomCreationButton.transform.position = new Vector3(_mapChooser.transform.position.x, pos.y, pos.z);
+            _roomCreationButton.transform.position = new Vector3((_mapChooser.transform.position.x + _robotChooser.transform.position.x) / 2, pos.y, pos.z);
+            _roomList.enabled = false;
+            GameObject.Find("MatchmakingCanvas/AvailableText").GetComponent<Text>().text = "";
+            
+            GameObject.Find("MatchmakingCanvas/TitleText").GetComponent<Text>().text = "CREATE ROOM";
+            _roomCreationButton.interactable = true;
         }
         else
         {
@@ -333,11 +355,23 @@ public class Networking : MonoBehaviour
     /// </summary>
     private void doEndGame()
     {
-        PhotonNetwork.OnEventCall -= handler;
-        Destroy(GameObject.Find("SettingsManager"));
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("Menu");
+        if (_round == Constants.ROUND_COUNT)
+        {
+            Debug.Log("End of the game");
+            PhotonNetwork.OnEventCall -= handler;
+            Destroy(GameObject.Find("SettingsManager"));
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        Debug.Log("Playing the next round");
+        _round++;
+        if (!PhotonNetwork.isMasterClient)
+            return;
+        _engine.Reset();
+        //NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.LOAD_SCENE, (int)_mapID);
+        startGame();
     }
 
 
@@ -406,8 +440,13 @@ public class Networking : MonoBehaviour
     /// </summary>
     public void EndGame(string[] leaderboard)
     {
+        _leaderboard = GameObject.Find("WinCanvas").GetComponent<Canvas>();
+        _leaderboard.enabled = true;
+        _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
+      
         foreach (var v in leaderboard)
         {
+            _leaderboardText.text = _leaderboardText.text + Environment.NewLine + v;
             Debug.Log(v);
         }
         Invoke("doEndGame", 5f);
@@ -417,4 +456,16 @@ public class Networking : MonoBehaviour
     {
         _engine.FPSCamera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
     }
+
+    public void DisableChat()
+    {
+        _engine.HideChat();
+      
+    }
+
+    public void HideChat()
+    {
+        Invoke("DisableChat",3f);
+    }
+
 }
