@@ -34,11 +34,13 @@ namespace AssemblyCSharp
 
         public const float VISION_IMPAIRED_POWERUP_DURATION = 5f;
 
-        public const float BAZOOKA_EXPLOSION_FORCE = 15f;
+        public const float BAZOOKA_EXPLOSION_FORCE = 150000f;
 
         public const float GRIP_PULL_FORCE = 300000f;
 
         public const int NUMBER_OF_AI = 5;
+
+        public const float AIM_RADIUS_AI = 50f;
 
         public const float START_GAME_DELAY = 5f;
 
