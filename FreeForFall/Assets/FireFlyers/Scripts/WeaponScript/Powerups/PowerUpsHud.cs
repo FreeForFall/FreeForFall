@@ -28,9 +28,9 @@ public class PowerUpsHud : MonoBehaviour {
     {
         if ((Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.R)) && todo != "")
         {
-            if (todo == "ImpairedVision")
+            if (todo == "0")
                 ImpairedVision(self);
-            if (todo == "SpeedBoost")
+            if (todo == "1")
                 SpeedBoost(self);
             todo = "";
             OnePowerUp = false;
@@ -47,4 +47,5 @@ public class PowerUpsHud : MonoBehaviour {
         Debug.LogWarning("Giving the player a speed boost");
         c.GetComponentInChildren<PlayerController>().SpeedBoost(Constants.SPEED_BOOST_POWERUP_MULT);
     }
+
 }

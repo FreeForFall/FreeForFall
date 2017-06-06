@@ -25,7 +25,7 @@ public class SpeedBoost : MonoBehaviour
 			if (g == LocalPlayer)
 			{
 				Debug.LogWarning ("Doing SpeedBoost on " + g);
-                playerscript.DoUpdate("SpeedBoost");
+                playerscript.DoUpdate("1");
 			}
 			else
 			{

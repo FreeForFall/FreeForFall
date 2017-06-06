@@ -26,7 +26,7 @@ public class ImpairVision : MonoBehaviour
             if (g == LocalPlayer )
             {
                 Debug.LogWarning("Doing ImpairVision on " + g);
-                playerscript.DoUpdate("ImparedVision");
+                playerscript.DoUpdate("0");
             }
             else
             {
