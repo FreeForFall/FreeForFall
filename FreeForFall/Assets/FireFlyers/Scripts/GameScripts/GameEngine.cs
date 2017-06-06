@@ -38,12 +38,33 @@ public class GameEngine
     private Image _chatPanel;
 
     private List<string> _chatMessages;
+    
+    public void Reset()
+    {
+        _hasAlreadySpawned = false;
+        _loadedCount = 0;
+        _lostCount = 0;
+        _playerCount = PhotonNetwork.room.PlayerCount;
+        _playerSpawned = 0;
+    }
+    public bool HasAlreadySpawned
+    {
+        get
+        {
+            return _hasAlreadySpawned;
+        }
+        set
+        {
+            _hasAlreadySpawned = value;
+        }
+    }
 
     public Constants.MAPS_IDS MapID
     {
         get
         {
             return _mapID;
+
         }
     }
 
@@ -117,7 +138,7 @@ public class GameEngine
         _loadedCount++;
         if (_loadedCount != _playerCount)
             return;
-        // We can tell everybody to spawn
+// We can tell everybody to spawn
         SpawnPlayers();
     }
 
@@ -130,7 +151,7 @@ public class GameEngine
         _playerSpawned++;
         if (_playerSpawned != _playerCount)
             return;
-        // We can remove the walls
+// We can remove the walls
         _network.RemoveWalls();
     }
 
@@ -218,7 +239,7 @@ public class GameEngine
         _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
-       // _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
+// _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
         _chatText = _localPlayer.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
         _chatPanel = _localPlayer.transform.Find("Canvas").Find("ChatPanel").GetComponent<Image>();
@@ -347,6 +368,8 @@ public class GameEngine
         spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
         for (int i = 0; i < x; i++)
         {
+            spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
+            spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
             GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
         }
     }
