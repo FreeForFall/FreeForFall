@@ -38,7 +38,9 @@ public class SimpleAI : MonoBehaviour {
             Mouvement();
         }
         if (jumping)
+        {
             transform.position += transform.forward * speed * Time.deltaTime;
+        }
 
     }
 
@@ -98,8 +100,8 @@ public class SimpleAI : MonoBehaviour {
         jumpsound.Play();
         Timesincelastjump = 0;
         GetComponent<Rigidbody>().AddForce(new Vector3(0f,  Constants.JUMP_FORCE, 0f));
-        Invoke("jumpDown", 0.5f);
         Destroy(JumpeffectDone, 0.5f);
+        Invoke("jumpDown", 0.5f);
 
     }
 
