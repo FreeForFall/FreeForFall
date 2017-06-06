@@ -157,10 +157,13 @@ public class Networking : MonoBehaviour
     /// </summary>
     void OnJoinedLobby()
     {
+        GameObject.Find("MatchmakingCanvas/TitleText").GetComponent<Text>().text = "CREATE ROOM";
         Debug.Log("Joined a lobby.");
         var rooms = PhotonNetwork.GetRoomList();
         Debug.Log(rooms.Length + " rooms available");
         refreshRooms();
+        _joinRoomButton.interactable = true;
+        _roomCreationButton.interactable = true;
     }
 
     /// <summary>
@@ -170,6 +173,10 @@ public class Networking : MonoBehaviour
     {
         Debug.Log("Joined a room");
         GameObject.Find("WaitForGameStartCanvas").GetComponent<Canvas>().enabled = true;
+        if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
+        {
+            GameObject.Find("WaitForGameStartCanvas/Text").GetComponent<Text>().text = "START THE GAME";
+        }    
         GameObject.Find("MatchmakingCanvas").GetComponent<Canvas>().enabled = false;
         if (!PhotonNetwork.isMasterClient)
             _waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
@@ -214,7 +221,12 @@ public class Networking : MonoBehaviour
 
             // this is a hack and won't work if the mapChooser changes too much
             Vector3 pos = _roomCreationButton.transform.position;
-            _roomCreationButton.transform.position = new Vector3(_mapChooser.transform.position.x, pos.y, pos.z);
+            _roomCreationButton.transform.position = new Vector3((_mapChooser.transform.position.x + _robotChooser.transform.position.x) / 2, pos.y, pos.z);
+            _roomList.enabled = false;
+            GameObject.Find("MatchmakingCanvas/AvailableText").GetComponent<Text>().text = "";
+            
+            GameObject.Find("MatchmakingCanvas/TitleText").GetComponent<Text>().text = "CREATE ROOM";
+            _roomCreationButton.interactable = true;
         }
         else
         {
