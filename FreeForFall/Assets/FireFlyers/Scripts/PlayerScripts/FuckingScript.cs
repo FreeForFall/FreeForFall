@@ -18,7 +18,7 @@ public class FuckingScript : MonoBehaviour {
     {
         if (CollisionInfo.collider.tag == "forcefield")
         {
-            this.GetComponent<Rigidbody>().AddForce(-transform.position * 50, ForceMode.Impulse);
+            this.GetComponent<Rigidbody>().AddForce(-transform.position * 75, ForceMode.Impulse);
         }
     }
 }
