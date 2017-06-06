@@ -4,6 +4,8 @@ namespace AssemblyCSharp
 {
     public static class Constants
     {
+        public const int ROUND_COUNT = 2;
+
         public const string GAME_VERSION = "0.2";
 
         public const float MOVEMENT_SPEED = 50f;
