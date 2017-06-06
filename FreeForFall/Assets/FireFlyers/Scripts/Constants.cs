@@ -46,6 +46,8 @@ namespace AssemblyCSharp
 
         public const float JUMP_CD_AI = 2f;
 
+        public const float FORCE_FIELD = 100f;
+
         public static string[] ROBOT_NAMES = new string[]
         {
             "Robot1",
