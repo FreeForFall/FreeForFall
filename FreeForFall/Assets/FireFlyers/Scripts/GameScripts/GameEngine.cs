@@ -32,6 +32,26 @@ public class GameEngine
 
     private Constants.ROBOT_IDS _robotID;
 
+    public void Reset()
+    {
+        _hasAlreadySpawned = false;
+        _loadedCount = 0;
+        _lostCount = 0;
+        _playerCount = PhotonNetwork.room.PlayerCount;
+        _playerSpawned = 0;
+    }
+    public bool HasAlreadySpawned
+    {
+        get
+        {
+            return _hasAlreadySpawned;
+        }
+        set
+        {
+            _hasAlreadySpawned = value;
+        }
+    }
+
     public Constants.MAPS_IDS MapID
     {
         get
@@ -331,10 +351,10 @@ public class GameEngine
     private void spawnAI(int x)
     {
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
-        spawnPosition.x = Random.Range(-9f, 9f);
-        spawnPosition.z = Random.Range(-9f, 9f);
         for (int i = 0; i < x; i++)
         {
+            spawnPosition.x = Random.Range(-9f, 9f);
+            spawnPosition.z = Random.Range(-9f, 9f);
             GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
         }
     }
