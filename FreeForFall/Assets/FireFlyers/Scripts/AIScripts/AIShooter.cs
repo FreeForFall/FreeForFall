@@ -17,7 +17,7 @@ public class AIShooter : MonoBehaviour {
     public float projectileforce;
     // Use this for initialization
     void Start () {
-        TimeSinceLastExplosion = 0f;
+        TimeSinceLastExplosion = -20f;
         HasTarget = false;
 	}
 	
