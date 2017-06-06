@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using AssemblyCSharp;
 using UnityEngine;
 
-public class FuckingScript : MonoBehaviour {
+public class Forcefield : MonoBehaviour {
 
     public GameObject impacteffect;
 	// Use this for initialization
