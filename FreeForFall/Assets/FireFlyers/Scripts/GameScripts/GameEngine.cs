@@ -171,6 +171,7 @@ public class GameEngine
     {
         GameObject.Destroy(GameObject.Find("BoxPrefab"));
         setNametags();
+        _localPlayer.GetComponent<Chat>().enabled = true;
     }
 
     /// <summary>
@@ -226,7 +227,7 @@ public class GameEngine
         _flyingCamera.gameObject.SetActive(false);
         _camera = _localPlayer.transform.Find("TPScamera/firstCamera").gameObject;
         _camera.GetComponent<AudioListener>().enabled = true;
-        _localPlayer.GetComponent<Chat>().enabled = true;
+
         if (!PhotonNetwork.isMasterClient)
             NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.PLAYER_SPAWNED);
         else
