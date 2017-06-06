@@ -8,20 +8,8 @@ public class WaitToFall : MonoBehaviour
 	public GameObject impactParticle;
     public bool powerup = false;
 
-	public void Goback ()
-	{
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
-        GetComponent<ReturnToPosition> ().enabled = true;
-        _isFallen = false;
-	}
-
 	void IsFallen ()
 	{
-        if (powerup)
-            Invoke("Goback", 0);
-        else
-        {
             Rigidbody rb = GetComponent<Rigidbody>();
             Renderer Ren = GetComponent<Renderer>();
             MeshCollider Mcol = GetComponent<MeshCollider>();
@@ -30,8 +18,6 @@ public class WaitToFall : MonoBehaviour
             rb.isKinematic = true;
             _isFallen = true;
             impactParticle = Instantiate(impactParticle, transform.position, Quaternion.identity);
-        }
-
     }
 
 	void Drop ()

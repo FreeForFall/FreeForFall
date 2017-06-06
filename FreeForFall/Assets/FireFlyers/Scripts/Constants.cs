@@ -93,8 +93,7 @@ namespace AssemblyCSharp
         {
             VISION_IMPAIRED_POWERUP,
             SPEED_BOOST_POWERUP,
-            COOLDOWN_REFRESH_POWERUP,
-            GROUND_BUILDUP_POWERUP
+            COOLDOWN_REFRESH_POWERUP
         }
 
         public enum EVENT_IDS

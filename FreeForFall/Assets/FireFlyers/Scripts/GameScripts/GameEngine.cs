@@ -313,10 +313,6 @@ public class GameEngine
                 var cr = p.AddComponent<CooldownRefresh>();
                 cr.LocalPlayer = _localPlayer;
                 break;
-            case Constants.POWERUP_IDS.GROUND_BUILDUP_POWERUP:
-                var gb = p.AddComponent<GroundPowerup>();
-                gb.LocalPlayer = _localPlayer;
-                break;
             default:
                 var s = p.AddComponent<SpeedBoost>();
                 s.LocalPlayer = _localPlayer;
