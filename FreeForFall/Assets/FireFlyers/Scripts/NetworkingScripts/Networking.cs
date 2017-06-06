@@ -33,6 +33,7 @@ public class Networking : MonoBehaviour
     private Dropdown _mapChooser;
     private Dropdown _robotChooser;
 
+    private int _round;
     private Constants.MAPS_IDS _mapID;
 
     private GameEngine _engine;
@@ -62,11 +63,13 @@ public class Networking : MonoBehaviour
 
     void Start()
     {
+        _round = 1;
         Debug.Log("NETWORKING START");
         DontDestroyOnLoad(this);
         findAllUIElements();
         registerEventHandlers();
         PhotonNetwork.OnEventCall += handler;
+        Debug.Log("Handler count : ");
         Debug.Log(PhotonNetwork.OnEventCall.GetInvocationList().Length);
         PhotonNetwork.autoJoinLobby = true;
         connectToServer(GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode);
@@ -83,9 +86,13 @@ public class Networking : MonoBehaviour
         object[] c = (object[])content;
         Constants.EVENT_IDS eventID = (Constants.EVENT_IDS)eventCode;
         Debug.Log("RECEIVED : " + eventID + " FROM " + senderId);
+
+        Debug.Log("Handler count : ");
+        Debug.Log(PhotonNetwork.OnEventCall.GetInvocationList().Length);
         switch (eventID)
         {
             case Constants.EVENT_IDS.LOAD_SCENE:
+                _engine.Reset();
                 _engine.LoadScene((Constants.MAPS_IDS)c[0]);
                 return;
             case Constants.EVENT_IDS.SCENE_LOADED:
@@ -340,11 +347,23 @@ public class Networking : MonoBehaviour
     /// </summary>
     private void doEndGame()
     {
-        PhotonNetwork.OnEventCall -= handler;
-        Destroy(GameObject.Find("SettingsManager"));
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("Menu");
+        if (_round == Constants.ROUND_COUNT)
+        {
+            Debug.Log("End of the game");
+            PhotonNetwork.OnEventCall -= handler;
+            Destroy(GameObject.Find("SettingsManager"));
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        Debug.Log("Playing the next round");
+        _round++;
+        if (!PhotonNetwork.isMasterClient)
+            return;
+        _engine.Reset();
+        //NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.LOAD_SCENE, (int)_mapID);
+        startGame();
     }
 
 
