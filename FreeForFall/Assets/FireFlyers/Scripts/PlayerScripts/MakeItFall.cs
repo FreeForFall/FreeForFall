@@ -9,7 +9,6 @@ public class MakeItFall : MonoBehaviour {
         if (other.tag == "Ground")
         {
             other.gameObject.BroadcastMessage("CallDrop");
-
         }
     }
 }
