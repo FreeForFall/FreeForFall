@@ -287,7 +287,7 @@ public class GameEngine
     /// </summary>
     private void switchCamera()
     {
-        Debug.LogWarning("SWITCHING CAMERAS");
+        Debug.LogWarning("SWITCHING CAMERAS"); 
         if (_flyingCamera.gameObject.GetActive())
         {
             _flyingCamera.gameObject.GetComponent<Camera>().enabled = false;
@@ -383,7 +383,10 @@ public class GameEngine
     
     public void HideChat()
     {
-        _chatPanel.enabled = false;
-        _chatText.enabled = false;
+        if (_chatPanel.enabled)
+        {
+            _chatPanel.enabled = false;
+            _chatText.enabled = false;
+        }
     }
 }
