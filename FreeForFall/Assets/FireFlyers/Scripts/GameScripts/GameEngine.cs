@@ -331,10 +331,10 @@ public class GameEngine
     private void spawnAI(int x)
     {
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
-        spawnPosition.x = Random.Range(-9f, 9f);
-        spawnPosition.z = Random.Range(-9f, 9f);
         for (int i = 0; i < x; i++)
         {
+            spawnPosition.x = Random.Range(-9f, 9f);
+            spawnPosition.z = Random.Range(-9f, 9f);
             GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
         }
     }

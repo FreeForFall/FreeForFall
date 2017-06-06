@@ -34,7 +34,7 @@ namespace AssemblyCSharp
 
         public const float VISION_IMPAIRED_POWERUP_DURATION = 5f;
 
-        public const float BAZOOKA_EXPLOSION_FORCE = 15f;
+        public const float BAZOOKA_EXPLOSION_FORCE = 500000f;
 
         public const float GRIP_PULL_FORCE = 300000f;
 
@@ -45,6 +45,8 @@ namespace AssemblyCSharp
         public const float SPEC_CAMERA_TRAVEL_TIME = 5f;
 
         public const float JUMP_CD_AI = 2f;
+
+        public const float FORCE_FIELD = 100f;
 
         public static string[] ROBOT_NAMES = new string[]
         {
