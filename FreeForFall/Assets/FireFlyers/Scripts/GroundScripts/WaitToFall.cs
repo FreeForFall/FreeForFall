@@ -6,28 +6,33 @@ public class WaitToFall : MonoBehaviour
 	public bool _isFallen = false;
 	private GameObject cell;
 	public GameObject impactParticle;
+    public bool powerup = false;
 
 	public void Goback ()
 	{
-		MeshCollider Mcol = GetComponent<MeshCollider> ();
-		Mcol.enabled = true;
-		Mcol.enabled = true;
-		GetComponent<ReturnToPosition> ().enabled = true;
- 
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        GetComponent<ReturnToPosition> ().enabled = true;
+        _isFallen = false;
 	}
 
 	void IsFallen ()
 	{
-		Rigidbody rb = GetComponent<Rigidbody> ();
-		Renderer Ren = GetComponent<Renderer> ();
-		MeshCollider Mcol = GetComponent<MeshCollider> ();
-		Mcol.enabled = false;
-		Ren.enabled = false;
-		rb.isKinematic = true;
-		_isFallen = true;
-		impactParticle = Instantiate (impactParticle, transform.position, Quaternion.identity);
+        if (powerup)
+            Invoke("Goback", 0);
+        else
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            Renderer Ren = GetComponent<Renderer>();
+            MeshCollider Mcol = GetComponent<MeshCollider>();
+            Destroy(Mcol);
+            Ren.enabled = false;
+            rb.isKinematic = true;
+            _isFallen = true;
+            impactParticle = Instantiate(impactParticle, transform.position, Quaternion.identity);
+        }
 
-	}
+    }
 
 	void Drop ()
 	{

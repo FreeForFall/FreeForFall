@@ -32,6 +32,8 @@ public class PowerUpsHud : MonoBehaviour {
                 ImpairedVision(self);
             if (todo == "1")
                 SpeedBoost(self);
+            if (todo == "2")
+                GroundPower(self);
             todo = "";
             OnePowerUp = false;
         }
@@ -47,5 +49,10 @@ public class PowerUpsHud : MonoBehaviour {
         Debug.LogWarning("Giving the player a speed boost");
         c.GetComponentInChildren<PlayerController>().SpeedBoost(Constants.SPEED_BOOST_POWERUP_MULT);
     }
-
+    public void GroundPower(GameObject c)
+    {
+        MakeItFall script = c.GetComponent<MakeItFall>();
+        script.powerground = true;
+        script.reset();
+    }
 }
