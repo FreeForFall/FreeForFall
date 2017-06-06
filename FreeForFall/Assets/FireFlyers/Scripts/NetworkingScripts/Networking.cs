@@ -4,6 +4,7 @@ using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 
 /*
@@ -32,6 +33,8 @@ public class Networking : MonoBehaviour
     private Button _joinRoomButton;
     private Dropdown _mapChooser;
     private Dropdown _robotChooser;
+    private Canvas _leaderboard;
+    private Text _leaderboardText;
 
     private int _round;
     private Constants.MAPS_IDS _mapID;
@@ -136,6 +139,11 @@ public class Networking : MonoBehaviour
             case Constants.EVENT_IDS.END_GAME:
                 EndGame((string[])c);
                 return;
+
+            case Constants.EVENT_IDS.CHAT_MESSAGE:
+                _engine.ReceiveChatMessage((string)c[0], (string)c[1]);
+                return;
+
             default:
                 Debug.LogError("UNKNOWN EVENT");
                 return;
@@ -432,8 +440,13 @@ public class Networking : MonoBehaviour
     /// </summary>
     public void EndGame(string[] leaderboard)
     {
+        _leaderboard = GameObject.Find("WinCanvas").GetComponent<Canvas>();
+        _leaderboard.enabled = true;
+        _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
+      
         foreach (var v in leaderboard)
         {
+            _leaderboardText.text = _leaderboardText.text + Environment.NewLine + v;
             Debug.Log(v);
         }
         Invoke("doEndGame", 5f);
@@ -443,4 +456,16 @@ public class Networking : MonoBehaviour
     {
         _engine.FPSCamera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
     }
+
+    public void DisableChat()
+    {
+        _engine.HideChat();
+      
+    }
+
+    public void HideChat()
+    {
+        Invoke("DisableChat",3f);
+    }
+
 }

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using AssemblyCSharp;
-
+using System;
 
 public class GameEngine
 {
@@ -32,6 +33,12 @@ public class GameEngine
 
     private Constants.ROBOT_IDS _robotID;
 
+    private Text _chatText;
+
+    private Image _chatPanel;
+
+    private List<string> _chatMessages;
+    
     public void Reset()
     {
         _hasAlreadySpawned = false;
@@ -57,6 +64,7 @@ public class GameEngine
         get
         {
             return _mapID;
+
         }
     }
 
@@ -90,6 +98,7 @@ public class GameEngine
     /// <param name="map">The map.</param>
     public GameEngine(Constants.MAPS_IDS map, Constants.ROBOT_IDS robot)
     {
+        _chatMessages = new List<string>();
         _robotID = robot;
         _hasAlreadySpawned = false;
         _loadedCount = 0;
@@ -129,7 +138,7 @@ public class GameEngine
         _loadedCount++;
         if (_loadedCount != _playerCount)
             return;
-        // We can tell everybody to spawn
+// We can tell everybody to spawn
         SpawnPlayers();
     }
 
@@ -142,7 +151,7 @@ public class GameEngine
         _playerSpawned++;
         if (_playerSpawned != _playerCount)
             return;
-        // We can remove the walls
+// We can remove the walls
         _network.RemoveWalls();
     }
 
@@ -185,6 +194,7 @@ public class GameEngine
     {
         GameObject.Destroy(GameObject.Find("BoxPrefab"));
         setNametags();
+        _localPlayer.GetComponent<Chat>().enabled = true;
     }
 
     /// <summary>
@@ -223,14 +233,16 @@ public class GameEngine
         _hasAlreadySpawned = true;
         updateReferences();
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 15;
-        spawnPosition.x = Random.Range(-9f, 9f);
-        spawnPosition.z = Random.Range(-9f, 9f);
+        spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
+        spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
         _localPlayer = PhotonNetwork.Instantiate(Constants.ROBOT_NAMES[(int)_robotID], spawnPosition, Quaternion.identity, 0);
         _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
-        //_localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
+// _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
+        _chatText = _localPlayer.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
+        _chatPanel = _localPlayer.transform.Find("Canvas").Find("ChatPanel").GetComponent<Image>();
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
         _localPlayer.GetComponent<UI>().enabled = true;
@@ -239,6 +251,7 @@ public class GameEngine
         _flyingCamera.gameObject.SetActive(false);
         _camera = _localPlayer.transform.Find("TPScamera/firstCamera").gameObject;
         _camera.GetComponent<AudioListener>().enabled = true;
+
         if (!PhotonNetwork.isMasterClient)
             NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.PLAYER_SPAWNED);
         else
@@ -295,7 +308,7 @@ public class GameEngine
     /// </summary>
     private void switchCamera()
     {
-        Debug.LogWarning("SWITCHING CAMERAS");
+        Debug.LogWarning("SWITCHING CAMERAS"); 
         if (_flyingCamera.gameObject.GetActive())
         {
             _flyingCamera.gameObject.GetComponent<Camera>().enabled = false;
@@ -314,7 +327,7 @@ public class GameEngine
 
     public void SpawnPowerup(Vector3 position, Constants.POWERUP_IDS id)
     {
-        var p = (GameObject)Object.Instantiate(
+        var p = (GameObject)UnityEngine.Object.Instantiate(
                     Resources.Load("Powerup"), 
                     position, 
                     Quaternion.identity);
@@ -351,11 +364,52 @@ public class GameEngine
     private void spawnAI(int x)
     {
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
+        spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
+        spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
         for (int i = 0; i < x; i++)
         {
-            spawnPosition.x = Random.Range(-9f, 9f);
-            spawnPosition.z = Random.Range(-9f, 9f);
+            spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
+            spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
             GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+        }
+    }
+
+    public void ReceiveChatMessage(string name, string content)
+    {
+        _chatPanel.enabled = true;
+        _chatText.enabled = true;
+        Debug.Log("Received message from " + name + " : " + content);
+        _chatMessages.Add(name + " - " + content + "\n");
+        updateChatDisplay();
+        _network.HideChat();
+    }
+
+
+    private void updateChatDisplay()
+    {
+
+        if (_chatMessages.Count < 9)
+        {
+            _chatText.text += _chatMessages.Last();
+            return;
+        }
+
+        while (_chatMessages.Count > 9)
+            _chatMessages.RemoveAt(0);
+       
+        _chatText.text = "";
+        foreach (var msg in _chatMessages)
+        {
+            _chatText.text += msg;
+        }
+    }
+    
+    public void HideChat()
+    {
+        if (_chatPanel.enabled)
+        {
+            _chatPanel.enabled = false;
+            _chatText.enabled = false;
         }
     }
 }

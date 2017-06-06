@@ -112,6 +112,9 @@ namespace AssemblyCSharp
             IMPAIR_VISION_EFFECT,
 
             BAZOOKA_SHOT,
+
+            CHAT_MESSAGE,
+
             END_GAME
         }
     }
