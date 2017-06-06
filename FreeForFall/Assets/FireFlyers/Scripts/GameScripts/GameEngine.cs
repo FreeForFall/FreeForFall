@@ -378,12 +378,10 @@ public class GameEngine
 
     public void ReceiveChatMessage(string name, string content)
     {
-        _chatPanel.enabled = true;
-        _chatText.enabled = true;
         Debug.Log("Received message from " + name + " : " + content);
         _chatMessages.Add(name + " - " + content + "\n");
         updateChatDisplay();
-        _network.HideChat();
+        Player.GetComponent<Chat>().ShowChat();
     }
 
 
@@ -403,15 +401,6 @@ public class GameEngine
         foreach (var msg in _chatMessages)
         {
             _chatText.text += msg;
-        }
-    }
-    
-    public void HideChat()
-    {
-        if (_chatPanel.enabled)
-        {
-            _chatPanel.enabled = false;
-            _chatText.enabled = false;
         }
     }
 }
