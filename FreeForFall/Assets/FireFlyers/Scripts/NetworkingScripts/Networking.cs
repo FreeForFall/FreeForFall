@@ -417,4 +417,15 @@ public class Networking : MonoBehaviour
     {
         _engine.FPSCamera.GetComponent<CameraFilterPack_FX_Glitch1>().enabled = false;
     }
+
+    public void DisableChat()
+    {
+        _engine.HideChat();
+    }
+
+    public void HideChat()
+    {
+        Invoke("DisableChat",3f);
+    }
+
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using AssemblyCSharp;
-
+using System;
 
 public class GameEngine
 {
@@ -34,6 +34,8 @@ public class GameEngine
     private Constants.ROBOT_IDS _robotID;
 
     private Text _chatText;
+
+    private Image _chatPanel;
 
     private List<string> _chatMessages;
 
@@ -210,15 +212,16 @@ public class GameEngine
         _hasAlreadySpawned = true;
         updateReferences();
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 15;
-        spawnPosition.x = Random.Range(-9f, 9f);
-        spawnPosition.z = Random.Range(-9f, 9f);
+        spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
+        spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
         _localPlayer = PhotonNetwork.Instantiate(Constants.ROBOT_NAMES[(int)_robotID], spawnPosition, Quaternion.identity, 0);
         _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
-        //_localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
+       // _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
         _chatText = _localPlayer.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
+        _chatPanel = _localPlayer.transform.Find("Canvas").Find("ChatPanel").GetComponent<Image>();
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
         _localPlayer.GetComponent<UI>().enabled = true;
@@ -303,7 +306,7 @@ public class GameEngine
 
     public void SpawnPowerup(Vector3 position, Constants.POWERUP_IDS id)
     {
-        var p = (GameObject)Object.Instantiate(
+        var p = (GameObject)UnityEngine.Object.Instantiate(
                     Resources.Load("Powerup"), 
                     position, 
                     Quaternion.identity);
@@ -340,8 +343,8 @@ public class GameEngine
     private void spawnAI(int x)
     {
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
-        spawnPosition.x = Random.Range(-9f, 9f);
-        spawnPosition.z = Random.Range(-9f, 9f);
+        spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
+        spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
         for (int i = 0; i < x; i++)
         {
             GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
@@ -350,13 +353,18 @@ public class GameEngine
 
     public void ReceiveChatMessage(string name, string content)
     {
+        _chatPanel.enabled = true;
+        _chatText.enabled = true;
         Debug.Log("Received message from " + name + " : " + content);
         _chatMessages.Add(name + " - " + content + "\n");
         updateChatDisplay();
+        _network.HideChat();
     }
+
 
     private void updateChatDisplay()
     {
+
         if (_chatMessages.Count < 9)
         {
             _chatText.text += _chatMessages.Last();
@@ -371,5 +379,11 @@ public class GameEngine
         {
             _chatText.text += msg;
         }
+    }
+    
+    public void HideChat()
+    {
+        _chatPanel.enabled = false;
+        _chatText.enabled = false;
     }
 }
