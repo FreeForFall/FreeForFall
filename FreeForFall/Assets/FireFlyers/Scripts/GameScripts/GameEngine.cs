@@ -30,6 +30,8 @@ public class GameEngine
 
     private Stack<string> _lostList;
 
+    private Constants.ROBOT_IDS _robotID;
+
     public Constants.MAPS_IDS MapID
     {
         get
@@ -66,8 +68,9 @@ public class GameEngine
     /// Initializes a new instance of the <see cref="GameEngine"/> class.
     /// </summary>
     /// <param name="map">The map.</param>
-    public GameEngine(Constants.MAPS_IDS map)
+    public GameEngine(Constants.MAPS_IDS map, Constants.ROBOT_IDS robot)
     {
+        _robotID = robot;
         _hasAlreadySpawned = false;
         _loadedCount = 0;
         _lostCount = 0;
@@ -161,6 +164,7 @@ public class GameEngine
     public void RemoveWalls()
     {
         GameObject.Destroy(GameObject.Find("BoxPrefab"));
+        setNametags();
     }
 
     /// <summary>
@@ -173,8 +177,6 @@ public class GameEngine
         Debug.Log(_playerCount + " - " + _playerSpawned);
         SceneManager.LoadScene(name);
     }
-    
-
 
     /// <summary>
     /// Sets the map up
@@ -203,14 +205,15 @@ public class GameEngine
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 15;
         spawnPosition.x = Random.Range(-9f, 9f);
         spawnPosition.z = Random.Range(-9f, 9f);
-        _localPlayer = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity, 0);
+        _localPlayer = PhotonNetwork.Instantiate(Constants.ROBOT_NAMES[(int)_robotID], spawnPosition, Quaternion.identity, 0);
+        _localPlayer.transform.Find("Canvas").gameObject.SetActive(true);
         _localPlayer.GetComponent<CrosshairUI>().enabled = true;
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
-        //_localPlayer.GetComponent<UI> ().enabled = true;
-        //_localPlayer.transform.Find ("bottom").Find ("Canvas").Find ("Text").GetComponent<Text> ().text = PhotonNetwork.playerName;
+        //_localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
+        _localPlayer.GetComponent<UI>().enabled = true;
         _localPlayer.GetComponentInChildren<LookTowardCamera>().enabled = true;
         _localPlayer.GetComponentInChildren<CameraControl>().enabled = true;
         _flyingCamera.gameObject.SetActive(false);
@@ -222,6 +225,23 @@ public class GameEngine
         {
             GameObject.Instantiate(Resources.Load("PowerupManager"));
         }
+
+        if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
+            spawnAI(Constants.NUMBER_OF_AI);
+    }
+
+    private void setNametags()
+    {
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (player == _localPlayer)
+                Debug.Log("LOCAL PLAYER");
+            var bottom = player.transform.Find("bottom");
+            if (bottom == null)
+                continue;
+            bottom.Find("Canvas").Find("Text").GetComponent<Text>().text 
+                = player.GetComponent<PhotonView>().owner.NickName;
+        } 
     }
 
     /// <summary>
@@ -305,5 +325,17 @@ public class GameEngine
         GameObject shell = GameObject.Instantiate(_shooterB.projectile, start, angle);
         shell.GetComponent<Rigidbody>().AddForce(force);
         GameObject.Destroy(shell, 10f);
+    }
+
+
+    private void spawnAI(int x)
+    {
+        Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
+        spawnPosition.x = Random.Range(-9f, 9f);
+        spawnPosition.z = Random.Range(-9f, 9f);
+        for (int i = 0; i < x; i++)
+        {
+            GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+        }
     }
 }

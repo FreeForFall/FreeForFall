@@ -6,9 +6,9 @@ namespace AssemblyCSharp
     {
         public const string GAME_VERSION = "0.2";
 
-        public const float MOVEMENT_SPEED = 20f;
+        public const float MOVEMENT_SPEED = 50f;
 
-        public const float SPRINT_SPEED = 4f;
+        public const float SPRINT_SPEED = 1.5f;
 
         public const float JUMP_CD = 2f;
 
@@ -28,7 +28,7 @@ namespace AssemblyCSharp
 
         public const float NETWORK_SMOOTHING = 0.1f;
 
-        public const float WHEEL_SPEED = 200f;
+        public const float WHEEL_SPEED = 300f;
 
         public const int SPEED_BOOST_POWERUP_MULT = 20;
 
@@ -44,11 +44,26 @@ namespace AssemblyCSharp
 
         public const float SPEC_CAMERA_TRAVEL_TIME = 5f;
 
+        public const float JUMP_CD_AI = 2f;
+
+        public static string[] ROBOT_NAMES = new string[]
+        {
+            "Robot1",
+            "Robot2"
+        };
+
+        public enum ROBOT_IDS
+        {
+            ROBOT_1,
+            ROBOT_2
+        }
+
         public enum MAPS_IDS
         {
             SPACE_MAP,
             BASIC_MAP,
-            TEST_MAP
+            TEST_MAP,
+            VOLCANO_MAP
         }
 
         /*
@@ -59,7 +74,8 @@ namespace AssemblyCSharp
         {
             "Map",
             "Map2",
-            "TestMap"
+            "TestMap",
+            "Map-Volcano"
         };
 
         /*
@@ -69,7 +85,8 @@ namespace AssemblyCSharp
         {
             "SpaceArena",
             "BasicArena",
-            "TestArena"
+            "TestArena",
+            "Volcano"
         };
 
         public enum POWERUP_IDS

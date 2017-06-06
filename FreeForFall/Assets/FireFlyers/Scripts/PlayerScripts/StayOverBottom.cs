@@ -5,9 +5,11 @@ using UnityEngine;
 public class StayOverBottom : MonoBehaviour
 {
 	public Transform bottom;
-
+    public float x;
+    public float y;
+    public float z;
 	void LateUpdate ()
 	{
-		transform.position = bottom.position + new Vector3 (-0.02f, 1.45f, 0);
+		transform.position = bottom.position + new Vector3 (x, y, z);
 	}
 }

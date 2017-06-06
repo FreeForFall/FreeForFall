@@ -31,6 +31,7 @@ public class Networking : MonoBehaviour
     private Button _startGameButton;
     private Button _joinRoomButton;
     private Dropdown _mapChooser;
+    private Dropdown _robotChooser;
 
     private Constants.MAPS_IDS _mapID;
 
@@ -172,7 +173,18 @@ public class Networking : MonoBehaviour
         GameObject.Find("MatchmakingCanvas").GetComponent<Canvas>().enabled = false;
         if (!PhotonNetwork.isMasterClient)
             _waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
-        _engine = new GameEngine(_mapID);
+        string selected = _robotChooser.GetComponentInChildren<Text>().text; 
+        Constants.ROBOT_IDS robotID;
+        switch (selected)
+        {
+            case "Not So Shitty Robot":
+                robotID = Constants.ROBOT_IDS.ROBOT_2;
+                break;
+            default:
+                robotID = Constants.ROBOT_IDS.ROBOT_1;
+                break;
+        }
+        _engine = new GameEngine(_mapID, robotID);
     }
 
     /// <summary>
@@ -224,6 +236,7 @@ public class Networking : MonoBehaviour
         _startGameButton = GameObject.Find("StartGameButton").GetComponent<Button>();
         _roomNameInput = GameObject.Find("RoomNameInput").GetComponent<InputField>();
         _waitingForGameStartText = GameObject.Find("WaitForGameStartCanvas").transform.FindChild("Text").GetComponent<Text>();
+        _robotChooser = GameObject.Find("RobotChoosingDropdown").GetComponent<Dropdown>();
     }
 
     /// <summary>
@@ -376,6 +389,8 @@ public class Networking : MonoBehaviour
                 return Constants.MAPS_IDS.SPACE_MAP;
             case "Map2":
                 return Constants.MAPS_IDS.BASIC_MAP;
+            case "Volcano":
+                return Constants.MAPS_IDS.VOLCANO_MAP;
             default:
                 return Constants.MAPS_IDS.SPACE_MAP;
         }
