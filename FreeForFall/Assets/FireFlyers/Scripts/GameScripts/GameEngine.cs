@@ -46,6 +46,8 @@ public class GameEngine
         _lostCount = 0;
         _playerCount = PhotonNetwork.room.PlayerCount;
         _playerSpawned = 0;
+        _lostList.Clear();
+        _chatMessages.Clear();
     }
     public bool HasAlreadySpawned
     {
