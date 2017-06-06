@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FuckingScript : MonoBehaviour {
 
+    public GameObject impacteffect;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,7 +19,10 @@ public class FuckingScript : MonoBehaviour {
     {
         if (CollisionInfo.collider.tag == "forcefield")
         {
-            this.GetComponent<Rigidbody>().AddForce(-transform.position * 75, ForceMode.Impulse);
+            GameObject ImpacteffectDone = Instantiate(impacteffect, CollisionInfo.contacts[0].point, transform.rotation) as GameObject;
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            this.GetComponent<Rigidbody>().AddForce(-transform.position * 250, ForceMode.Impulse);
+            Destroy(ImpacteffectDone, 0.5f);
         }
     }
 }

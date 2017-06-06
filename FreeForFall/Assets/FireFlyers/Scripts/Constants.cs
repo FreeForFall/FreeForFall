@@ -34,7 +34,7 @@ namespace AssemblyCSharp
 
         public const float VISION_IMPAIRED_POWERUP_DURATION = 5f;
 
-        public const float BAZOOKA_EXPLOSION_FORCE = 15f;
+        public const float BAZOOKA_EXPLOSION_FORCE = 500000f;
 
         public const float GRIP_PULL_FORCE = 300000f;
 
