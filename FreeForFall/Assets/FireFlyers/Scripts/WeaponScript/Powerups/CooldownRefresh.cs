@@ -5,8 +5,9 @@ using UnityEngine;
 public class CooldownRefresh : MonoBehaviour
 {
 	public GameObject LocalPlayer;
- 
-  void Start()
+    public PowerUpsHud playerscript;
+
+    void Start()
   {
     gameObject.GetComponent<ParticleSystem>().startColor = Color.green;
   }
