@@ -290,6 +290,10 @@ public class GameEngine
         if (_lostList.Count >= _playerCount)
         {
             string[] arr = _lostList.ToArray();
+            foreach (string a in arr)
+            {
+                Debug.Log(a);
+            }
             NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.END_GAME, arr);
             _network.EndGame(arr);
         }
@@ -355,6 +359,11 @@ public class GameEngine
         }
     }
 
+    public void AILost(string name)
+    {
+        _lostList.Push(name);
+    }
+
     public void BazookaShoot(Vector3 start, Quaternion angle, Vector3 force)
     {
         GameObject shell = GameObject.Instantiate(_shooterB.projectile, start, angle);
@@ -368,11 +377,22 @@ public class GameEngine
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 10;
         spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
         spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
+        var nameList = Constants.AI_NAMES.ToList();
         for (int i = 0; i < x; i++)
         {
             spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
             spawnPosition.z = UnityEngine.Random.Range(-9f, 9f);
-            GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+            var ia = (GameObject)GameObject.Instantiate(Resources.Load("IA"), spawnPosition, Quaternion.identity);
+            string name = i.ToString();
+            if (nameList.Count != 0)
+            {
+
+                int random = UnityEngine.Random.Range(0, nameList.Count);
+                name = nameList[random];
+                nameList.RemoveAt(random);
+            
+            }
+            ia.GetComponent<SimpleAI>().Name = name;
         }
     }
 

@@ -27,6 +27,14 @@ public class PlayerCollector : MonoBehaviour
             if (PhotonNetwork.isMasterClient)
                 _networking.Engine.PlayerLost(p);
         }
+        else
+        {
+            var ai = p.GetComponent<SimpleAI>();
+            if (ai != null)
+            {
+                _networking.Engine.AILost(ai.Name);    
+            }
+        }
         Destroy(p);
     }
 }

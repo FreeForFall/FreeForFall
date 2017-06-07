@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using AssemblyCSharp;
 using UnityEngine;
 
-public class SimpleAI : MonoBehaviour {
+public class SimpleAI : MonoBehaviour
+{
 
     public AudioSource jumpsound;
     public AudioSource Fallsound;
@@ -18,22 +19,37 @@ public class SimpleAI : MonoBehaviour {
     private bool airbone;
     private bool jumping;
     private bool playfrogs;
+    private string _name;
+
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+        }
+    }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         Timesincelastjump = 3;
         turnValue = 1;
         this.playfrogs = false;
         Invoke("autisticfrogs", 10f);
         this.airbone = false;
         this.jumping = false;
-	}
+    }
 	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
         Timesincelastjump += Time.deltaTime;
         air();
-        if(!airbone)
+        if (!airbone)
         {
             Mouvement();
         }
@@ -44,16 +60,16 @@ public class SimpleAI : MonoBehaviour {
 
     }
 
-    void OnDrawGizmos ()
+    void OnDrawGizmos()
     {
-        Gizmos.DrawRay(transform.position + 0.5f * transform.forward + transform.up, (transform.forward + -transform.up) *(sensorLength + transform.localScale.z));
-        Gizmos.DrawRay(transform.position + 0.5f * transform.forward + transform.up, (-transform.up + transform.right ) *(sensorLength + transform.localScale.z));
-        Gizmos.DrawRay(transform.position + 0.5f * transform.forward + transform.up, (-transform.up + -transform.right ) *(sensorLength + transform.localScale.z));
+        Gizmos.DrawRay(transform.position + 0.5f * transform.forward + transform.up, (transform.forward + -transform.up) * (sensorLength + transform.localScale.z));
+        Gizmos.DrawRay(transform.position + 0.5f * transform.forward + transform.up, (-transform.up + transform.right) * (sensorLength + transform.localScale.z));
+        Gizmos.DrawRay(transform.position + 0.5f * transform.forward + transform.up, (-transform.up + -transform.right) * (sensorLength + transform.localScale.z));
         Gizmos.DrawRay(transform.position - transform.up * 1f + -transform.right + transform.forward, (-transform.up) * (1));
         Gizmos.DrawRay(transform.position - transform.up * 1f + transform.right + transform.forward, (-transform.up) * (1));
         Gizmos.DrawRay(transform.position - transform.up * 1f + -transform.right + -transform.forward, (-transform.up) * (1));
         Gizmos.DrawRay(transform.position - transform.up * 1f + transform.right + -transform.forward, (-transform.up) * (1));
-        Gizmos.DrawRay(transform.position - transform.up * 1f + transform.forward*8, (-transform.up) * (1));
+        Gizmos.DrawRay(transform.position - transform.up * 1f + transform.forward * 8, (-transform.up) * (1));
     }
 
     void Mouvement()
@@ -99,7 +115,7 @@ public class SimpleAI : MonoBehaviour {
         GameObject JumpeffectDone = Instantiate(jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
         jumpsound.Play();
         Timesincelastjump = 0;
-        GetComponent<Rigidbody>().AddForce(new Vector3(0f,  Constants.JUMP_FORCE, 0f));
+        GetComponent<Rigidbody>().AddForce(new Vector3(0f, Constants.JUMP_FORCE, 0f));
         Destroy(JumpeffectDone, 0.5f);
         Invoke("jumpDown", 0.5f);
 
@@ -115,7 +131,7 @@ public class SimpleAI : MonoBehaviour {
     {
         RaycastHit hit;
         if (!Physics.Raycast(transform.position - transform.up * 1f + transform.right + transform.forward, -transform.up, out hit, (0.5f))
-            && !Physics.Raycast(transform.position - transform.up * 1f + -transform.right +transform.forward, -transform.up, out hit, (0.5f))
+            && !Physics.Raycast(transform.position - transform.up * 1f + -transform.right + transform.forward, -transform.up, out hit, (0.5f))
             && !Physics.Raycast(transform.position - transform.up * 1f + transform.right - transform.forward, -transform.up, out hit, (0.5f))
             && !Physics.Raycast(transform.position - transform.up * 1f + -transform.right - transform.forward, -transform.up, out hit, (0.5f)))
         {
