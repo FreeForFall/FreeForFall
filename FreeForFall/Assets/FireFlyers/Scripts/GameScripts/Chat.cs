@@ -12,19 +12,22 @@ public class Chat : MonoBehaviour
     private float _timeSinceLastShown;
     private float _timeSinceLastMessage;
     private Text _chatText;
-    private Image _chatPanel;
+    private Canvas _canvas;
     private List<string> _chatMessages;
+    private bool _inPostRound;
 
     void Start()
     {
+        _inPostRound = false;
         _timeSinceLastShown = 0f;
         _timeSinceLastMessage = 0f;
         _engine = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
         var p = _engine.Player;
         _username = p.GetComponent<PhotonView>().owner.NickName;
         _chatText = GameObject.Find("ChatManager/Canvas/ChatText").GetComponent<Text>();
-        _chatPanel = GameObject.Find("ChatManager/Canvas/ChatPanel").GetComponent<Image>();
+        _canvas = GameObject.Find("ChatManager/Canvas").GetComponent<Canvas>();        
         _chatMessages = new List<string>();
+
         
     }
 
@@ -64,8 +67,10 @@ public class Chat : MonoBehaviour
          * */
         _timeSinceLastShown += Time.deltaTime;
         _timeSinceLastMessage += Time.deltaTime;
-        if (_timeSinceLastShown > 3f)
+        if (_timeSinceLastShown > 3f && !_inPostRound)
+        {
             HideChat();
+        }
 
         if (_timeSinceLastMessage < 0.5f)
             return;
@@ -90,14 +95,14 @@ public class Chat : MonoBehaviour
       
         if (leftRight == 0f)
         {
-            message += upDown > 0f ? "GIT GUD" : "WELL PLAYED";
+            message += "WELL PLAYED";
         }
         else if (upDown == 0f)
         {
-            message += leftRight > 0f ? "DUDIN KING" : "NICE MEME";
+            message += "GIT GUD";
         }
         else
-            return;
+            message += "BOTH AYY";
 
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE,
             new object[]
@@ -113,13 +118,11 @@ public class Chat : MonoBehaviour
     public void ShowChat()
     {
         _timeSinceLastShown = 0f;
-        _chatPanel.enabled = true;
-        _chatText.enabled = true;
+        _canvas.enabled = true;
     }
 
     public void HideChat()
     {
-        _chatPanel.enabled = false;
-        _chatText.enabled = false;
+        _canvas.enabled = false;
     }
 }
