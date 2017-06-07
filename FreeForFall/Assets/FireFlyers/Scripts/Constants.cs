@@ -119,5 +119,19 @@ namespace AssemblyCSharp
 
             END_GAME
         }
+
+        public static string[] AI_NAMES = new string[]
+        {
+            "Barry",
+            "Larry",
+            "Jhon",
+            "Bashar",
+            "Donald",
+            "Manuel",
+            "Alex",
+            "Corentin",
+            "Nicolas",
+            "Stan"
+        };
     }
 }
