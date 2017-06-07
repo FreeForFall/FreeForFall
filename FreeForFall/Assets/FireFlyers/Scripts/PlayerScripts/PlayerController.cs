@@ -125,5 +125,9 @@ public class PlayerController : MonoBehaviour
     {
         TimeSincePreviousJump += Time.deltaTime;
         doMovement();
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKey(KeyCode.Joystick1Button1))
+        {
+            transform.position = Vector3.zero;
+        }
     }
 }
