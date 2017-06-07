@@ -34,7 +34,7 @@ namespace AssemblyCSharp
 
         public const float WHEEL_SPEED = 300f;
 
-        public const int SPEED_BOOST_POWERUP_MULT = 4;
+        public const int SPEED_BOOST_POWERUP_MULT = 2;
 
         public const float VISION_IMPAIRED_POWERUP_DURATION = 5f;
 
