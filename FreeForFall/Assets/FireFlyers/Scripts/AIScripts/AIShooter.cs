@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using AssemblyCSharp;
 using UnityEngine;
 
-public class AIShooter : MonoBehaviour {
+public class AIShooter : MonoBehaviour
+{
 
     private float TimeSinceLastExplosion;
-    public GameObject projectile ;
+    public GameObject projectile;
     public GameObject Launcher;
     public GameObject PlayerBody;
     public GameObject Canon;
@@ -16,18 +17,19 @@ public class AIShooter : MonoBehaviour {
     private GameObject Target;
     public float projectileforce;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         TimeSinceLastExplosion = -20f;
         HasTarget = false;
-	}
+    }
 	
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
         TimeSinceLastExplosion += Time.deltaTime;
         if (HasTarget)
         {
-            Debug.LogWarning("Has a target");
+            //Debug.LogWarning("Has a target");
             Direction = Target.transform.position - PlayerBody.transform.position;
             Canon.transform.rotation = Quaternion.Slerp(Canon.transform.rotation, Quaternion.LookRotation(Direction), 0.1f);
             Shoot();
@@ -41,13 +43,13 @@ public class AIShooter : MonoBehaviour {
     {
         if (Constants.BAZOOKA_CD - TimeSinceLastExplosion <= 0)
         {
-                TimeSinceLastExplosion = 0;
-                GameObject temp_projectile;
-                temp_projectile = Instantiate(projectile, Launcher.transform.position, PlayerBody.transform.rotation, PlayerBody.transform) as GameObject;
-                Rigidbody projectile_body;
-                projectile_body = temp_projectile.GetComponent<Rigidbody>();
-                projectile_body.AddForce(Direction * projectileforce);
-                Destroy(temp_projectile, 10.0f);
+            TimeSinceLastExplosion = 0;
+            GameObject temp_projectile;
+            temp_projectile = Instantiate(projectile, Launcher.transform.position, PlayerBody.transform.rotation, PlayerBody.transform) as GameObject;
+            Rigidbody projectile_body;
+            projectile_body = temp_projectile.GetComponent<Rigidbody>();
+            projectile_body.AddForce(Direction * projectileforce);
+            Destroy(temp_projectile, 10.0f);
         }
     }
 
@@ -58,7 +60,7 @@ public class AIShooter : MonoBehaviour {
         {
             if (InRange[i].tag == "Player" && InRange[i].gameObject != PlayerBody.gameObject)
             {
-                Debug.LogWarning("Oh boy");
+                //Debug.LogWarning("Oh boy");
                 Target = InRange[i].gameObject;
                 HasTarget = true;
                 return;
