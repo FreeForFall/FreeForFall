@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Chat : MonoBehaviour
 {
@@ -10,17 +12,56 @@ public class Chat : MonoBehaviour
     private float _timeSinceLastShown;
     private float _timeSinceLastMessage;
     private Text _chatText;
-    private Image _chatPanel;
+    private Canvas _canvas;
+    private InputField _input;
+    private List<string> _chatMessages;
+    private bool _isWriting;
 
     void Start()
     {
+        _isWriting = false;
         _timeSinceLastShown = 0f;
         _timeSinceLastMessage = 0f;
         _engine = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
         var p = _engine.Player;
         _username = p.GetComponent<PhotonView>().owner.NickName;
-        _chatText = p.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
-        _chatPanel = p.transform.Find("Canvas").Find("ChatPanel").GetComponent<Image>();
+        _chatText = GameObject.Find("ChatManager/Canvas/ChatText").GetComponent<Text>();
+        _canvas = GameObject.Find("ChatManager/Canvas").GetComponent<Canvas>();        
+        _chatMessages = new List<string>();
+        _input = _canvas.transform.Find("ChatPanel/InputField").gameObject.GetComponent<InputField>();
+        _input.onValueChanged.AddListener(s => _isWriting = true);
+        _input.onEndEdit.AddListener(s =>
+            {
+                sendMessage(s);
+                _isWriting = false;
+            }); 
+    }
+
+    public void ReceiveMessage(string name, string content)
+    {
+        _chatMessages.Add(name + " - " + content + "\n");
+        updateDisplay();
+        ShowChat();
+    }
+
+
+    private void updateDisplay()
+    {
+        if (_chatMessages.Count < 9)
+        {
+            _chatText.text += _chatMessages.Last();
+            return;
+        }
+
+        while (_chatMessages.Count > 9)
+            _chatMessages.RemoveAt(0);
+       
+        _chatText.text = "";
+        foreach (var msg in _chatMessages)
+        {
+            _chatText.text += msg;
+        }
+
     }
 
     void Update()
@@ -32,8 +73,15 @@ public class Chat : MonoBehaviour
          * */
         _timeSinceLastShown += Time.deltaTime;
         _timeSinceLastMessage += Time.deltaTime;
-        if (_timeSinceLastShown > 3f)
+        if (_timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
+        {
             HideChat();
+        }
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            ShowChat(); 
+            _input.Select();
+        }   
 
         if (_timeSinceLastMessage < 0.5f)
             return;
@@ -58,15 +106,21 @@ public class Chat : MonoBehaviour
       
         if (leftRight == 0f)
         {
-            message += upDown > 0f ? "GIT GUD" : "WELL PLAYED";
+            message += "WELL PLAYED";
         }
         else if (upDown == 0f)
         {
-            message += leftRight > 0f ? "DUDIN KING" : "NICE MEME";
+            message += "GIT GUD";
         }
         else
-            return;
+            message += "BOTH AYY";
+        sendMessage(message);
+    }
 
+    private void sendMessage(string message)
+    {
+        _isWriting = false;
+        _input.text = "";
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE,
             new object[]
             {
@@ -74,32 +128,18 @@ public class Chat : MonoBehaviour
                 (object)message
             }
         );
-        _engine.ReceiveChatMessage(_username, message);
-
+        ReceiveMessage(_username, message);
         _timeSinceLastMessage = 0f;
-        /* if (Input.GetKeyDown(KeyCode.C)) */
-        /* { */
-        /*     NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE, */
-        /*         new object[] */
-        /*         { */
-        /*             (object)_username, */
-        /*             (object)"Sent " + count++.ToString() */
-        /*         } */
-        /*     ); */
-        /*     _engine.ReceiveChatMessage(_username, "Sent " + count.ToString()); */
-        /* } */
     }
  
     public void ShowChat()
     {
         _timeSinceLastShown = 0f;
-        _chatPanel.enabled = true;
-        _chatText.enabled = true;
+        _canvas.enabled = true;
     }
 
     public void HideChat()
     {
-        _chatPanel.enabled = false;
-        _chatText.enabled = false;
+        _canvas.enabled = false;
     }
 }
