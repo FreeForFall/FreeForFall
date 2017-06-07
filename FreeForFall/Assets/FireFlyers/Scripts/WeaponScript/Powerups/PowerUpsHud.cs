@@ -7,7 +7,7 @@ public class PowerUpsHud : MonoBehaviour {
 
     public bool OnePowerUp = false;
     public string action;
-    public string todo;
+    public string todo = "";
     public GameObject self;
 
 	// Use this for initialization
@@ -32,6 +32,8 @@ public class PowerUpsHud : MonoBehaviour {
                 ImpairedVision(self);
             if (todo == "1")
                 SpeedBoost(self);
+            if (todo == "2")
+                CooldownRefresh(self);
             todo = "";
             OnePowerUp = false;
         }
@@ -46,5 +48,10 @@ public class PowerUpsHud : MonoBehaviour {
     {
         Debug.LogWarning("Giving the player a speed boost");
         c.GetComponentInChildren<PlayerController>().SpeedBoost(Constants.SPEED_BOOST_POWERUP_MULT);
+    }
+
+    public void CooldownRefresh(GameObject c)
+    {
+        c.GetComponentInParent<ShooterB>().RefreshCooldowns();
     }
 }
