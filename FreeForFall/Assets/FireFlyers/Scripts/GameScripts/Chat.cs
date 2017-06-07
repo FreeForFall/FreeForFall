@@ -15,16 +15,28 @@ public class Chat : MonoBehaviour
     private Canvas _canvas;
     private InputField _input;
     private List<string> _chatMessages;
-    private bool _isWriting;
+    private bool _isWriting = false;
+    private bool _inMenu = false;
+
+        
+    public bool InMenu
+    {
+        get
+        {
+            return _inMenu;
+        }
+        set
+        {
+            _inMenu = value;
+        }
+    }
 
     void Start()
     {
-        _isWriting = false;
         _timeSinceLastShown = 0f;
         _timeSinceLastMessage = 0f;
         _engine = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
-        var p = _engine.Player;
-        _username = p.GetComponent<PhotonView>().owner.NickName;
+        _username = PhotonNetwork.playerName;
         _chatText = GameObject.Find("ChatManager/Canvas/ChatText").GetComponent<Text>();
         _canvas = GameObject.Find("ChatManager/Canvas").GetComponent<Canvas>();        
         _chatMessages = new List<string>();
@@ -73,7 +85,7 @@ public class Chat : MonoBehaviour
          * */
         _timeSinceLastShown += Time.deltaTime;
         _timeSinceLastMessage += Time.deltaTime;
-        if (_timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
+        if (!_inMenu && _timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
         {
             HideChat();
         }

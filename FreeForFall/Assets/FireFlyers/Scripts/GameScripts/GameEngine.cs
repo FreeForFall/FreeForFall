@@ -230,7 +230,7 @@ public class GameEngine
             return;
         }
         _chat = GameObject.Find("ChatManager").GetComponent<Chat>();
-        _chat.enabled = true;
+        _chat.InMenu = false;
         _hasAlreadySpawned = true;
         GameObject.Find("ChatManager").GetComponent<Chat>().enabled = true;
         updateReferences();
@@ -394,11 +394,11 @@ public class GameEngine
         }
     }
 
-    public void ReceiveChatMessage(string name, string content)
-    {
-        Debug.Log("Received message from " + name + " : " + content);
-        if (_chat != null)
-            _chat.ReceiveMessage(name, content);
-    }
+    /* public void ReceiveChatMessage(string name, string content) */
+    /* { */
+    /*     Debug.Log("Received message from " + name + " : " + content); */
+    /*     if (_chat != null) */
+    /*         _chat.ReceiveMessage(name, content); */
+    /* } */
 
 }

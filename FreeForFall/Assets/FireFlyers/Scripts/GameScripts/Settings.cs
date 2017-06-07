@@ -19,6 +19,9 @@ public class Settings : MonoBehaviour
         var net = GameObject.Find("NetworkManager");
         if (net != null)
             Destroy(net);
+        var chat = GameObject.Find("ChatManager");
+        if (chat != null)
+            Destroy(chat);
         if (GameObject.FindGameObjectsWithTag("Settings").Length > 1)
         {
             Destroy(this);
@@ -30,7 +33,7 @@ public class Settings : MonoBehaviour
         Debug.Log(OnlineMode);
         DontDestroyOnLoad(transform.gameObject);
 
-        Physics.gravity = new Vector3(0, - Constants.PHYSICS_GRAVITY, 0);
+        Physics.gravity = new Vector3(0, -Constants.PHYSICS_GRAVITY, 0);
     }
 
     public void PlayOnline()
