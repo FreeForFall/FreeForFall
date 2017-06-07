@@ -60,13 +60,13 @@ public class Networking : MonoBehaviour
     #if UNITY_EDITOR
 	void OnGUI ()
 	{
-		GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
+		GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString () + " ROUND : " + _round);
 	}
 	#endif
 
     void Start()
     {
-        _round = 1;
+        _round = 0;
         Debug.Log("NETWORKING START");
         DontDestroyOnLoad(this);
         findAllUIElements();
@@ -95,6 +95,7 @@ public class Networking : MonoBehaviour
         switch (eventID)
         {
             case Constants.EVENT_IDS.LOAD_SCENE:
+                _round++;
                 _engine.Reset();
                 _engine.LoadScene((Constants.MAPS_IDS)c[0]);
                 return;
@@ -345,34 +346,13 @@ public class Networking : MonoBehaviour
             Debug.LogError("A normal client clicked the start game button");
             return;
         }
+
         Debug.Log("Starting the game");
+        _round = _round == 0 ? 1 : _round;
         _engine.StartGame();
     }
 
 
-    /// <summary>
-    /// Ends the game.
-    /// </summary>
-    private void doEndGame()
-    {
-        if (_round == Constants.ROUND_COUNT)
-        {
-            Debug.Log("End of the game");
-            PhotonNetwork.OnEventCall -= handler;
-            Destroy(GameObject.Find("SettingsManager"));
-            PhotonNetwork.LeaveRoom();
-            PhotonNetwork.Disconnect();
-            SceneManager.LoadScene("Menu");
-            return;
-        }
-        Debug.Log("Playing the next round");
-        _round++;
-        if (!PhotonNetwork.isMasterClient)
-            return;
-        _engine.Reset();
-        //NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.LOAD_SCENE, (int)_mapID);
-        startGame();
-    }
 
 
 
@@ -436,6 +416,32 @@ public class Networking : MonoBehaviour
     }
 
     /// <summary>
+    /// Ends the game.
+    /// </summary>
+    private void doEndGame()
+    {
+        Debug.Log("IN DOENDGAME");
+        if (_round == Constants.ROUND_COUNT)
+        {
+            Debug.Log("End of the game");
+            PhotonNetwork.OnEventCall -= handler;
+            Destroy(GameObject.Find("SettingsManager"));
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("Menu");
+            return;
+        }
+        Debug.Log("Playing the next round");
+        _round++;
+        if (!PhotonNetwork.isMasterClient)
+            return;
+        _engine.Reset();
+        //NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.LOAD_SCENE, (int)_mapID);
+        
+        startGame();
+    }
+
+    /// <summary>
     /// Wrapper around doEndGame. This is what should display and leaderboard.
     /// </summary>
     public void EndGame(string[] leaderboard)
@@ -443,13 +449,24 @@ public class Networking : MonoBehaviour
         _leaderboard = GameObject.Find("WinCanvas").GetComponent<Canvas>();
         _leaderboard.enabled = true;
         _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
-      
         foreach (var v in leaderboard)
         {
-            _leaderboardText.text = _leaderboardText.text + Environment.NewLine + v;
+            _leaderboardText.text += Environment.NewLine + v;
             Debug.Log(v);
         }
-        Invoke("doEndGame", 5f);
+        if (_round == Constants.ROUND_COUNT)
+        {
+            GameObject.Find("WinCanvas/ButtonToMenu/Text").GetComponent<Text>().text = "RETURN TO MENU";
+            GameObject.Find("WinCanvas/ButtonToMenu").GetComponent<Button>().interactable = true;
+            GameObject.Find("WinCanvas/ButtonToMenu").GetComponent<Button>().onClick.AddListener(doEndGame);
+            return;
+        }
+        GameObject.Find("WinCanvas/ButtonToMenu/Text").GetComponent<Text>().text = "NEXT ROUND";
+        Debug.Log("Changed the text");
+        GameObject.Find("WinCanvas/ButtonToMenu").GetComponent<Button>().interactable = PhotonNetwork.isMasterClient;
+        Debug.Log("Adding a listener");
+        GameObject.Find("WinCanvas/ButtonToMenu").GetComponent<Button>().onClick.AddListener(doEndGame);
+        Debug.Log("At the end of EndGame");
     }
 
     private void removeVisionImpaired()

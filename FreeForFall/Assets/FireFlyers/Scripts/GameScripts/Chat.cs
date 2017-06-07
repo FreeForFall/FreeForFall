@@ -52,8 +52,6 @@ public class Chat : MonoBehaviour
         upDown = Input.GetAxis("LinuxUpDownDPAD");
 #endif
 
-        Debug.Log(upDown);
-        Debug.Log(leftRight);
 
         if (leftRight == 0f && upDown == 0f)
             return;
