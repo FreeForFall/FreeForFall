@@ -4,6 +4,8 @@ namespace AssemblyCSharp
 {
     public static class Constants
     {
+        public const int PHYSICS_GRAVITY = 60;
+
         public const int ROUND_COUNT = 2;
 
         public const string GAME_VERSION = "0.2";
@@ -22,9 +24,9 @@ namespace AssemblyCSharp
 
         public const float POWERUP_SPAWN_CD = 10f;
 
-        public const float BAZOOKA_CD = 3f;
+        public const float BAZOOKA_CD = 2f;
 
-        public const float GRIP_CD = 3f;
+        public const float GRIP_CD = 2f;
 
         public const float PROJECTILE_FORCE = 10000f;
 
