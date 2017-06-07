@@ -124,14 +124,19 @@ namespace AssemblyCSharp
         {
             "Barry",
             "Larry",
-            "Jhon",
+            "John",
             "Bashar",
             "Donald",
             "Manuel",
             "Alex",
             "Corentin",
             "Nicolas",
-            "Stan"
+            "Stan",
+            "Spood",
+            "Beast",
+            "Frog",
+            "Damon"
+
         };
     }
 }
