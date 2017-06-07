@@ -44,7 +44,7 @@ public class Chat : MonoBehaviour
         _input.onValueChanged.AddListener(s => _isWriting = true);
         _input.onEndEdit.AddListener(s =>
             {
-                sendMessage(s);
+                SendMessage(s);
                 _isWriting = false;
             }); 
     }
@@ -126,22 +126,23 @@ public class Chat : MonoBehaviour
         }
         else
             message += "BOTH AYY";
-        sendMessage(message);
+        SendMessage(message);
+
+        _timeSinceLastMessage = 0f;
     }
 
-    private void sendMessage(string message)
+    public void SendMessage(string username, string message)
     {
         _isWriting = false;
         _input.text = "";
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE,
             new object[]
             {
-                (object)_username,
+                (object)username,
                 (object)message
             }
         );
-        ReceiveMessage(_username, message);
-        _timeSinceLastMessage = 0f;
+        ReceiveMessage(username, message);
     }
  
     public void ShowChat()
