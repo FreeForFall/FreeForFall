@@ -270,10 +270,17 @@ public class GameEngine
             if (player == _localPlayer)
                 Debug.Log("LOCAL PLAYER");
             var bottom = player.transform.Find("bottom");
-            if (bottom == null)
+            var ai = player.GetComponent<SimpleAI>();
+            if (ai != null)
+            {
+                player.transform.Find("Canvas").Find("Text").GetComponent<Text>().text = ai.Name;
+                Debug.Log("AI Named");
                 continue;
-            bottom.Find("Canvas").Find("Text").GetComponent<Text>().text 
-                = player.GetComponent<PhotonView>().owner.NickName;
+            }
+            if (bottom != null)
+            {
+                bottom.Find("Canvas").Find("Text").GetComponent<Text>().text = player.GetComponent<PhotonView>().owner.NickName;
+            }
         } 
     }
 
