@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Chat : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class Chat : MonoBehaviour
     private float _timeSinceLastMessage;
     private Text _chatText;
     private Image _chatPanel;
+    private List<string> _chatMessages;
 
     void Start()
     {
@@ -19,8 +22,37 @@ public class Chat : MonoBehaviour
         _engine = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
         var p = _engine.Player;
         _username = p.GetComponent<PhotonView>().owner.NickName;
-        _chatText = p.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
-        _chatPanel = p.transform.Find("Canvas").Find("ChatPanel").GetComponent<Image>();
+        _chatText = GameObject.Find("ChatManager/Canvas/ChatText").GetComponent<Text>();
+        _chatPanel = GameObject.Find("ChatManager/Canvas/ChatPanel").GetComponent<Image>();
+        _chatMessages = new List<string>();
+        
+    }
+
+    public void ReceiveMessage(string name, string content)
+    {
+        _chatMessages.Add(name + " - " + content + "\n");
+        updateDisplay();
+        ShowChat();
+    }
+
+
+    private void updateDisplay()
+    {
+        if (_chatMessages.Count < 9)
+        {
+            _chatText.text += _chatMessages.Last();
+            return;
+        }
+
+        while (_chatMessages.Count > 9)
+            _chatMessages.RemoveAt(0);
+       
+        _chatText.text = "";
+        foreach (var msg in _chatMessages)
+        {
+            _chatText.text += msg;
+        }
+
     }
 
     void Update()
@@ -74,20 +106,8 @@ public class Chat : MonoBehaviour
                 (object)message
             }
         );
-        _engine.ReceiveChatMessage(_username, message);
-
+        ReceiveMessage(_username, message);
         _timeSinceLastMessage = 0f;
-        /* if (Input.GetKeyDown(KeyCode.C)) */
-        /* { */
-        /*     NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE, */
-        /*         new object[] */
-        /*         { */
-        /*             (object)_username, */
-        /*             (object)"Sent " + count++.ToString() */
-        /*         } */
-        /*     ); */
-        /*     _engine.ReceiveChatMessage(_username, "Sent " + count.ToString()); */
-        /* } */
     }
  
     public void ShowChat()

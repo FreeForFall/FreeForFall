@@ -33,11 +33,9 @@ public class GameEngine
 
     private Constants.ROBOT_IDS _robotID;
 
-    private Text _chatText;
-
-    private Image _chatPanel;
-
     private List<string> _chatMessages;
+
+    private Chat _chat;
     
     public void Reset()
     {
@@ -196,7 +194,6 @@ public class GameEngine
     {
         GameObject.Destroy(GameObject.Find("BoxPrefab"));
         setNametags();
-        _localPlayer.GetComponent<Chat>().enabled = true;
     }
 
     /// <summary>
@@ -232,7 +229,10 @@ public class GameEngine
             Debug.Log("Trying to create a player I already had");
             return;
         }
+        _chat = GameObject.Find("ChatManager").GetComponent<Chat>();
+        _chat.enabled = true;
         _hasAlreadySpawned = true;
+        GameObject.Find("ChatManager").GetComponent<Chat>().enabled = true;
         updateReferences();
         Vector3 spawnPosition = _map.transform.Find("BoxPrefab").transform.position + Vector3.up * 15;
         spawnPosition.x = UnityEngine.Random.Range(-9f, 9f);
@@ -243,8 +243,6 @@ public class GameEngine
         _localPhotonView = _localPlayer.GetComponent<PhotonView>();
 // _localPlayer.transform.Find("bottom").Find("Canvas").Find("Text").GetComponent<Text>().text = PhotonNetwork.playerName;
         _localPlayer.GetComponentInChildren<PlayerController>().enabled = true;
-        _chatText = _localPlayer.transform.Find("Canvas").Find("ChatText").GetComponent<Text>();
-        _chatPanel = _localPlayer.transform.Find("Canvas").Find("ChatPanel").GetComponent<Image>();
         _localPlayer.GetComponent<ShooterB>().enabled = true;
         _shooterB = _localPlayer.GetComponent<ShooterB>();
         _localPlayer.GetComponent<UI>().enabled = true;
@@ -399,28 +397,8 @@ public class GameEngine
     public void ReceiveChatMessage(string name, string content)
     {
         Debug.Log("Received message from " + name + " : " + content);
-        _chatMessages.Add(name + " - " + content + "\n");
-        updateChatDisplay();
-        Player.GetComponent<Chat>().ShowChat();
+        if (_chat != null)
+            _chat.ReceiveMessage(name, content);
     }
 
-
-    private void updateChatDisplay()
-    {
-
-        if (_chatMessages.Count < 9)
-        {
-            _chatText.text += _chatMessages.Last();
-            return;
-        }
-
-        while (_chatMessages.Count > 9)
-            _chatMessages.RemoveAt(0);
-       
-        _chatText.text = "";
-        foreach (var msg in _chatMessages)
-        {
-            _chatText.text += msg;
-        }
-    }
 }
