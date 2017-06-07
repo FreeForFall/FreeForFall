@@ -28,7 +28,7 @@ namespace AssemblyCSharp
 
         public const float GRIP_CD = 2f;
 
-        public const float PROJECTILE_FORCE = 15000f;
+        public const float PROJECTILE_FORCE = 10000f;
 
         public const float NETWORK_SMOOTHING = 0.1f;
 
@@ -40,7 +40,7 @@ namespace AssemblyCSharp
 
         public const float BAZOOKA_EXPLOSION_FORCE = 500000f;
 
-        public const float GRIP_PULL_FORCE = 600000f;
+        public const float GRIP_PULL_FORCE = 1000000f;
 
         public const int NUMBER_OF_AI = 5;
 
