@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
 
 public class Settings : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class Settings : MonoBehaviour
         FpsMode = false;
         Debug.Log(OnlineMode);
         DontDestroyOnLoad(transform.gameObject);
+
+        Physics.gravity = new Vector3(0, - Constants.PHYSICS_GRAVITY, 0);
     }
 
     public void PlayOnline()
