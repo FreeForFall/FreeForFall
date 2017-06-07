@@ -13,12 +13,13 @@ public class Chat : MonoBehaviour
     private float _timeSinceLastMessage;
     private Text _chatText;
     private Canvas _canvas;
+    private InputField _input;
     private List<string> _chatMessages;
-    private bool _inPostRound;
+    private bool _isWriting;
 
     void Start()
     {
-        _inPostRound = false;
+        _isWriting = false;
         _timeSinceLastShown = 0f;
         _timeSinceLastMessage = 0f;
         _engine = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
@@ -27,8 +28,13 @@ public class Chat : MonoBehaviour
         _chatText = GameObject.Find("ChatManager/Canvas/ChatText").GetComponent<Text>();
         _canvas = GameObject.Find("ChatManager/Canvas").GetComponent<Canvas>();        
         _chatMessages = new List<string>();
-
-        
+        _input = _canvas.transform.Find("ChatPanel/InputField").gameObject.GetComponent<InputField>();
+        _input.onValueChanged.AddListener(s => _isWriting = true);
+        _input.onEndEdit.AddListener(s =>
+            {
+                sendMessage(s);
+                _isWriting = false;
+            }); 
     }
 
     public void ReceiveMessage(string name, string content)
@@ -67,10 +73,15 @@ public class Chat : MonoBehaviour
          * */
         _timeSinceLastShown += Time.deltaTime;
         _timeSinceLastMessage += Time.deltaTime;
-        if (_timeSinceLastShown > 3f && !_inPostRound)
+        if (_timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
         {
             HideChat();
         }
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            ShowChat(); 
+            _input.Select();
+        }   
 
         if (_timeSinceLastMessage < 0.5f)
             return;
@@ -103,7 +114,13 @@ public class Chat : MonoBehaviour
         }
         else
             message += "BOTH AYY";
+        sendMessage(message);
+    }
 
+    private void sendMessage(string message)
+    {
+        _isWriting = false;
+        _input.text = "";
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE,
             new object[]
             {
