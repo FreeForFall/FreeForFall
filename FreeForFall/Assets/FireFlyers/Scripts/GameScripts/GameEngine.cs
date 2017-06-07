@@ -229,6 +229,7 @@ public class GameEngine
             Debug.Log("Trying to create a player I already had");
             return;
         }
+        Cursor.visible = false;
         _chat = GameObject.Find("ChatManager").GetComponent<Chat>();
         _chat.InMenu = false;
         _hasAlreadySpawned = true;

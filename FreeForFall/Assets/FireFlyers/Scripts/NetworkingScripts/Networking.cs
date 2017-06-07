@@ -38,6 +38,7 @@ public class Networking : MonoBehaviour
     private Chat _chat;
     private int _round;
     private Constants.MAPS_IDS _mapID;
+    private float _countdown;
 
     private GameEngine _engine;
 
@@ -158,7 +159,20 @@ public class Networking : MonoBehaviour
     /// </summary>
     public void RemoveWalls()
     {
+        if (PhotonNetwork.isMasterClient)
+        {
+            _countdown = Constants.START_GAME_DELAY;
+            sendCountdown();
+        }
         Invoke("doRemove", Constants.START_GAME_DELAY);
+    }
+
+    private void sendCountdown()
+    {
+        if (_countdown == -1)
+            return;
+        _chat.SendMessage("GAME", _countdown--.ToString());    
+        Invoke("sendCountdown", 0.9f);
     }
 
     /// <summary>
@@ -450,6 +464,7 @@ public class Networking : MonoBehaviour
     /// </summary>
     public void EndGame(string[] leaderboard)
     {
+        Cursor.visible = true;
         _leaderboard = GameObject.Find("WinCanvas").GetComponent<Canvas>();
         _leaderboard.enabled = true;
         _chat.InMenu = true;
