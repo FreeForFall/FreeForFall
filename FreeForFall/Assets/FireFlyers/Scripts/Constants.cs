@@ -14,7 +14,7 @@ namespace AssemblyCSharp
 
         public const float SPRINT_SPEED = 1.5f;
 
-        public const float JUMP_CD = 2f;
+        public const float JUMP_CD = 1f;
 
         public const float JUMP_FORCE = 150000f;
 
@@ -24,7 +24,7 @@ namespace AssemblyCSharp
 
         public const float POWERUP_SPAWN_CD = 10f;
 
-        public const float BAZOOKA_CD = 2f;
+        public const float BAZOOKA_CD = 1f;
 
         public const float GRIP_CD = 2f;
 

@@ -52,13 +52,9 @@ public class PlayerController : MonoBehaviour
     {
 
         this.rigidBody.AddForce(new Vector3(0f, Constants.JUMP_FORCE, 0f));
-        Invoke("jumpDown", 0.3f);
+
     }
 
-    private void jumpDown()
-    {
-        this.rigidBody.AddForce(new Vector3(0f, -Constants.JUMP_FORCE * 1.5f, 0f));
-    }
 
     private void doMovement()
     {
