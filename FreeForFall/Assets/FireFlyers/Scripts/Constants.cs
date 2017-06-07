@@ -28,19 +28,19 @@ namespace AssemblyCSharp
 
         public const float GRIP_CD = 2f;
 
-        public const float PROJECTILE_FORCE = 10000f;
+        public const float PROJECTILE_FORCE = 15000f;
 
         public const float NETWORK_SMOOTHING = 0.1f;
 
         public const float WHEEL_SPEED = 300f;
 
-        public const int SPEED_BOOST_POWERUP_MULT = 20;
+        public const int SPEED_BOOST_POWERUP_MULT = 4;
 
         public const float VISION_IMPAIRED_POWERUP_DURATION = 5f;
 
         public const float BAZOOKA_EXPLOSION_FORCE = 500000f;
 
-        public const float GRIP_PULL_FORCE = 300000f;
+        public const float GRIP_PULL_FORCE = 600000f;
 
         public const int NUMBER_OF_AI = 5;
 
