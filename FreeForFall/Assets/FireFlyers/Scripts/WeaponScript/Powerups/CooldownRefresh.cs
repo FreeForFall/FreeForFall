@@ -5,16 +5,18 @@ using UnityEngine;
 public class CooldownRefresh : MonoBehaviour
 {
 	public GameObject LocalPlayer;
+ 
+  void Start()
+  {
+    gameObject.GetComponent<ParticleSystem>().startColor = Color.green;
+  }
 
-    void Start()
-    {
-        gameObject.GetComponent<ParticleSystem>().startColor = Color.green;
-    }
     void OnTriggerEnter (Collider c)
 	{
-		Debug.LogWarning ("Something collided with the powerup");
-		if (c.gameObject.tag == "Player")
-		{
+        Debug.LogWarning("Something collided with the powerup");
+        playerscript = c.GetComponent<PowerUpsHud>();
+        if (c.gameObject.tag == "Player" && !playerscript.OnePowerUp)
+        {
 			GameObject g;
 			if (c.name == "bottom")
 			{
@@ -27,7 +29,7 @@ public class CooldownRefresh : MonoBehaviour
 			if (g == LocalPlayer)
 			{
 				Debug.LogWarning ("Doing CooldownRefresh on " + g);
-				doPowerup (g);
+                playerscript.DoUpdate("2");
 			}
 			else
 			{
@@ -37,8 +39,4 @@ public class CooldownRefresh : MonoBehaviour
 		}
 	}
 
-	private void doPowerup (GameObject c)
-	{
-		c.GetComponentInChildren<ShooterB> ().RefreshCooldowns ();
-	}
 }
