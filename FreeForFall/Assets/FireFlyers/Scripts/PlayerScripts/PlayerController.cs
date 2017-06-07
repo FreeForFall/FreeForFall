@@ -63,9 +63,9 @@ public class PlayerController : MonoBehaviour
     private void doMovement()
     {
         if ((Input.GetKeyDown(KeyCode.Joystick1Button0)
-        || Input.GetKeyDown(KeyCode.Space))
-        && !this.airbone
-        && Constants.JUMP_CD < TimeSincePreviousJump)
+            || Input.GetKeyDown(KeyCode.Space))
+            && !this.airbone
+            && Constants.JUMP_CD < TimeSincePreviousJump)
         {
             GameObject JumpeffectDone = Instantiate(jumpeffect, jumpflamelocation.transform.position, jumpflamelocation.transform.rotation) as GameObject;
             jumpsound.Play();
@@ -100,8 +100,9 @@ public class PlayerController : MonoBehaviour
             rotation = Quaternion.LookRotation(direction, Vector3.up);
             cam = new Quaternion(0, playerCamera.rotation.y, 0, playerCamera.rotation.w);
             rb.rotation = Quaternion.Lerp(transform.rotation, cam * rotation, 800 * Time.deltaTime);
-            transform.position = Vector3.Lerp(transform.position, transform.position + transform.forward, 
-                Constants.MOVEMENT_SPEED * sprintMultiplier * Time.deltaTime * _speedBoost);
+            transform.position = Vector3.Lerp(transform.position, 
+                transform.position + transform.forward * Constants.MOVEMENT_SPEED * _speedBoost, 
+                Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Joystick1Button6))
         {
