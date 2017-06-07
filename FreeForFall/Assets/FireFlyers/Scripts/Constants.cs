@@ -4,7 +4,7 @@ namespace AssemblyCSharp
 {
     public static class Constants
     {
-        public const int PHYSICS_GRAVITY = 45;
+        public const int PHYSICS_GRAVITY = 60;
 
         public const int ROUND_COUNT = 2;
 
