@@ -7,11 +7,6 @@ namespace AssemblyCSharp
 {
     public static class NetworkEventHandlers
     {
-        public static void SendEvent(NetworkEvent e)
-        {
-            PhotonNetwork.RaiseEvent(e.NetworkEventCode, e.Content, e.Reliable, null);
-        }
-
         public static void Broadcast(Constants.EVENT_IDS id, object[] content)
         {
             Debug.Log("SENT " + id.ToString());
