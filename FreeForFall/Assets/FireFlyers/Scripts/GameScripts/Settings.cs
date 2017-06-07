@@ -28,6 +28,8 @@ public class Settings : MonoBehaviour
         FpsMode = false;
         Debug.Log(OnlineMode);
         DontDestroyOnLoad(transform.gameObject);
+
+        Physics.gravity = new Vector3(0, -45, 0);
     }
 
     public void PlayOnline()

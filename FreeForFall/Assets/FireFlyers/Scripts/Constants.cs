@@ -22,9 +22,9 @@ namespace AssemblyCSharp
 
         public const float POWERUP_SPAWN_CD = 10f;
 
-        public const float BAZOOKA_CD = 3f;
+        public const float BAZOOKA_CD = 2f;
 
-        public const float GRIP_CD = 3f;
+        public const float GRIP_CD = 2f;
 
         public const float PROJECTILE_FORCE = 10000f;
 
