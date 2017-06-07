@@ -11,7 +11,6 @@ public class SimpleAI : MonoBehaviour
     public GameObject jumpeffect;
     public Transform jumpflamelocation;
     public float sensorLength = 2f;
-    public float speed = 30f;
     public float turnspeed = 1000f;
     private int turnValue = 0;
     private System.Random rng;
@@ -20,6 +19,8 @@ public class SimpleAI : MonoBehaviour
     private bool jumping;
     private bool playfrogs;
     private string _name;
+    private float airtime;
+    private float start;
 
     public string Name
     {
@@ -36,6 +37,7 @@ public class SimpleAI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        start = 0f;
         Timesincelastjump = 3;
         turnValue = 1;
         this.playfrogs = false;
@@ -47,17 +49,25 @@ public class SimpleAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Timesincelastjump += Time.deltaTime;
-        air();
-        if (!airbone)
+        if(start >= Constants.START_GAME_DELAY-1.5f)
         {
-            Mouvement();
+            Timesincelastjump += Time.deltaTime;
+            air();
+            if (!airbone)
+            {
+                Mouvement();
+            }
+            if (jumping)
+            {
+                airbone = true;
+                airtime = 1f;
+                transform.position += transform.forward * Constants.MOVEMENT_SPEED * Time.deltaTime;
+            }
         }
-        if (jumping)
+        else
         {
-            transform.position += transform.forward * speed * Time.deltaTime;
+            start += Time.deltaTime;
         }
-
     }
 
     void OnDrawGizmos()
@@ -78,7 +88,7 @@ public class SimpleAI : MonoBehaviour
         int flag = 0;
         if (!Physics.Raycast(transform.position + 0.5f * transform.forward + transform.up, transform.forward + -transform.up, out hit, (sensorLength + transform.localScale.z)))
         {
-            if (Physics.Raycast(transform.position + 1 * transform.forward * 8, -transform.up, out hit, 3) && Constants.JUMP_CD_AI < Timesincelastjump)
+            if (Physics.Raycast(transform.position + 1 * transform.forward * 11, -transform.up, out hit, 3) && Constants.JUMP_CD_AI < Timesincelastjump)
             {
                 jump();
             }
@@ -106,7 +116,7 @@ public class SimpleAI : MonoBehaviour
         if (flag == 0)
             turnValue = 0;
         transform.Rotate(Vector3.up * (turnspeed * turnValue) * Time.deltaTime);
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += transform.forward * Constants.MOVEMENT_SPEED * Time.deltaTime;
     }
 
     private void jump()
@@ -135,7 +145,11 @@ public class SimpleAI : MonoBehaviour
             && !Physics.Raycast(transform.position - transform.up * 1f + transform.right - transform.forward, -transform.up, out hit, (0.5f))
             && !Physics.Raycast(transform.position - transform.up * 1f + -transform.right - transform.forward, -transform.up, out hit, (0.5f)))
         {
-            airbone = true;
+            airtime += Time.deltaTime;
+            if (airtime >= 0.2f)
+            {
+                airbone = true;
+            }
             if (playfrogs)
             {
                 Fallsound.Play();
@@ -145,6 +159,7 @@ public class SimpleAI : MonoBehaviour
         else
         {
             airbone = false;
+            airtime = 0f;
         }
     }
 
