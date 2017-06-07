@@ -19,7 +19,7 @@ public class AIShooter : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        TimeSinceLastExplosion = -20f;
+        TimeSinceLastExplosion = -6f;
         HasTarget = false;
     }
 	
@@ -32,7 +32,11 @@ public class AIShooter : MonoBehaviour
             //Debug.LogWarning("Has a target");
             Direction = Target.transform.position - PlayerBody.transform.position;
             Canon.transform.rotation = Quaternion.Slerp(Canon.transform.rotation, Quaternion.LookRotation(Direction), 0.1f);
-            Shoot();
+            var x = Random.Range(0, 11);
+            if(x>7)
+            {
+                Shoot();
+            }
             HasTarget = false;
         }
         else
