@@ -7,6 +7,11 @@ public class SpeedBoost : MonoBehaviour
 {
 	public GameObject LocalPlayer;
     public PowerUpsHud playerscript;
+    void Start()
+    {
+        gameObject.GetComponent<ParticleSystem>().startColor = Color.red;
+    }
+
 	void OnTriggerEnter (Collider c)
 	{
 		Debug.LogWarning ("Something collided with the powerup");

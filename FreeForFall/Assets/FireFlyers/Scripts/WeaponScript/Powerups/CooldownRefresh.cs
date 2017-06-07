@@ -6,6 +6,12 @@ public class CooldownRefresh : MonoBehaviour
 {
 	public GameObject LocalPlayer;
     public PowerUpsHud playerscript;
+
+    void Start()
+  {
+    gameObject.GetComponent<ParticleSystem>().startColor = Color.green;
+  }
+
     void OnTriggerEnter (Collider c)
 	{
         Debug.LogWarning("Something collided with the powerup");
