@@ -495,8 +495,11 @@ public class Networking : MonoBehaviour
         _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
         foreach (var v in leaderboard)
         {
-            _leaderboardText.text += v + Environment.NewLine;
-            Debug.Log(v);
+            string[] spl = v.Split('-');
+            _leaderboardText.text += "<color=#ffa500ff>" + spl[0] + "</color>";
+            for (int i = 1; i < spl.Length; i++)
+                _leaderboardText.text += spl[i];
+            _leaderboardText.text += Environment.NewLine;
         }
         if (_round == Constants.ROUND_COUNT)
         {
