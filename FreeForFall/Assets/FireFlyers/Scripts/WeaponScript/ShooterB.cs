@@ -12,7 +12,8 @@ public class ShooterB : MonoBehaviour
     public GameObject Camera;
     public GameObject PlayerBody;
     public GameObject thing;
-    public GameObject Refreshparticle;
+    public GameObject RefreshParticleNonLocal;
+    public GameObject RefreshParticleLocal;
     public float TimeSinceLastExplosion;
     public float TimeSinceLastGrip;
     private PhotonView _pView;
@@ -66,10 +67,25 @@ public class ShooterB : MonoBehaviour
     public void RefreshCooldowns()
     {
         Debug.LogWarning("REFRESHING");
-        GameObject RefreshBuff = Instantiate(Refreshparticle, transform.FindChild("bottom").transform.position, Quaternion.identity ,transform.FindChild("bottom")) as GameObject;
-        Debug.LogWarning("Particle Rfresh");
+        RefreshCooldownsParticles(transform.FindChild("bottom").transform.position, true);
         TimeSinceLastExplosion = Constants.BAZOOKA_CD;
         TimeSinceLastGrip = Constants.GRIP_CD;
-        Destroy(RefreshBuff, 1f);
+    }
+
+    public void RefreshCooldownsParticles(Vector3 position, bool local = false)
+    {
+        GameObject particle;
+        if (local)
+        {
+            particle = Instantiate(RefreshParticleLocal, position, Quaternion.identity, transform.FindChild("bottom")) as GameObject;
+            Debug.LogWarning("Particle Rfresh");
+        }
+        else
+        {
+            particle = Instantiate(RefreshParticleNonLocal, position, Quaternion.identity) as GameObject;
+            Debug.LogWarning("Particle Rfresh");
+        }
+
+        Destroy(particle, 1f);
     }
 }
