@@ -12,6 +12,7 @@ public class ShooterB : MonoBehaviour
     public GameObject Camera;
     public GameObject PlayerBody;
     public GameObject thing;
+    public GameObject Refreshparticle;
     public float TimeSinceLastExplosion;
     public float TimeSinceLastGrip;
     private PhotonView _pView;
@@ -65,7 +66,10 @@ public class ShooterB : MonoBehaviour
     public void RefreshCooldowns()
     {
         Debug.LogWarning("REFRESHING");
+        GameObject RefreshBuff = Instantiate(Refreshparticle, transform.FindChild("bottom").transform.position, Quaternion.identity ,transform.FindChild("bottom")) as GameObject;
+        Debug.LogWarning("Particle Rfresh");
         TimeSinceLastExplosion = Constants.BAZOOKA_CD;
         TimeSinceLastGrip = Constants.GRIP_CD;
+        Destroy(RefreshBuff, 1f);
     }
 }

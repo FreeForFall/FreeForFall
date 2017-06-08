@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public GameObject jumpeffect;
     public Transform jumpflamelocation;
     public GameObject portal;
+    public GameObject speedparticle;
     public float TimeSincePreviousJump;
     private float sprintMultiplier;
     private bool airbone;
@@ -114,7 +115,9 @@ public class PlayerController : MonoBehaviour
     public void SpeedBoost(float mult)
     {
         _speedBoost = mult;
+        GameObject speedbuff = Instantiate(speedparticle, transform.position, transform.rotation, transform) as GameObject;
         Invoke("removeSpeedBoost", 2);
+        Destroy(speedbuff, 2);
     }
 
     public void Swap()

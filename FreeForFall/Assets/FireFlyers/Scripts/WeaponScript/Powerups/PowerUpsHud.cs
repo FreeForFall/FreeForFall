@@ -10,6 +10,7 @@ public class PowerUpsHud : MonoBehaviour {
     public string action;
     public string todo = "";
     public GameObject self;
+    public GameObject visionparticle;
 
 	// Use this for initialization
 	void Start ()
@@ -47,6 +48,8 @@ public class PowerUpsHud : MonoBehaviour {
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.IMPAIR_VISION_EFFECT);
         GameObject g = c.transform.parent.gameObject;
         g.transform.Find("Canvas/PowerCanvas/ImpairedVision").gameObject.GetComponent<Image>().enabled = false;
+        GameObject visionbuff = Instantiate(visionparticle, transform.position, Quaternion.identity, transform) as GameObject;
+        Destroy(visionbuff, 1f);
 
     }
 
