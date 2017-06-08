@@ -30,14 +30,7 @@ public class NetworkPlayerController : MonoBehaviour
     {
         if (!_photonView.isMine)
         {
-            if (Vector3.Distance(_bottom.position, _targetPosition) > 6f)
-            {
-                _bottom.position = _targetPosition;
-            }
-            else
-            {
-                _bottom.position = Vector3.Lerp(_bottom.position, _targetPosition, Constants.NETWORK_SMOOTHING);
-            }
+            _bottom.position = Vector3.Lerp(_bottom.position, _targetPosition, Constants.NETWORK_SMOOTHING);
             _bottom.rotation = Quaternion.Lerp(_bottom.rotation, _targetBottomRotation, Constants.NETWORK_SMOOTHING);
             _torso.rotation = Quaternion.Lerp(_torso.rotation, _targetTorsoRotation, Constants.NETWORK_SMOOTHING);
         }
