@@ -117,6 +117,7 @@ public class Chat : MonoBehaviour
         float leftRight = 0f;
         string message = "";
 
+       
 
 #if UNITY_STANDALONE_WIN
         leftRight = Input.GetAxis("WindowsLeftRightDPAD");
@@ -127,20 +128,21 @@ public class Chat : MonoBehaviour
         upDown = Input.GetAxis("LinuxUpDownDPAD");
 #endif
 
-
         if (leftRight == 0f && upDown == 0f)
             return;
-      
-        if (leftRight == 0f)
-        {
-            message += "WELL PLAYED";
-        }
-        else if (upDown == 0f)
-        {
-            message += "GIT GUD";
-        }
+        else if (leftRight == 1f && upDown == 0f)
+            message = "WELL PLAYED!!!";
+        else if (leftRight == -1f && upDown == 0f)
+            message = "YOU GOT ME !!!";
+        else if (leftRight == 0f && upDown == 1f)
+            message = "AWESOME !!!";
+        else if (leftRight == 0f && upDown == -1f)
+            message = "GG !!!";
         else
-            message += "BOTH AYY";
+            return;
+
+
+
         SendChatMessage(_username, message);
 
         _timeSinceLastMessage = 0f;
