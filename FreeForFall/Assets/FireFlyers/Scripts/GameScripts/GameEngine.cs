@@ -204,8 +204,16 @@ public class GameEngine
         _mapID = id;
         string name = Constants.MAP_SCENES_NAMES[(int)id];
         Debug.Log(_playerCount + " - " + _playerSpawned);
+        var w = GameObject.Find("WaitForGameStartCanvas");
+        if (w != null)
+        {
+            w.GetComponent<Canvas>().enabled = false;
+            GameObject.Find("Loading").GetComponent<Canvas>().enabled = true;
+        }
         SceneManager.LoadScene(name);
+
     }
+
 
     /// <summary>
     /// Sets the map up

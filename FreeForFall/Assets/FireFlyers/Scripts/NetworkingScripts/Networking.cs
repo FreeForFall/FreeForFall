@@ -530,4 +530,18 @@ public class Networking : MonoBehaviour
     }
 
 
+    public void LoadingScreen(string s)
+    {
+        StartCoroutine(LoadNewScene(s));
+    }
+
+
+    private IEnumerator LoadNewScene(string s)
+{
+    AsyncOperation async = SceneManager.LoadSceneAsync(s);
+    while (!async.isDone)
+        yield return null;
+
+}
+
 }
