@@ -116,6 +116,8 @@ namespace AssemblyCSharp
 
             BAZOOKA_SHOT,
             SWAP_PARTICLES,
+            COOLDOWN_REFRESH_PARTICLES,
+            VISION_IMPAIRED_PARTICLES,
 
             CHAT_MESSAGE,
 

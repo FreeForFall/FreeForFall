@@ -163,6 +163,14 @@ public class Networking : MonoBehaviour
                 _engine.SwapParticles((Vector3)c[0]);
                 return;
 
+            case Constants.EVENT_IDS.COOLDOWN_REFRESH_PARTICLES:
+                _engine.CooldownRefreshParticles((Vector3)c[0]);
+                return;
+
+            case Constants.EVENT_IDS.VISION_IMPAIRED_PARTICLES:
+                _engine.VisionImpairedParticles((Vector3)c[0]);
+                return;
+
             default:
                 Debug.LogError("UNKNOWN EVENT");
                 return;

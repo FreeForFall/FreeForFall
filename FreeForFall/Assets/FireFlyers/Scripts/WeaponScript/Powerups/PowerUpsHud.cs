@@ -4,22 +4,24 @@ using UnityEngine;
 using AssemblyCSharp;
 using UnityEngine.UI;
 
-public class PowerUpsHud : MonoBehaviour {
+public class PowerUpsHud : MonoBehaviour
+{
 
     public bool OnePowerUp = false;
     public string action;
     public string todo = "";
     public GameObject self;
-    public GameObject visionparticle;
+    public GameObject visionparticlelocal;
+    public GameObject visionparticlenonlocal;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
 		
-	}
+    }
 
-	// Update is called once per frame
-	public void DoUpdate (string powerup)
+    // Update is called once per frame
+    public void DoUpdate(string powerup)
     {
         todo = powerup;
         OnePowerUp = true;
@@ -46,11 +48,21 @@ public class PowerUpsHud : MonoBehaviour {
     public void ImpairedVision(GameObject c)
     {
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.IMPAIR_VISION_EFFECT);
+        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.VISION_IMPAIRED_PARTICLES, transform.position);
         GameObject g = c.transform.parent.gameObject;
         g.transform.Find("Canvas/PowerCanvas/ImpairedVision").gameObject.GetComponent<Image>().enabled = false;
-        GameObject visionbuff = Instantiate(visionparticle, transform.position, Quaternion.identity, transform) as GameObject;
-        Destroy(visionbuff, 1f);
+        ImpairedVisionParticles(transform.position, true);
+    }
 
+    public void ImpairedVisionParticles(Vector3 a, bool local = false)
+    {
+        Debug.Log("Impair vision particles");
+        GameObject visionbuff;
+        if (local)
+            visionbuff = Instantiate(visionparticlelocal, a, Quaternion.identity, transform) as GameObject;
+        else
+            visionbuff = Instantiate(visionparticlenonlocal, a, Quaternion.identity) as GameObject;
+        Destroy(visionbuff, 2f);
     }
 
     public void SpeedBoost(GameObject c)
@@ -68,7 +80,7 @@ public class PowerUpsHud : MonoBehaviour {
         g.transform.Find("Canvas/PowerCanvas/Cooldown").gameObject.GetComponent<Image>().enabled = false;
     }
 
-    public void Swap (GameObject c)
+    public void Swap(GameObject c)
     {
         c.GetComponentInChildren<PlayerController>().Swap();
         GameObject g = c.transform.parent.gameObject;

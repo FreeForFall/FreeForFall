@@ -417,4 +417,14 @@ public class GameEngine
     {
         _localPlayer.transform.Find("bottom").gameObject.GetComponent<PlayerController>().SpawnSwapParticles(a);
     }
+
+    public void CooldownRefreshParticles(Vector3 a)
+    {
+
+    }
+
+    public void VisionImpairedParticles(Vector3 a)
+    {
+        _localPlayer.transform.Find("bottom").gameObject.GetComponent<PowerUpsHud>().ImpairedVisionParticles(a);
+    }
 }
