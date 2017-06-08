@@ -91,7 +91,7 @@ namespace AssemblyCSharp
         {
             "SpaceArena",
             "BasicArena",
-            "TestArena",
+            "TestScene",
             "Volcano"
         };
 
@@ -115,6 +115,7 @@ namespace AssemblyCSharp
             IMPAIR_VISION_EFFECT,
 
             BAZOOKA_SHOT,
+            SWAP_PARTICLES,
 
             CHAT_MESSAGE,
 

@@ -413,4 +413,8 @@ public class GameEngine
     /*         _chat.ReceiveMessage(name, content); */
     /* } */
 
+    public void SwapParticles(Vector3 a)
+    {
+        _localPlayer.transform.Find("bottom").gameObject.GetComponent<PlayerController>().SpawnSwapParticles(a);
+    }
 }

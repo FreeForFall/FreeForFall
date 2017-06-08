@@ -3,6 +3,7 @@ using AssemblyCSharp;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class Chat : MonoBehaviour
 {
@@ -59,19 +60,28 @@ public class Chat : MonoBehaviour
 
     private void updateDisplay()
     {
-        if (_chatMessages.Count < 9)
+        if (_chatMessages.Count < 10)
         {
-            _chatText.text += _chatMessages.Last();
+            var msg = _chatMessages.Last();
+            string[] spl = msg.Split('-');
+            _chatText.text += "<color=#ffa500ff>" + spl[0] + "</color>";
+            for (int i = 1; i < spl.Length; i++)
+                _chatText.text += "-" + spl[i];
             return;
         }
 
-        while (_chatMessages.Count > 9)
+        while (_chatMessages.Count > 10)
             _chatMessages.RemoveAt(0);
        
         _chatText.text = "";
         foreach (var msg in _chatMessages)
         {
-            _chatText.text += msg;
+
+            Debug.Log(msg);
+            string[] spl = msg.Split('-');
+            _chatText.text += "<color=#ffa500ff>" + spl[0] + "</color>";
+            for (int i = 1; i < spl.Length; i++)
+                _chatText.text += "-" + spl[i];
         }
 
     }

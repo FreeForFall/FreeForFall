@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicSwitch : MonoBehaviour {
+public class MusicSwitch : MonoBehaviour
+{
     public AudioSource music_space;
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
-        GameObject a = GameObject.Find("MusicMenu");
+        GameObject a = GameObject.Find("MusicMenu(Clone)");
         Destroy(a);
         music_space.Play();
-	}
+    }
 	
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
 		
-	}
+    }
 }

@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private float _speedBoost;
     public AudioSource motorsound;
     public AudioSource jumpsound;
+    private GameObject _spawn;
 
     // Use this for initialization
     void Start()
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
         this.rigidBody = this.GetComponent<Rigidbody>();
         rb = GetComponent<Rigidbody>();
         _speedBoost = 1f;
+        _spawn = GameObject.Find("DevSpawn");
     }
 
     void OnCollisionEnter(Collision other)
@@ -72,10 +74,9 @@ public class PlayerController : MonoBehaviour
             Destroy(JumpeffectDone, 0.5f);
         }
 
-        if (Input.GetKey(KeyCode.P) || Input.GetKey(KeyCode.Joystick1Button7))
+        if (Input.GetKey(KeyCode.F1) || Input.GetKey(KeyCode.Joystick1Button7))
         {
-            SceneManager.LoadScene("Menu");
-            Cursor.visible = true;
+            GameObject.Find("NetworkManager").GetComponent<Networking>().menu();
         }
         #if UNITY_STANDALONE_WIN
         if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
@@ -119,12 +120,17 @@ public class PlayerController : MonoBehaviour
         Destroy(speedbuff, 2);
     }
 
-    public void Swap ()
+    public void Swap()
     {
-        GameObject portalIn = Instantiate(portal, transform.position + transform.up*10, transform.rotation) as GameObject;
-        var spawn = GameObject.Find("DevSpawn");
-        transform.position = spawn.transform.position;
-        GameObject portalOut = Instantiate(portal, transform.position, transform.rotation) as GameObject;
+        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.SWAP_PARTICLES, transform.position);
+        SpawnSwapParticles(transform.position);
+        transform.position = _spawn.transform.position;
+    }
+    
+    public void SpawnSwapParticles(Vector3 a)
+    {
+        GameObject portalIn = Instantiate(portal, a, transform.rotation) as GameObject;
+        GameObject portalOut = Instantiate(portal, _spawn.transform.position, transform.rotation) as GameObject;
         Destroy(portalIn, 2f);
         Destroy(portalOut, 2f);
     }
@@ -134,12 +140,11 @@ public class PlayerController : MonoBehaviour
         _speedBoost = 1f;
     }
 
-    private void DevSpawn ()
+    private void DevSpawn()
     {
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKey(KeyCode.Joystick1Button1))
         {
-            var spawn = GameObject.Find("DevSpawn");
-            transform.position = spawn.transform.position;
+            transform.position = _spawn.transform.position;
         }
     }
 
