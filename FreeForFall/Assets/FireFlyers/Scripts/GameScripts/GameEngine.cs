@@ -425,6 +425,6 @@ public class GameEngine
 
     public void VisionImpairedParticles(Vector3 a)
     {
-        _localPlayer.transform.Find("bottom").gameObject.GetComponent<PowerUpsHud>().ImpairedVisionParticles(a);
+        _localPlayer.transform.Find("bottom").gameObject.GetComponent<PowerUpsHud>().ImpairedVisionParticles(a, true);
     }
 }
