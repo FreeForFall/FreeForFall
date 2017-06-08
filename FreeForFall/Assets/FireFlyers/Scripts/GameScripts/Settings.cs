@@ -15,6 +15,8 @@ public class Settings : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        if (GameObject.Find("MusicMenu(Clone)") == null)
+            Instantiate(Resources.Load("MusicMenu"));
         UnityEngine.Cursor.visible = true;
         var net = GameObject.Find("NetworkManager");
         if (net != null)

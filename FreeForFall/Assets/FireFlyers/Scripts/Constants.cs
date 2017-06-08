@@ -42,7 +42,7 @@ namespace AssemblyCSharp
 
         public const float GRIP_PULL_FORCE = 1000000f;
 
-        public const int NUMBER_OF_AI = 5;
+        public const int NUMBER_OF_AI = 0;
 
         public const float START_GAME_DELAY = 5f;
 

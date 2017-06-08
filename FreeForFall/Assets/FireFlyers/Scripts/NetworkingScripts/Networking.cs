@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AssemblyCSharp;
+using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
@@ -39,6 +40,16 @@ public class Networking : MonoBehaviour
     private int _round;
     private Constants.MAPS_IDS _mapID;
     private float _countdown;
+
+    private Toggle _volcanotoggle;
+    private Toggle _spacetoggle;
+    private ToggleGroup _mapSelect;
+    private ToggleGroup _robotSelect;
+    private Toggle _testtoggle;
+    private Toggle _basicetoggle;
+    private Toggle _talltoggle;
+    private Toggle _shorttoggle;
+
 
     private GameEngine _engine;
 
@@ -214,17 +225,15 @@ public class Networking : MonoBehaviour
         GameObject.Find("MatchmakingCanvas").GetComponent<Canvas>().enabled = false;
         if (!PhotonNetwork.isMasterClient)
             _waitingForGameStartText.text = PhotonNetwork.room.PlayerCount + " players are in the room.";
-        string selected = _robotChooser.GetComponentInChildren<Text>().text; 
         Constants.ROBOT_IDS robotID;
-        switch (selected)
-        {
-            case "Not So Shitty Robot":
-                robotID = Constants.ROBOT_IDS.ROBOT_2;
-                break;
-            default:
-                robotID = Constants.ROBOT_IDS.ROBOT_1;
-                break;
-        }
+
+        if (_robotSelect.ActiveToggles().FirstOrDefault() == _talltoggle)
+            robotID = Constants.ROBOT_IDS.ROBOT_1;
+        if (_robotSelect.ActiveToggles().FirstOrDefault() == _shorttoggle)
+            robotID = Constants.ROBOT_IDS.ROBOT_2;
+        else
+            robotID = Constants.ROBOT_IDS.ROBOT_1;
+         
         _engine = new GameEngine(_mapID, robotID);
     }
 
@@ -254,8 +263,6 @@ public class Networking : MonoBehaviour
             _joinRoomButton.gameObject.SetActive(false);
 
             // this is a hack and won't work if the mapChooser changes too much
-            Vector3 pos = _roomCreationButton.transform.position;
-            _roomCreationButton.transform.position = new Vector3((_mapChooser.transform.position.x + _robotChooser.transform.position.x) / 2, pos.y, pos.z);
             _roomList.enabled = false;
             GameObject.Find("MatchmakingCanvas/AvailableText").GetComponent<Text>().text = "";
             
@@ -278,11 +285,20 @@ public class Networking : MonoBehaviour
         _refreshButton = GameObject.Find("RefreshButton").GetComponent<Button>();
         _roomList = GameObject.Find("RoomListView").GetComponent<Text>();
         _nicknameInput = GameObject.Find("NicknameInput").GetComponent<InputField>();
-        _mapChooser = GameObject.Find("MapChoosingDropdown").GetComponent<Dropdown>();
+//        _mapChooser = GameObject.Find("MapChoosingDropdown").GetComponent<Dropdown>();
         _startGameButton = GameObject.Find("StartGameButton").GetComponent<Button>();
         _roomNameInput = GameObject.Find("RoomNameInput").GetComponent<InputField>();
         _waitingForGameStartText = GameObject.Find("WaitForGameStartCanvas").transform.FindChild("Text").GetComponent<Text>();
-        _robotChooser = GameObject.Find("RobotChoosingDropdown").GetComponent<Dropdown>();
+//        _robotChooser = GameObject.Find("RobotChoosingDropdown").GetComponent<Dropdown>();
+        _spacetoggle = GameObject.Find("Space").GetComponent<Toggle>();
+        _volcanotoggle = GameObject.Find("Volcano").GetComponent<Toggle>();
+        _testtoggle = GameObject.Find("Test").GetComponent<Toggle>();
+        _basicetoggle = GameObject.Find("Basic").GetComponent<Toggle>();
+        _talltoggle = GameObject.Find("Tallrobot").GetComponent<Toggle>();
+        _shorttoggle = GameObject.Find("Shortrobot").GetComponent<Toggle>();
+        _mapSelect = _volcanotoggle.group;
+        _robotSelect = _talltoggle.group;
+
     }
 
     /// <summary>
@@ -420,17 +436,25 @@ public class Networking : MonoBehaviour
     /// <returns>The map.</returns>
     private Constants.MAPS_IDS chooseMap()
     {
-        switch (_mapChooser.GetComponentInChildren<Text>().text)
-        {
-            case "Map1":
-                return Constants.MAPS_IDS.SPACE_MAP;
-            case "Map2":
-                return Constants.MAPS_IDS.BASIC_MAP;
-            case "Volcano":
-                return Constants.MAPS_IDS.VOLCANO_MAP;
-            default:
-                return Constants.MAPS_IDS.SPACE_MAP;
-        }
+        if (_mapSelect.ActiveToggles().FirstOrDefault() == _volcanotoggle)
+            return Constants.MAPS_IDS.VOLCANO_MAP; 
+        if (_mapSelect.ActiveToggles().FirstOrDefault() == _spacetoggle)
+            return Constants.MAPS_IDS.SPACE_MAP;
+        if (_mapSelect.ActiveToggles().FirstOrDefault() == _basicetoggle)
+            return Constants.MAPS_IDS.BASIC_MAP;
+        if (_mapSelect.ActiveToggles().FirstOrDefault() == _testtoggle)
+            return Constants.MAPS_IDS.SPACE_MAP;
+        else
+            return Constants.MAPS_IDS.SPACE_MAP;
+    }
+
+    public void menu()
+    {
+        PhotonNetwork.OnEventCall -= handler;
+        Destroy(GameObject.Find("SettingsManager"));
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("Menu");
     }
 
     /// <summary>
@@ -442,11 +466,7 @@ public class Networking : MonoBehaviour
         if (_round == Constants.ROUND_COUNT)
         {
             Debug.Log("End of the game");
-            PhotonNetwork.OnEventCall -= handler;
-            Destroy(GameObject.Find("SettingsManager"));
-            PhotonNetwork.LeaveRoom();
-            PhotonNetwork.Disconnect();
-            SceneManager.LoadScene("Menu");
+            menu();
             return;
         }
         Debug.Log("Playing the next round");

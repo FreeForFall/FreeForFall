@@ -44,7 +44,7 @@ public class Chat : MonoBehaviour
         _input.onValueChanged.AddListener(s => _isWriting = true);
         _input.onEndEdit.AddListener(s =>
             {
-                SendMessage(s);
+                SendChatMessage(_username, s);
                 _isWriting = false;
             }); 
     }
