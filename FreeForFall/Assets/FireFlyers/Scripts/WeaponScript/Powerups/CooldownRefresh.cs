@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CooldownRefresh : MonoBehaviour
 {
@@ -31,7 +32,9 @@ public class CooldownRefresh : MonoBehaviour
 			{
 				Debug.LogWarning ("Doing CooldownRefresh on " + g);
                 playerscript.DoUpdate("2");
-			}
+                g.transform.Find("Canvas/PowerCanvas/Cooldown").gameObject.GetComponent<Image>().enabled = true;
+                
+            }
 			else
 			{
 				Debug.LogWarning ("Someone else collided with the powerup, removing it");

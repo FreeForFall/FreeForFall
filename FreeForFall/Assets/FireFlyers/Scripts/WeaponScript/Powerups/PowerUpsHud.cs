@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AssemblyCSharp;
+using UnityEngine.UI;
 
 public class PowerUpsHud : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class PowerUpsHud : MonoBehaviour {
     public string action;
     public string todo = "";
     public GameObject self;
+    public GameObject visionparticle;
 
 	// Use this for initialization
 	void Start ()
@@ -44,21 +46,32 @@ public class PowerUpsHud : MonoBehaviour {
     public void ImpairedVision(GameObject c)
     {
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.IMPAIR_VISION_EFFECT);
+        GameObject g = c.transform.parent.gameObject;
+        g.transform.Find("Canvas/PowerCanvas/ImpairedVision").gameObject.GetComponent<Image>().enabled = false;
+        GameObject visionbuff = Instantiate(visionparticle, transform.position, Quaternion.identity, transform) as GameObject;
+        Destroy(visionbuff, 1f);
+
     }
 
     public void SpeedBoost(GameObject c)
     {
         Debug.LogWarning("Giving the player a speed boost");
         c.GetComponentInChildren<PlayerController>().SpeedBoost(Constants.SPEED_BOOST_POWERUP_MULT);
+        GameObject g = c.transform.parent.gameObject;
+        g.transform.Find("Canvas/PowerCanvas/Boost").gameObject.GetComponent<Image>().enabled = false;
     }
 
     public void CooldownRefresh(GameObject c)
     {
         c.GetComponentInParent<ShooterB>().RefreshCooldowns();
+        GameObject g = c.transform.parent.gameObject;
+        g.transform.Find("Canvas/PowerCanvas/Cooldown").gameObject.GetComponent<Image>().enabled = false;
     }
 
     public void Swap (GameObject c)
     {
         c.GetComponentInChildren<PlayerController>().Swap();
+        GameObject g = c.transform.parent.gameObject;
+        g.transform.Find("Canvas/PowerCanvas/Swap").gameObject.GetComponent<Image>().enabled = false;
     }
 }

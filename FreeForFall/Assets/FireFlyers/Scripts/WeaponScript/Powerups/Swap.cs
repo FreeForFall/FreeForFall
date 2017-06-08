@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Swap : MonoBehaviour {
 
@@ -31,6 +32,7 @@ public class Swap : MonoBehaviour {
             {
                 Debug.LogWarning("Doing Swap on " + g);
                 playerscript.DoUpdate("3");
+                g.transform.Find("Canvas/PowerCanvas/Swap").gameObject.GetComponent<Image>().enabled = true;
             }
             else
             {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AssemblyCSharp;
+using UnityEngine.UI;
+
 
 public class ImpairVision : MonoBehaviour
 {
@@ -27,6 +29,7 @@ public class ImpairVision : MonoBehaviour
             {
                 Debug.LogWarning("Doing ImpairVision on " + g);
                 playerscript.DoUpdate("0");
+                g.transform.Find("Canvas/PowerCanvas/ImpairedVision").gameObject.GetComponent<Image>().enabled = true;
             }
             else
             {
