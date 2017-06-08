@@ -127,8 +127,8 @@ public class PlayerController : MonoBehaviour
     {
         GameObject portalIn = Instantiate(portal, a, transform.rotation) as GameObject;
         GameObject portalOut = Instantiate(portal, _spawn.transform.position, transform.rotation) as GameObject;
-        Destroy(portalIn, 2f);
-        Destroy(portalOut, 2f);
+        Destroy(portalIn, 4f);
+        Destroy(portalOut, 4f);
     }
 
     private void removeSpeedBoost()
