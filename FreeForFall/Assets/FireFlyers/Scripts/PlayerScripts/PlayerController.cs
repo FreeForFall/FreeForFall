@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public GameObject jumpeffect;
     public Transform jumpflamelocation;
+    public GameObject portal;
     public float TimeSincePreviousJump;
     private float sprintMultiplier;
     private bool airbone;
@@ -115,9 +116,28 @@ public class PlayerController : MonoBehaviour
         Invoke("removeSpeedBoost", 2);
     }
 
+    public void Swap ()
+    {
+        GameObject portalIn = Instantiate(portal, transform.position, transform.rotation) as GameObject;
+        var spawn = GameObject.Find("DevSpawn");
+        transform.position = spawn.transform.position;
+        GameObject portalOut = Instantiate(portal, transform.position, transform.rotation) as GameObject;
+        Destroy(portalIn, 2f);
+        Destroy(portalOut, 2f);
+    }
+
     private void removeSpeedBoost()
     {
         _speedBoost = 1f;
+    }
+
+    private void DevSpawn ()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKey(KeyCode.Joystick1Button1))
+        {
+            var spawn = GameObject.Find("DevSpawn");
+            transform.position = spawn.transform.position;
+        }
     }
 
     // Update is called once per frame
@@ -125,5 +145,6 @@ public class PlayerController : MonoBehaviour
     {
         TimeSincePreviousJump += Time.deltaTime;
         doMovement();
+        DevSpawn(); 
     }
 }

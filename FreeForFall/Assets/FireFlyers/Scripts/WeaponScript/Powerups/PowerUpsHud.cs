@@ -34,6 +34,8 @@ public class PowerUpsHud : MonoBehaviour {
                 SpeedBoost(self);
             if (todo == "2")
                 CooldownRefresh(self);
+            if (todo == "3")
+                Swap(self);
             todo = "";
             OnePowerUp = false;
         }
@@ -53,5 +55,10 @@ public class PowerUpsHud : MonoBehaviour {
     public void CooldownRefresh(GameObject c)
     {
         c.GetComponentInParent<ShooterB>().RefreshCooldowns();
+    }
+
+    public void Swap (GameObject c)
+    {
+        c.GetComponentInChildren<PlayerController>().Swap();
     }
 }

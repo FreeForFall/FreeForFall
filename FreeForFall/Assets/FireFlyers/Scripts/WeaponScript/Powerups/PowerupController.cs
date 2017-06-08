@@ -39,7 +39,7 @@ public class PowerupController : MonoBehaviour
         //Debug.LogWarning ("Spawning a powerup");
         // This is pretty bad and should be changed.
         // Remember to change the value when adding new powerups. 
-        int id = Random.Range(0, 3);
+        int id = Random.Range(0, 4);
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.SPAWN_POWERUP, 
             new object[] { (object)position, id });
         return id;
