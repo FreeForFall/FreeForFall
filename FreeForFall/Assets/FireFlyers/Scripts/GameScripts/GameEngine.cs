@@ -357,6 +357,10 @@ public class GameEngine
                 var cr = p.AddComponent<CooldownRefresh>();
                 cr.LocalPlayer = _localPlayer;
                 break;
+            case Constants.POWERUP_IDS.SWAP_POWERUP:
+                var sw = p.AddComponent<Swap>();
+                sw.LocalPlayer = _localPlayer;
+                break;
             default:
                 var s = p.AddComponent<SpeedBoost>();
                 s.LocalPlayer = _localPlayer;
