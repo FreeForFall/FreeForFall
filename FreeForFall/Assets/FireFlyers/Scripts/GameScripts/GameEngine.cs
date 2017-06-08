@@ -420,6 +420,7 @@ public class GameEngine
 
     public void CooldownRefreshParticles(Vector3 a)
     {
+        Debug.Log("In engine");
         _shooterB.RefreshCooldownsParticles(a); 
     }
 

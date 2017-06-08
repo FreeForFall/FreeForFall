@@ -66,7 +66,7 @@ public class ShooterB : MonoBehaviour
 
     public void RefreshCooldowns()
     {
-        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.COOLDOWN_REFRESH_PARTICLES, transform.position);
+        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.COOLDOWN_REFRESH_PARTICLES, transform.FindChild("bottom").transform.position);
         Debug.LogWarning("REFRESHING");
         RefreshCooldownsParticles(transform.FindChild("bottom").transform.position, true);
         TimeSinceLastExplosion = Constants.BAZOOKA_CD;
@@ -75,6 +75,7 @@ public class ShooterB : MonoBehaviour
 
     public void RefreshCooldownsParticles(Vector3 position, bool local = false)
     {
+        Debug.Log("IN PARTICLES");
         GameObject particle;
         if (local)
         {
@@ -86,7 +87,7 @@ public class ShooterB : MonoBehaviour
             particle = Instantiate(RefreshParticleNonLocal, position, Quaternion.identity) as GameObject;
             Debug.LogWarning("Particle Rfresh");
         }
-
+        Debug.Log("OUT OF PARTICLE");
         Destroy(particle, 1f);
     }
 }
