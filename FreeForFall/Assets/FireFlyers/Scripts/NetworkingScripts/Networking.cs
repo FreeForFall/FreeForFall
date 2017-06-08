@@ -495,7 +495,7 @@ public class Networking : MonoBehaviour
         _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
         foreach (var v in leaderboard)
         {
-            _leaderboardText.text += Environment.NewLine + v;
+            _leaderboardText.text += v + Environment.NewLine;
             Debug.Log(v);
         }
         if (_round == Constants.ROUND_COUNT)
