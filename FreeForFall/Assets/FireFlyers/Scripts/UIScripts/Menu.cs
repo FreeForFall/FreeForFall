@@ -57,6 +57,10 @@ public class Menu : MonoBehaviour
 		optionsMenuHolder.SetActive (true);
 	}
 
+    public void Credits()
+    {
+        SceneManager.LoadScene("Credit");
+    }
 	public void MainMenu ()
 	{
 		optionsMenuHolder.SetActive (false);
