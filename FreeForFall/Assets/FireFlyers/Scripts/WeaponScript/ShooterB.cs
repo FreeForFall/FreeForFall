@@ -66,6 +66,7 @@ public class ShooterB : MonoBehaviour
 
     public void RefreshCooldowns()
     {
+        NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.COOLDOWN_REFRESH_PARTICLES, transform.position);
         Debug.LogWarning("REFRESHING");
         RefreshCooldownsParticles(transform.FindChild("bottom").transform.position, true);
         TimeSinceLastExplosion = Constants.BAZOOKA_CD;
