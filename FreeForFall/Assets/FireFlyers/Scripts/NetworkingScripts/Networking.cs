@@ -171,7 +171,7 @@ public class Networking : MonoBehaviour
     {
         if (_countdown == -1)
             return;
-        _chat.SendMessage("GAME", _countdown--.ToString());    
+        _chat.SendChatMessage("GAME", _countdown--.ToString());    
         Invoke("sendCountdown", 0.9f);
     }
 

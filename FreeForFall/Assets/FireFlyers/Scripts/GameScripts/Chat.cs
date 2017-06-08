@@ -126,12 +126,12 @@ public class Chat : MonoBehaviour
         }
         else
             message += "BOTH AYY";
-        SendMessage(message);
+        SendChatMessage(_username, message);
 
         _timeSinceLastMessage = 0f;
     }
 
-    public void SendMessage(string username, string message)
+    public void SendChatMessage(string username, string message)
     {
         _isWriting = false;
         _input.text = "";
