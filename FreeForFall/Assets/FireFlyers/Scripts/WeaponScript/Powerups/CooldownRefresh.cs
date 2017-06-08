@@ -17,7 +17,7 @@ public class CooldownRefresh : MonoBehaviour
 	{
         Debug.LogWarning("Something collided with the powerup");
         playerscript = c.GetComponent<PowerUpsHud>();
-        if (c.gameObject.tag == "Player" && !playerscript.OnePowerUp)
+        if (c.gameObject.tag == "Player" )
         {
 			GameObject g;
 			if (c.name == "bottom")
@@ -28,7 +28,7 @@ public class CooldownRefresh : MonoBehaviour
 			{
 				g = c.gameObject;
 			}
-			if (g == LocalPlayer)
+			if (g == LocalPlayer && !playerscript.OnePowerUp)
 			{
 				Debug.LogWarning ("Doing CooldownRefresh on " + g);
                 playerscript.DoUpdate("2");
