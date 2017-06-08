@@ -420,7 +420,7 @@ public class GameEngine
 
     public void CooldownRefreshParticles(Vector3 a)
     {
-
+        _shooterB.RefreshCooldownsParticles(a); 
     }
 
     public void VisionImpairedParticles(Vector3 a)
