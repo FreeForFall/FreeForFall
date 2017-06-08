@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AssemblyCSharp;
+using UnityEngine.UI;
 
 public class SpeedBoost : MonoBehaviour
 {
@@ -31,7 +32,8 @@ public class SpeedBoost : MonoBehaviour
 			{
 				Debug.LogWarning ("Doing SpeedBoost on " + g);
                 playerscript.DoUpdate("1");
-			}
+                g.transform.Find("Canvas/PowerCanvas/Boost").gameObject.GetComponent<Image>().enabled = true;
+            }
 			else
 			{
 				Debug.LogWarning ("Someone else collided with the powerup, removing it");
