@@ -159,6 +159,10 @@ public class Networking : MonoBehaviour
                 _chat.ReceiveMessage((string)c[0], (string)c[1]);
                 return;
 
+            case Constants.EVENT_IDS.SWAP_PARTICLES:
+                _engine.SwapParticles((Vector3)c[0]);
+                return;
+
             default:
                 Debug.LogError("UNKNOWN EVENT");
                 return;
