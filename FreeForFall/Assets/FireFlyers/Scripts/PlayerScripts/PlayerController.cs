@@ -74,10 +74,6 @@ public class PlayerController : MonoBehaviour
             Destroy(JumpeffectDone, 0.5f);
         }
 
-        if (Input.GetKey(KeyCode.F1) || Input.GetKey(KeyCode.Joystick1Button7))
-        {
-            GameObject.Find("NetworkManager").GetComponent<Networking>().menu();
-        }
         #if UNITY_STANDALONE_WIN
         if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.Joystick1Button8))
         #endif

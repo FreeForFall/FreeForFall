@@ -93,6 +93,11 @@ public class Chat : MonoBehaviour
          * the left/right arrows are the 6th axis
          * On Linux : 8th and 7th
          * */
+
+        if (Input.GetKey(KeyCode.F1) || Input.GetKey(KeyCode.Joystick1Button7))
+        {
+            _engine.Network.menu();
+        }
         _timeSinceLastShown += Time.deltaTime;
         _timeSinceLastMessage += Time.deltaTime;
         if (!_inMenu && _timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
