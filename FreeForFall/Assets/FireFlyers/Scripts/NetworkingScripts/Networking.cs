@@ -443,7 +443,7 @@ public class Networking : MonoBehaviour
         if (_mapSelect.ActiveToggles().FirstOrDefault() == _basicetoggle)
             return Constants.MAPS_IDS.BASIC_MAP;
         if (_mapSelect.ActiveToggles().FirstOrDefault() == _testtoggle)
-            return Constants.MAPS_IDS.SPACE_MAP;
+            return Constants.MAPS_IDS.TEST_MAP;
         else
             return Constants.MAPS_IDS.SPACE_MAP;
     }
