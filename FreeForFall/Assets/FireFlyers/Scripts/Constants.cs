@@ -91,7 +91,7 @@ namespace AssemblyCSharp
         {
             "SpaceArena",
             "BasicArena",
-            "TestArena",
+            "TestScene",
             "Volcano"
         };
 
