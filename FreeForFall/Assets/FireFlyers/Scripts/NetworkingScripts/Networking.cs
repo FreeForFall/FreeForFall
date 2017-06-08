@@ -35,9 +35,10 @@ public class Networking : MonoBehaviour
     private Dropdown _robotChooser;
     private Canvas _leaderboard;
     private Text _leaderboardText;
-
+    private Chat _chat;
     private int _round;
     private Constants.MAPS_IDS _mapID;
+    private float _countdown;
 
     private GameEngine _engine;
 
@@ -76,6 +77,8 @@ public class Networking : MonoBehaviour
         Debug.Log(PhotonNetwork.OnEventCall.GetInvocationList().Length);
         PhotonNetwork.autoJoinLobby = true;
         connectToServer(GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode);
+        _chat = GameObject.Find("ChatManager").GetComponent<Chat>();
+        DontDestroyOnLoad(_chat);
     }
 
     /// <summary>
@@ -142,7 +145,7 @@ public class Networking : MonoBehaviour
                 return;
 
             case Constants.EVENT_IDS.CHAT_MESSAGE:
-                _engine.ReceiveChatMessage((string)c[0], (string)c[1]);
+                _chat.ReceiveMessage((string)c[0], (string)c[1]);
                 return;
 
             default:
@@ -156,7 +159,20 @@ public class Networking : MonoBehaviour
     /// </summary>
     public void RemoveWalls()
     {
+        if (PhotonNetwork.isMasterClient)
+        {
+            _countdown = Constants.START_GAME_DELAY;
+            sendCountdown();
+        }
         Invoke("doRemove", Constants.START_GAME_DELAY);
+    }
+
+    private void sendCountdown()
+    {
+        if (_countdown == -1)
+            return;
+        _chat.SendMessage("GAME", _countdown--.ToString());    
+        Invoke("sendCountdown", 0.9f);
     }
 
     /// <summary>
@@ -187,6 +203,8 @@ public class Networking : MonoBehaviour
     /// </summary>
     void OnJoinedRoom()
     {
+        _chat.enabled = true;
+        _chat.InMenu = true;
         Debug.Log("Joined a room");
         GameObject.Find("WaitForGameStartCanvas").GetComponent<Canvas>().enabled = true;
         if (!GameObject.Find("SettingsManager").GetComponent<Settings>().OnlineMode)
@@ -446,8 +464,10 @@ public class Networking : MonoBehaviour
     /// </summary>
     public void EndGame(string[] leaderboard)
     {
+        Cursor.visible = true;
         _leaderboard = GameObject.Find("WinCanvas").GetComponent<Canvas>();
         _leaderboard.enabled = true;
+        _chat.InMenu = true;
         _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
         foreach (var v in leaderboard)
         {

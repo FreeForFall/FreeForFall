@@ -15,16 +15,28 @@ public class Chat : MonoBehaviour
     private Canvas _canvas;
     private InputField _input;
     private List<string> _chatMessages;
-    private bool _isWriting;
+    private bool _isWriting = false;
+    private bool _inMenu = false;
+
+        
+    public bool InMenu
+    {
+        get
+        {
+            return _inMenu;
+        }
+        set
+        {
+            _inMenu = value;
+        }
+    }
 
     void Start()
     {
-        _isWriting = false;
         _timeSinceLastShown = 0f;
         _timeSinceLastMessage = 0f;
         _engine = GameObject.Find("NetworkManager").GetComponent<Networking>().Engine;
-        var p = _engine.Player;
-        _username = p.GetComponent<PhotonView>().owner.NickName;
+        _username = PhotonNetwork.playerName;
         _chatText = GameObject.Find("ChatManager/Canvas/ChatText").GetComponent<Text>();
         _canvas = GameObject.Find("ChatManager/Canvas").GetComponent<Canvas>();        
         _chatMessages = new List<string>();
@@ -32,7 +44,7 @@ public class Chat : MonoBehaviour
         _input.onValueChanged.AddListener(s => _isWriting = true);
         _input.onEndEdit.AddListener(s =>
             {
-                sendMessage(s);
+                SendMessage(s);
                 _isWriting = false;
             }); 
     }
@@ -73,7 +85,7 @@ public class Chat : MonoBehaviour
          * */
         _timeSinceLastShown += Time.deltaTime;
         _timeSinceLastMessage += Time.deltaTime;
-        if (_timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
+        if (!_inMenu && _timeSinceLastShown > 3f && !_isWriting && !Input.GetKey(KeyCode.Tab))
         {
             HideChat();
         }
@@ -114,22 +126,23 @@ public class Chat : MonoBehaviour
         }
         else
             message += "BOTH AYY";
-        sendMessage(message);
+        SendMessage(message);
+
+        _timeSinceLastMessage = 0f;
     }
 
-    private void sendMessage(string message)
+    public void SendMessage(string username, string message)
     {
         _isWriting = false;
         _input.text = "";
         NetworkEventHandlers.Broadcast(Constants.EVENT_IDS.CHAT_MESSAGE,
             new object[]
             {
-                (object)_username,
+                (object)username,
                 (object)message
             }
         );
-        ReceiveMessage(_username, message);
-        _timeSinceLastMessage = 0f;
+        ReceiveMessage(username, message);
     }
  
     public void ShowChat()
