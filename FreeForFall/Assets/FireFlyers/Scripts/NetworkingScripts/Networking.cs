@@ -159,6 +159,10 @@ public class Networking : MonoBehaviour
                 _chat.ReceiveMessage((string)c[0], (string)c[1]);
                 return;
 
+            case Constants.EVENT_IDS.SWAP_PARTICLES:
+                _engine.SwapParticles((Vector3)c[0]);
+                return;
+
             default:
                 Debug.LogError("UNKNOWN EVENT");
                 return;
@@ -491,7 +495,7 @@ public class Networking : MonoBehaviour
         _leaderboardText = GameObject.Find("WinCanvas/leaderboard").GetComponent<Text>();
         foreach (var v in leaderboard)
         {
-            _leaderboardText.text += Environment.NewLine + v;
+            _leaderboardText.text += v + Environment.NewLine;
             Debug.Log(v);
         }
         if (_round == Constants.ROUND_COUNT)
